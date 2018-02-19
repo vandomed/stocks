@@ -1,0 +1,22 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1519065676767.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "2289656119",
+    "id" : "3CE61282",
+    "lastKnownWriteTime" : 1519065959,
+    "last_content_update" : 1519065959838,
+    "path" : "C:/Users/Dane/Google Drive/github/stocks/src/diffs.cpp",
+    "project_path" : "src/diffs.cpp",
+    "properties" : {
+        "cursorPosition" : "29,3",
+        "scrollLine" : "25"
+    },
+    "relative_order" : 2,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "cpp"
+}
