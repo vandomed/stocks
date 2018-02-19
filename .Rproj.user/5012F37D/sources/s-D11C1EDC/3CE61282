@@ -5,15 +5,15 @@
     "dirty" : false,
     "encoding" : "UTF-8",
     "folds" : "",
-    "hash" : "2289656119",
+    "hash" : "0",
     "id" : "3CE61282",
-    "lastKnownWriteTime" : 1519065959,
-    "last_content_update" : 1519065959838,
-    "path" : "C:/Users/Dane/Google Drive/github/stocks/src/diffs.cpp",
-    "project_path" : "src/diffs.cpp",
+    "lastKnownWriteTime" : 1519068957,
+    "last_content_update" : 1519068957072,
+    "path" : "C:/Users/Dane/Google Drive/github/stocks/src/pdiffs.cpp",
+    "project_path" : "src/pdiffs.cpp",
     "properties" : {
-        "cursorPosition" : "29,3",
-        "scrollLine" : "25"
+        "cursorPosition" : "26,25",
+        "scrollLine" : "10"
     },
     "relative_order" : 2,
     "source_on_save" : false,

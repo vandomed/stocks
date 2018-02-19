@@ -12,21 +12,21 @@
             }
         ],
         "file" : "C:/Users/Dane/Google Drive/github/stocks/src/diffs.cpp",
-        "file_last_write" : 1519065959
+        "file_last_write" : 1519068074
     },
     {
         "definitions" : [
             {
-                "column" : 6,
-                "file" : "C:/Users/Dane/Google Drive/github/stocks/src/rcpp_hello_world.cpp",
+                "column" : 15,
+                "file" : "C:/Users/Dane/Google Drive/github/stocks/src/pdiffs.cpp",
                 "kind" : 6,
-                "line" : 6,
-                "name" : "rcpp_hello_world",
+                "line" : 34,
+                "name" : "pdiffs(NumericVector, int)",
                 "parent_name" : "",
-                "usr" : "c:@F@rcpp_hello_world#"
+                "usr" : "c:@F@pdiffs#$@N@Rcpp@C@Vector>#VI14#@N@Rcpp@CT>1#T@PreserveStorage#I#"
             }
         ],
-        "file" : "C:/Users/Dane/Google Drive/github/stocks/src/rcpp_hello_world.cpp",
-        "file_last_write" : 1519065362
+        "file" : "C:/Users/Dane/Google Drive/github/stocks/src/pdiffs.cpp",
+        "file_last_write" : 1519068957
     }
 ]

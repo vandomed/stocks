@@ -7,7 +7,7 @@ using namespace Rcpp;
 //' vector. Very similar to \code{\link[base]{diff}}, but written in C++.
 //'
 //' @param x Numeric vector.
-//' @param lag Numeric value (e.g. 3 for differences between 1st and 3rd
+//' @param lag Numeric value (e.g. 2 for differences between 1st and 3rd
 //' element, 2nd and 4th, ...).
 //'
 //'

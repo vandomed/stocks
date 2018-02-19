@@ -17,20 +17,22 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// rcpp_hello_world
-List rcpp_hello_world();
-RcppExport SEXP _stocks_rcpp_hello_world() {
+// pdiffs
+NumericVector pdiffs(NumericVector x, int lag);
+RcppExport SEXP _stocks_pdiffs(SEXP xSEXP, SEXP lagSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    rcpp_result_gen = Rcpp::wrap(rcpp_hello_world());
+    Rcpp::traits::input_parameter< NumericVector >::type x(xSEXP);
+    Rcpp::traits::input_parameter< int >::type lag(lagSEXP);
+    rcpp_result_gen = Rcpp::wrap(pdiffs(x, lag));
     return rcpp_result_gen;
 END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
     {"_stocks_diffs", (DL_FUNC) &_stocks_diffs, 2},
-    {"_stocks_rcpp_hello_world", (DL_FUNC) &_stocks_rcpp_hello_world, 0},
+    {"_stocks_pdiffs", (DL_FUNC) &_stocks_pdiffs, 2},
     {NULL, NULL, 0}
 };
 

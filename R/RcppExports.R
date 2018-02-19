@@ -7,7 +7,7 @@
 #' vector. Very similar to \code{\link[base]{diff}}, but written in C++.
 #'
 #' @param x Numeric vector.
-#' @param lag Numeric value (e.g. 3 for differences between 1st and 3rd
+#' @param lag Numeric value (e.g. 2 for differences between 1st and 3rd
 #' element, 2nd and 4th, ...).
 #'
 #'
@@ -34,7 +34,36 @@ diffs <- function(x, lag = 1L) {
     .Call(`_stocks_diffs`, x, lag)
 }
 
-rcpp_hello_world <- function() {
-    .Call(`_stocks_rcpp_hello_world`)
+#' Lagged Proportion Differences
+#'
+#' Calculates proportion differences between subsequent (or lagged) elements of 
+#' a numeric vector.
+#'
+#' @param x Numeric vector.
+#' @param lag Numeric value (e.g. 2 for differences between 1st and 3rd
+#' element, 2nd and 4th, ...).
+#'
+#'
+#' @return Numeric vector.
+#'
+#'
+#' @examples
+#' # Generate 10 values from N(0, 1)
+#' x <- rnorm(10)
+#' 
+#' # Calculate vector of proportion differences between subsequent values
+#' y <- pdiffs(x)
+#' 
+#' # Equivalent base R computation
+#' len <- length(x) 
+#' p1 <- x[2: len]
+#' p2 <- x[1: (len - 1)]
+#' y2 <- (p1 - p2) / (0.5 * (p1 + p2))
+#' all.equal(y, y2)
+#' 
+#'
+#'@export
+pdiffs <- function(x, lag = 1L) {
+    .Call(`_stocks_pdiffs`, x, lag)
 }
 

@@ -9,7 +9,7 @@ diffs(x, lag = 1L)
 \arguments{
 \item{x}{Numeric vector.}
 
-\item{lag}{Numeric value (e.g. 3 for differences between 1st and 3rd
+\item{lag}{Numeric value (e.g. 2 for differences between 1st and 3rd
 element, 2nd and 4th, ...).}
 }
 \value{
