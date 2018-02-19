@@ -24,7 +24,7 @@ a vector.
 x <- rnorm(10)
 
 # Calculate vector of proportion differences between subsequent values
-y <- pdiffs(x)
+(y <- pdiffs(x))
 
 # Equivalent base R computation
 len <- length(x) 

@@ -3,6 +3,7 @@
 export(diffs)
 export(pchanges)
 export(pdiffs)
+export(ratios)
 import(RColorBrewer)
 import(curl)
 import(grDevices)

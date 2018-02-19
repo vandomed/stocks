@@ -52,7 +52,7 @@ diffs <- function(x, lag = 1L) {
 #' x <- rnorm(10)
 #' 
 #' # Calculate vector of proportion changes between subsequent values
-#' y <- pchanges(x)
+#' (y <- pchanges(x))
 #' 
 #' # Equivalent base R computation
 #' len <- length(x)
@@ -85,7 +85,7 @@ pchanges <- function(x, lag = 1L) {
 #' x <- rnorm(10)
 #' 
 #' # Calculate vector of proportion differences between subsequent values
-#' y <- pdiffs(x)
+#' (y <- pdiffs(x))
 #' 
 #' # Equivalent base R computation
 #' len <- length(x) 
@@ -98,5 +98,35 @@ pchanges <- function(x, lag = 1L) {
 #'@export
 pdiffs <- function(x, lag = 1L) {
     .Call(`_stocks_pdiffs`, x, lag)
+}
+
+#' Ratios of Subsequent Elements in a Vector
+#' 
+#' Calculates vector of ratios of a vector, i.e. ratio of \code{x[2]} to 
+#' \code{x[1]}, ratio of \code{x[3]} to \code{x[2]}, and so forth.
+#' 
+#'
+#' @param x Numeric vector.
+#'
+#'
+#' @return Numeric vector.
+#'
+#'
+#' @examples
+#' # Generate 10 values from N(0, 1)
+#' x <- rnorm(10)
+#' 
+#' # Calculate vector of ratios
+#' (y <- ratios(x))
+#' 
+#' # Slower base R computation
+#' len <- length(prices)
+#' y2 <- prices[2: len] / prices[1: (len - 1)]
+#' all.equal(y, y2)
+#' 
+#'
+#'@export
+ratios <- function(x) {
+    .Call(`_stocks_ratios`, x)
 }
 

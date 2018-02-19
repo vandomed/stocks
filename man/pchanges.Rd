@@ -24,7 +24,7 @@ vector.
 x <- rnorm(10)
 
 # Calculate vector of proportion changes between subsequent values
-y <- pchanges(x)
+(y <- pchanges(x))
 
 # Equivalent base R computation
 len <- length(x)

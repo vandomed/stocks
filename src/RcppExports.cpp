@@ -41,11 +41,23 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// ratios
+NumericVector ratios(NumericVector x);
+RcppExport SEXP _stocks_ratios(SEXP xSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector >::type x(xSEXP);
+    rcpp_result_gen = Rcpp::wrap(ratios(x));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_stocks_diffs", (DL_FUNC) &_stocks_diffs, 2},
     {"_stocks_pchanges", (DL_FUNC) &_stocks_pchanges, 2},
     {"_stocks_pdiffs", (DL_FUNC) &_stocks_pdiffs, 2},
+    {"_stocks_ratios", (DL_FUNC) &_stocks_ratios, 1},
     {NULL, NULL, 0}
 };
 
