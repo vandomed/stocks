@@ -5,14 +5,14 @@
     "dirty" : false,
     "encoding" : "UTF-8",
     "folds" : "",
-    "hash" : "3743864245",
+    "hash" : "3430271669",
     "id" : "945760BC",
-    "lastKnownWriteTime" : 1519068074,
-    "last_content_update" : 1519068074063,
+    "lastKnownWriteTime" : 1519069342,
+    "last_content_update" : 1519069342596,
     "path" : "C:/Users/Dane/Google Drive/github/stocks/src/diffs.cpp",
     "project_path" : "src/diffs.cpp",
     "properties" : {
-        "cursorPosition" : "9,36",
+        "cursorPosition" : "6,4",
         "scrollLine" : "0"
     },
     "relative_order" : 6,

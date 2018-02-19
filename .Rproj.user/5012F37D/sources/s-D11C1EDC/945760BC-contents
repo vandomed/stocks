@@ -3,8 +3,8 @@ using namespace Rcpp;
 
 //' Lagged Differences (Alternate Implementation)
 //'
-//' Calculates differences between subsequent (or lagged) elements of a numeric
-//' vector. Very similar to \code{\link[base]{diff}}, but written in C++.
+//' Calculates differences between subsequent (or lagged) elements of a vector. 
+//' Very similar to \code{\link[base]{diff}}, but written in C++.
 //'
 //' @param x Numeric vector.
 //' @param lag Numeric value (e.g. 2 for differences between 1st and 3rd

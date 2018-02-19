@@ -3,8 +3,8 @@
 
 #' Lagged Differences (Alternate Implementation)
 #'
-#' Calculates differences between subsequent (or lagged) elements of a numeric
-#' vector. Very similar to \code{\link[base]{diff}}, but written in C++.
+#' Calculates differences between subsequent (or lagged) elements of a vector. 
+#' Very similar to \code{\link[base]{diff}}, but written in C++.
 #'
 #' @param x Numeric vector.
 #' @param lag Numeric value (e.g. 2 for differences between 1st and 3rd
@@ -34,10 +34,43 @@ diffs <- function(x, lag = 1L) {
     .Call(`_stocks_diffs`, x, lag)
 }
 
+#' Lagged Proportion Changes
+#'
+#' Calculates proportion changes between subsequent (or lagged) elements of a 
+#' vector.
+#'
+#' @param x Numeric vector.
+#' @param lag Numeric value (e.g. 2 for differences between 1st and 3rd
+#' element, 2nd and 4th, ...).
+#'
+#'
+#' @return Numeric vector.
+#'
+#'
+#' @examples
+#' # Generate 10 values from N(0, 1)
+#' x <- rnorm(10)
+#' 
+#' # Calculate vector of proportion changes between subsequent values
+#' y <- pchanges(x)
+#' 
+#' # Equivalent base R computation
+#' len <- length(x)
+#' p1 <- x[2: len] 
+#' p2 <- x[1: (len - 1)] 
+#' y2 <- p1 / p2 - 1
+#' all.equal(y, y2)
+#' 
+#'
+#'@export
+pchanges <- function(x, lag = 1L) {
+    .Call(`_stocks_pchanges`, x, lag)
+}
+
 #' Lagged Proportion Differences
 #'
 #' Calculates proportion differences between subsequent (or lagged) elements of 
-#' a numeric vector.
+#' a vector.
 #'
 #' @param x Numeric vector.
 #' @param lag Numeric value (e.g. 2 for differences between 1st and 3rd

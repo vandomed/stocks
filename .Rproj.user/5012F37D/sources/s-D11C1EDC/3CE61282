@@ -7,13 +7,13 @@
     "folds" : "",
     "hash" : "0",
     "id" : "3CE61282",
-    "lastKnownWriteTime" : 1519068957,
-    "last_content_update" : 1519068957072,
-    "path" : "C:/Users/Dane/Google Drive/github/stocks/src/pdiffs.cpp",
-    "project_path" : "src/pdiffs.cpp",
+    "lastKnownWriteTime" : 1519069841,
+    "last_content_update" : 1519069841128,
+    "path" : "C:/Users/Dane/Google Drive/github/stocks/src/pchanges.cpp",
+    "project_path" : "src/pchanges.cpp",
     "properties" : {
-        "cursorPosition" : "26,25",
-        "scrollLine" : "10"
+        "cursorPosition" : "27,21",
+        "scrollLine" : "14"
     },
     "relative_order" : 2,
     "source_on_save" : false,

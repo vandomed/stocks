@@ -16,8 +16,8 @@ element, 2nd and 4th, ...).}
 Numeric vector.
 }
 \description{
-Calculates differences between subsequent (or lagged) elements of a numeric
-vector. Very similar to \code{\link[base]{diff}}, but written in C++.
+Calculates differences between subsequent (or lagged) elements of a vector. 
+Very similar to \code{\link[base]{diff}}, but written in C++.
 }
 \examples{
 # Generate 1 million values from Poisson(3) distribution
