@@ -1,0 +1,13 @@
+Package: dvmisc
+Type: Package
+Title: Faster Computation of Common Statistics and Miscellaneous Functions
+Version: 1.1.2
+Date: 2018-02-05
+Author: Dane R. Van Domelen
+Maintainer: Dane R. Van Domelen <vandomed@gmail.com>
+Description: Faster versions of base R functions (e.g. mean, standard deviation, covariance, weighted mean), mostly written in C++, along with miscellaneous functions for various purposes (e.g. create histogram with fitted probability density function or probability mass function curve, create body mass index groups, assess linearity assumption in logistic regression).
+License: GPL-2
+Depends: rbenchmark
+Imports: graphics, MASS, Rcpp (>= 0.12.15), stats, utils
+LinkingTo: Rcpp
+RoxygenNote: 6.0.1

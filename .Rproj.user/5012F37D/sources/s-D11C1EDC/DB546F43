@@ -1,0 +1,20 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1519141866738.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "1042031367",
+    "id" : "DB546F43",
+    "lastKnownWriteTime" : 1519104009,
+    "last_content_update" : 1519104009,
+    "path" : "C:/Users/Dane/Google Drive/github/stocks/NAMESPACE",
+    "project_path" : "NAMESPACE",
+    "properties" : {
+    },
+    "relative_order" : 4,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_namespace"
+}

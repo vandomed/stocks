@@ -120,8 +120,8 @@ pdiffs <- function(x, lag = 1L) {
 #' (y <- ratios(x))
 #' 
 #' # Slower base R computation
-#' len <- length(prices)
-#' y2 <- prices[2: len] / prices[1: (len - 1)]
+#' len <- length(x)
+#' y2 <- x[2: len] / x[1: (len - 1)]
 #' all.equal(y, y2)
 #' 
 #'
