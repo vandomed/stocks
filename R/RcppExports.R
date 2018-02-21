@@ -34,6 +34,22 @@ diffs <- function(x, lag = 1L) {
     .Call(`_stocks_diffs`, x, lag)
 }
 
+mdd_p <- function(x) {
+    .Call(`_stocks_mdd_p`, x)
+}
+
+mdd_p_indices <- function(x) {
+    .Call(`_stocks_mdd_p_indices`, x)
+}
+
+mdd_hl <- function(highs, lows) {
+    .Call(`_stocks_mdd_hl`, highs, lows)
+}
+
+mdd_hl_indices <- function(highs, lows) {
+    .Call(`_stocks_mdd_hl_indices`, highs, lows)
+}
+
 #' Lagged Proportion Changes
 #'
 #' Calculates proportion changes between subsequent (or lagged) elements of a 

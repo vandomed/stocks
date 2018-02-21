@@ -4,7 +4,7 @@
 #' Defined simply as \code{initial * cumprod(gains + 1)}.
 #' 
 #' 
-#' @param gains Numeric vector of investment gains.
+#' @param gains Numeric vector of gains.
 #' @param initial Numeric value.
 #' 
 #' 

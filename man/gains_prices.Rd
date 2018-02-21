@@ -7,7 +7,7 @@
 gains_prices(gains, initial = 10000)
 }
 \arguments{
-\item{gains}{Numeric vector of investment gains.}
+\item{gains}{Numeric vector of gains.}
 
 \item{initial}{Numeric value.}
 }

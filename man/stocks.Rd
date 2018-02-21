@@ -17,7 +17,7 @@ graphs. C++ code is used where possible to improve processing speed.
 Package: \tab stocks \cr
 Type: \tab Package \cr
 Version: \tab 1.1.2 \cr
-Date: \tab 2018-02-20 \cr
+Date: \tab 2018-02-21 \cr
 License: \tab GPL-3 \cr
 }
 
@@ -25,6 +25,10 @@ See \href{https://cran.r-project.org/package=stocks}{CRAN documentation} for
 full list of functions.
 }
 \references{
+Ryan, J.A. and Ulrich, J.M. (2017) quantmod: Quantitative Financial Modelling 
+Framework. R package version 0.4-12, 
+\url{https://CRAN.R-project.org/package=quantmod}.
+
 Acknowledgment: This material is based upon work supported by the
 National Science Foundation Graduate Research Fellowship under Grant No.
 DGE-0940903.
