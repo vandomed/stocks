@@ -12,7 +12,7 @@ recognizes.}
 
 \item{bench}{Character string with ticker symbol for benchmark.}
 
-\item{...}{Arguments to pass to \code{\link{load.gains}}.}
+\item{...}{Arguments to pass to \code{\link{load_gains}}.}
 }
 \value{
 Numeric value.
