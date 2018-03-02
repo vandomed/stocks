@@ -14,14 +14,10 @@ load_prices(tickers, intercepts = NULL, slopes = NULL,
 recognizes.}
 
 \item{intercepts}{Numeric vector of values to add to daily gains for each 
-ticker. For example, if you have two tickers and want to simulate a 1\% 
-annual expense ratio for only the second fund, set 
-\code{intercepts = c(0, convert.rate(-0.01, units.in = 252, units.out = 1))}.}
+ticker.}
 
 \item{slopes}{Numeric vector of values to multiply daily gains for each ticker 
-by. For example, if you have two tickers and want to simulate a 2x leveraged 
-version of the second fund, set \code{slopes = c(1, 2)}. The slopes are 
-multiplied prior to adding the intercepts.}
+by. Slopes are multiplied prior to adding intercepts.}
 
 \item{from}{Date or character string (e.g. \code{"2015-01-15"}.}
 

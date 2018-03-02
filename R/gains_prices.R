@@ -1,14 +1,13 @@
-#' Convert Vector of Gains to Prices
+#' Convert Gains to Prices
 #' 
-#' Calculates vector of prices based on initial balance and vector of gains. 
-#' Defined simply as \code{initial * cumprod(gains + 1)}.
+#' Calculates prices based on initial balance and vector or matrix of gains.
 #' 
 #' 
-#' @param gains Numeric vector of gains.
+#' @inheritParams metrics
 #' @param initial Numeric value.
 #' 
 #' 
-#' @return Numeric vector.
+#' @return Numeric vector or matrix.
 #' 
 #' 
 #' @examples 
@@ -23,5 +22,15 @@
 #' 
 #' @export
 gains_prices <- function(gains, initial = 10000) {
-  return(c(initial, initial * cumprod(1 + gains)))
+  
+  if (is.vector(gains)) {
+    prices <- c(initial, initial * cumprod(1 + gains))
+  } else {
+    prices <- apply(gains, 2, function(x) {
+      c(initial, initial * cumprod(1 + x))
+    })
+    rownames(prices)[1] <- as.Date(rownames(gains[1, , drop = FALSE])) - 1
+  }
+  return(prices)
+
 }

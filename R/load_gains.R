@@ -11,14 +11,10 @@
 #' @inheritParams ticker_dates
 #' 
 #' @param intercepts Numeric vector of values to add to daily gains for each 
-#' ticker. For example, if you have two tickers and want to simulate a 1\% 
-#' annual expense ratio for only the second fund, set 
-#' \code{intercepts = c(0, convert.rate(-0.01, units.in = 252, units.out = 1))}.
+#' ticker.
 #' 
 #' @param slopes Numeric vector of values to multiply daily gains for each ticker 
-#' by. For example, if you have two tickers and want to simulate a 2x leveraged 
-#' version of the second fund, set \code{slopes = c(1, 2)}. The slopes are 
-#' multiplied prior to adding the intercepts.
+#' by. Slopes are multiplied prior to adding intercepts.
 #' 
 #' @param time.scale Character string controlling time frame for gains. Choices 
 #' are \code{"daily"}, \code{"monthly"}, and \code{"yearly"}.
@@ -203,9 +199,10 @@ load_gains <- function(tickers, intercepts = NULL, slopes = NULL,
       
       if (! (intercepts[ii] == 0 & slopes[ii] == 1)) {
         closing.prices <- prices[[ii]][, 6]
-        prices[[ii]][, 6] <- balances(ratios = 1 + intercepts[ii] +
-                                        slopes[ii] * pchanges(closing.prices),
-                                      initial = closing.prices[1])
+        prices[[ii]][, 6] <- 
+          gains_prices(gains = intercepts[ii] + 
+                         slopes[ii] * pchanges(closing.prices), 
+                       initial = closing.prices[1])
         if (slopes[ii] != 1) {
           tickers[ii] <- paste(slopes[ii], "x ", tickers[ii], sep = "")
         }

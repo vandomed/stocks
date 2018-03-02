@@ -2,44 +2,19 @@
 #' Allocation Varies
 #' 
 #' Useful for visualizing performance of three-fund portfolios, typically by 
-#' plotting a measure of growth vs. a measure of volatility. 
+#' plotting a measure of growth vs. a measure of volatility. First three 
+#' investments are used as the first three-fund set, next three as the second 
+#' three-fund set, and so on. 
 #' 
 #' 
 #' @inheritParams twofunds_graph
 #' 
-#' 
-#' @param tickers Character vector or matrix of ticker symbols, if you want to 
-#' load data on the fly rather than specify \code{tickers.gains}. If a vector, 
-#' the first through third elements are assumed to be first three-fund set, the 
-#' fourth through sixth the second three-fund set, and so on. If a matrix, each 
-#' three-row column should represent a different set.
-#' 
-#' @param intercepts Numeric vector or matrix of values to add to daily gains 
-#' for each ticker. For example, if you have three tickers and want to simulate 
-#' a 1\% annual expense ratio for only the third fund, you would set 
-#' \code{intercepts = c(0, 0, convert.rate(-0.01, units.in = 252, units.out = 1))}. 
-#' Like the \code{tickers} input, can be a vector divisible by three or a 
-#' three-row matrix.
-#' 
-#' @param slopes Numeric vector or matrix of values to multiply daily gains for 
-#' each ticker by. For example, if you have three tickers and want to simulate a 
-#' 2x leveraged version of the third fund, you would set 
-#' \code{slopes = c(1, 1, 2)}. The slopes are multiplied prior to adding the 
-#' intercepts. Like the \code{tickers} input, can be a vector divisible by three 
-#' or a three-row matrix.
-#' 
-#' @param tickers.gains Numeric matrix of gains, where each column has gains for 
-#' a particular fund. The first through third columns are assumed to be the 
-#' first three-fund set, fourth through sixth the second, and so on.
-#' 
 #' @param step.curves Numeric value specifying allocation increments for first 
-#' fund in each set. For example, set to \code{0.2} for six curves for each 
-#' three-fund set: one for 0\% fund 1, another for 20\% fund 1, and so on, up to 
-#' 100\% fund 1 (which is technically a data point, not a curve).
+#' fund in each set.
 #' 
 #' 
 #' @return
-#' In addition to the graph, a list containing the following: 
+#' In addition to the graph, a list containing: 
 #' \enumerate{
 #' \item List named \code{portfolio.xy} where each element is a list of 
 #' two-column matrices of x- and y-axis values for a particular three-fund set 
@@ -54,15 +29,15 @@
 #' 
 #' 
 #' @examples
-#' # Plot mean vs. SD for UPRO/VBLTX/VWEHX portfolio, and compare to VFINX and 
-#' # BRK-B
-#' fig1 <- threefunds_graph(tickers = c("VWEHX", "VBLTX", "UPRO"), 
-#'                          reference.tickers = c("VFINX", "BRK-B"))
-#'                       
-#' # Same funds, but annualized growth vs. maximum drawdown
-#' fig2 <- threefunds_graph(tickers = c("VWEHX", "VBLTX", "UPRO"), 
-#'                          reference.tickers = c("VFINX", "BRK-B"),
-#'                          x.metric = "mdd", y.metric = "cagr")
+#' # # Plot mean vs. SD for UPRO/VBLTX/VWEHX portfolio, and compare to VFINX and 
+#' # # BRK-B
+#' # fig1 <- threefunds_graph(tickers = c("VWEHX", "VBLTX", "UPRO"), 
+#' #                          reference.tickers = c("VFINX", "BRK-B"))
+#' #                      
+#' # # Same funds, but annualized growth vs. maximum drawdown
+#' # fig2 <- threefunds_graph(tickers = c("VWEHX", "VBLTX", "UPRO"), 
+#' #                          reference.tickers = c("VFINX", "BRK-B"),
+#' #                          x.metric = "mdd", y.metric = "cagr")
 #'
 #' @export
 threefunds_graph <- function(tickers = NULL, intercepts = NULL, slopes = NULL,
@@ -81,6 +56,7 @@ threefunds_graph <- function(tickers = NULL, intercepts = NULL, slopes = NULL,
                              reflabel.offsets = NULL,
                              add.plot = FALSE,
                              colors = NULL,
+                             lty = NULL, 
                              plot.list = NULL,
                              points.list = NULL,
                              text.list = NULL,
@@ -93,48 +69,42 @@ threefunds_graph <- function(tickers = NULL, intercepts = NULL, slopes = NULL,
   # If tickers specified, load various historical prices from Yahoo! Finance
   if (! is.null(tickers)) {
     
-    # If vectors rather than matrices are provided for tickers, intercepts, or
-    # slopes, convert to 2-row matrices
-    if (is.vector(tickers)) {
-      tickers <- matrix(tickers, nrow = 3)
-    }
-    if (is.vector(intercepts)) {
-      intercepts <- matrix(intercepts, nrow = 3)
-    }
-    if (is.vector(slopes)) {
-      slopes <- matrix(slopes, nrow = 3)
-    }
+    # Get number of tickers
+    n.tickers <- length(tickers)
+    n.sets <- n.tickers / 3
+    n.bench <- length(benchmark.tickers)
+    n.ref <- length(reference.tickers)
+    n.extra <- n.bench + n.ref
     
-    # If intercepts or slopes NULL, set to matrix of 0's and 1's, respectively
-    if (is.null(intercepts)) {
-      intercepts <- matrix(0, nrow = 3, ncol = ncol(tickers))
-    }
-    if (is.null(slopes)) {
-      slopes <- matrix(1, nrow = 3, ncol = ncol(tickers))
-    }
-    
-    # Create vector of "extra" tickers comprised of benchmark and reference
-    # tickers
+    # Create vector of "extra" tickers
     extra.tickers <- unique(c(benchmark.tickers, reference.tickers))
     
+    # If intercepts or slopes NULL, set to 0's and 1's, respectively
+    if (is.null(intercepts)) {
+      intercepts <- rep(0, n.tickers)
+    }
+    if (is.null(slopes)) {
+      slopes <- rep(1, n.tickers)
+    }
+    
     # Calculate gains matrix
-    tickers.vec <- c(as.vector(tickers), extra.tickers)
-    intercepts.vec <- c(as.vector(intercepts), rep(0, length(extra.tickers)))
-    slopes.vec <- c(as.vector(slopes), rep(1, length(extra.tickers)))
+    tickers.vec <- c(tickers, extra.tickers)
+    intercepts.vec <- c(intercepts, rep(0, n.extra))
+    slopes.vec <- c(slopes, rep(1, n.extra))
     gains <- load_gains(tickers = tickers.vec, intercepts = intercepts.vec,
                         slopes = slopes.vec, ...)
     
     # Update ticker names to show intercept/slope
-    tickers <- matrix(colnames(gains)[1: length(tickers)], nrow = 3)
+    tickers <- colnames(gains)[1: length(tickers)]
     
     # Separate benchmark gains, reference gains, and ticker gains
-    tickers.gains <- gains[, 1: length(tickers), drop = F]
-    extra.gains <- gains[, -c(1: length(tickers)), drop = F]
-    if (! is.null(benchmark.tickers)) {
-      benchmark.gains <- extra.gains[, 1: length(benchmark.tickers), drop = F]
-      extra.gains <- extra.gains[, -c(1: length(benchmark.tickers)), drop = F]
+    tickers.gains <- gains[, 1: n.tickers, drop = F]
+    extra.gains <- gains[, -c(1: n.tickers), drop = F]
+    if (n.bench > 0) {
+      benchmark.gains <- extra.gains[, 1: n.bench, drop = F]
+      extra.gains <- extra.gains[, -c(1: n.bench), drop = F]
     }
-    if (! is.null(reference.tickers)) {
+    if (n.ref > 0) {
       reference.gains <- extra.gains
     }
     
@@ -142,10 +112,11 @@ threefunds_graph <- function(tickers = NULL, intercepts = NULL, slopes = NULL,
     
     # Figure out tickers from tickers.gains
     tickers <- colnames(tickers.gains)
+    n.tickers <- length(tickers)
+    n.sets <- n.tickers / 3
     if (is.null(tickers)) {
-      tickers <- paste("FUND", 1: ncol(tickers.gains), sep = "")
+      tickers <- paste("FUND", 1: n.tickers, sep = "")
     }
-    tickers <- matrix(tickers, nrow = 3)
     
     # Convert reference.gains to matrix if necessary, and figure out
     # reference.tickers
@@ -213,7 +184,7 @@ threefunds_graph <- function(tickers = NULL, intercepts = NULL, slopes = NULL,
   
   # Going in different direction. If doesn't work, revert back to version in
   # exports file
-  for (ii in 1: ncol(tickers)) {
+  for (ii in 1: n.sets) {
     
     # Initialize list to store x-axis values and y-axis values for current
     # three-fund set
@@ -617,7 +588,7 @@ threefunds_graph <- function(tickers = NULL, intercepts = NULL, slopes = NULL,
     # for a particular fund-1 allocation
     set.list <- mapply(function(x, y)
       list(cbind(unlist(x), unlist(y))), x, y, SIMPLIFY = TRUE)
-    names(set.list) <- paste(fund1.all * 100, "% ", tickers[1, ii], sep = "")
+    names(set.list) <- paste(fund1.all * 100, "% ", tickers[ii * 3 - 2], sep = "")
     
     # Add set.list to portfolio.xy
     portfolio.xy[[ii]] <- set.list
@@ -625,8 +596,9 @@ threefunds_graph <- function(tickers = NULL, intercepts = NULL, slopes = NULL,
   }
   
   # Create labels for 3-fund sets
-  set.labels <- apply(tickers, 2, function(x)
-    paste(x[1], "-", x[2], "-", x[3], sep = ""))
+  set.labels <- paste(tickers[seq(1, length(tickers), 3)], 
+                      tickers[seq(2, length(tickers), 3)], 
+                      tickers[seq(3, length(tickers), 3)], sep = "-")
   
   # Extract all x and y values from portfolio.xy
   x <- lapply(portfolio.xy, function(x) lapply(x, function(x) x[, 1]))
@@ -639,28 +611,28 @@ threefunds_graph <- function(tickers = NULL, intercepts = NULL, slopes = NULL,
     plot.title <- paste("Mean of ", capitalize(time.scale), " Gains vs. ",
                         sep = "")
     y.label <- paste("Mean of ", time.scale, " gains (%)", sep = "")
-    if (!is.null(reference.tickers)) {
+    if (! is.null(reference.tickers)) {
       reference.y <- apply(reference.gains, 2, mean) * 100
     }
   } else if (y.metric == "sd") {
     plot.title <- paste("SD of ", capitalize(time.scale), " Gains vs. ",
                         sep = "")
     y.label <- paste("SD of ", time.scale, " gains (%)", sep = "")
-    if (!is.null(reference.tickers)) {
+    if (! is.null(reference.tickers)) {
       reference.y <- apply(reference.gains, 2, sd) * 100
     }
     y1 <- 0
   } else if (y.metric == "growth") {
     plot.title <- "Total Growth vs. "
     y.label <- "Growth (%)"
-    if (!is.null(reference.tickers)) {
+    if (! is.null(reference.tickers)) {
       reference.y <- apply(reference.gains, 2, function(x) 
         gains_rate(gains = x)) * 100
     }
   } else if (y.metric == "cagr") {
     plot.title <- "CAGR vs. "
     y.label <- "CAGR (%)"
-    if (!is.null(reference.tickers)) {
+    if (! is.null(reference.tickers)) {
       reference.y <- apply(reference.gains, 2, function(x)
         gains_rate(gains = x, units.rate = units.year)) * 100
     }
@@ -675,47 +647,47 @@ threefunds_graph <- function(tickers = NULL, intercepts = NULL, slopes = NULL,
   } else if (y.metric == "sharpe") {
     plot.title <- "Sharpe Ratio vs. "
     y.label <- "Sharpe ratio"
-    if (!is.null(reference.tickers)) {
+    if (! is.null(reference.tickers)) {
       reference.y <- apply(reference.gains, 2, function(x) sharpe(gains = x))
     }
   } else if (y.metric == "sortino") {
     plot.title <- "Sortino Ratio vs. "
     y.label <- "Sortino ratio"
-    if (!is.null(reference.tickers)) {
+    if (! is.null(reference.tickers)) {
       reference.y <- apply(reference.gains, 2, function(x) sortino(gains = x))
     }
   } else if (y.metric == "alpha") {
     plot.title <- "Alpha vs. "
     y.label <- paste("Alpha w/ ", benchmark.tickers[1], " (%)", sep = "")
-    if (!is.null(reference.tickers)) {
+    if (! is.null(reference.tickers)) {
       reference.y <- apply(reference.gains, 2, function(x)
         lm(x ~ benchmark.gains[, 1])$coef[1]) * 100
     }
   } else if (y.metric == "alpha2") {
     plot.title <- "Alpha vs. "
     y.label <- paste("Alpha w/ ", benchmark.tickers[2], " (%)", sep = "")
-    if (!is.null(reference.tickers)) {
+    if (! is.null(reference.tickers)) {
       reference.y <- apply(reference.gains, 2, function(x)
         lm(x ~ benchmark.gains[, 2])$coef[1]) * 100
     }
   } else if (y.metric == "beta") {
     plot.title <- "Beta vs. "
     y.label <- paste("Beta w/ ", benchmark.tickers[1], sep = "")
-    if (!is.null(reference.tickers)) {
+    if (! is.null(reference.tickers)) {
       reference.y <- apply(reference.gains, 2, function(x)
         lm(x ~ benchmark.gains[, 1])$coef[2])
     }
   } else if (y.metric == "beta2") {
     plot.title <- "Beta vs. "
     y.label <- paste("Beta w/ ", benchmark.tickers[2], sep = "")
-    if (!is.null(reference.tickers)) {
+    if (! is.null(reference.tickers)) {
       reference.y <- apply(reference.gains, 2, function(x)
         lm(x ~ benchmark.gains[, 2])$coef[2])
     }
   } else if (y.metric == "r.squared") {
     plot.title <- "R-squared vs. "
     y.label <- paste("R-squared w/ ", benchmark.tickers[1], sep = "")
-    if (!is.null(reference.tickers)) {
+    if (! is.null(reference.tickers)) {
       reference.y <- apply(reference.gains, 2, function(x)
         summary(lm(x ~ benchmark.gains[, 1]))$r.squared)
     }
@@ -723,7 +695,7 @@ threefunds_graph <- function(tickers = NULL, intercepts = NULL, slopes = NULL,
   } else if (y.metric == "r.squared2") {
     plot.title <- "R-squared vs. "
     y.label <- paste("R-squared w/ ", benchmark.tickers[2], sep = "")
-    if (!is.null(reference.tickers)) {
+    if (! is.null(reference.tickers)) {
       reference.y <- apply(reference.gains, 2, function(x)
         summary(lm(x ~ benchmark.gains[, 2]))$r.squared)
     }
@@ -731,42 +703,42 @@ threefunds_graph <- function(tickers = NULL, intercepts = NULL, slopes = NULL,
   } else if (y.metric == "pearson") {
     plot.title <- "Pearson Cor. vs. "
     y.label <- paste("Pearson cor. w/ ", benchmark.tickers[1], sep = "")
-    if (!is.null(reference.tickers)) {
+    if (! is.null(reference.tickers)) {
       reference.y <- apply(reference.gains, 2, function(x)
         cor(x, benchmark.gains[, 1]))
     }
   } else if (y.metric == "pearson2") {
     plot.title <- "Pearson Cor. vs. "
     y.label <- paste("Pearson cor. w/ ", benchmark.tickers[2], sep = "")
-    if (!is.null(reference.tickers)) {
+    if (! is.null(reference.tickers)) {
       reference.y <- apply(reference.gains, 2, function(x)
         cor(x, benchmark.gains[, 2]))
     }
   } else if (y.metric == "spearman") {
     plot.title <- "Spearman Cor. vs. "
     y.label <- paste("Spearman cor. w/ ", benchmark.tickers[1], sep = "")
-    if (!is.null(reference.tickers)) {
+    if (! is.null(reference.tickers)) {
       reference.y <- apply(reference.gains, 2, function(x)
         cor(x, benchmark.gains[, 1], method = "spearman"))
     }
   } else if (y.metric == "spearman2") {
     plot.title <- "Spearman Cor. vs. "
     y.label <- paste("Spearman cor. w/ ", benchmark.tickers[2], sep = "")
-    if (!is.null(reference.tickers)) {
+    if (! is.null(reference.tickers)) {
       reference.y <- apply(reference.gains, 2, function(x)
         cor(x, benchmark.gains[, 2], method = "spearman"))
     }
   } else if (y.metric == "auto.pearson") {
     plot.title <- "Autocorrelation vs. "
     y.label <- "Pearson autocorrelation"
-    if (!is.null(reference.tickers)) {
+    if (! is.null(reference.tickers)) {
       reference.y <- apply(reference.gains, 2, function(x)
         cor(x[-length(x)], x[-1]))
     }
   } else if (y.metric == "auto.spearman") {
     plot.title <- "Autocorrelation vs. "
     y.label <- "Spearman autocorrelation"
-    if (!is.null(reference.tickers)) {
+    if (! is.null(reference.tickers)) {
       reference.y <- apply(reference.gains, 2, function(x)
         cor(x[-length(x)], x[-1], method = "spearman"))
     }
@@ -782,35 +754,35 @@ threefunds_graph <- function(tickers = NULL, intercepts = NULL, slopes = NULL,
     plot.title <- paste(plot.title, "Mean of ", capitalize(time.scale),
                         " Gains", sep = "")
     x.label <- paste("Mean of ", time.scale, " gains (%)", sep = "")
-    if (!is.null(reference.tickers)) {
+    if (! is.null(reference.tickers)) {
       reference.x <- apply(reference.gains, 2, mean) * 100
     }
   } else if (x.metric == "sd") {
     plot.title <- paste(plot.title, "SD of ", capitalize(time.scale), " Gains",
                         sep = "")
     x.label <- paste("SD of ", time.scale, " gains (%)", sep = "")
-    if (!is.null(reference.tickers)) {
+    if (! is.null(reference.tickers)) {
       reference.x <- apply(reference.gains, 2, sd) * 100
     }
     x1 <- 0
   } else if (x.metric == "growth") {
     plot.title <- paste(plot.title, "Total Growth", sep = "")
     x.label <- "Growth (%)"
-    if (!is.null(reference.tickers)) {
+    if (! is.null(reference.tickers)) {
       reference.x <- apply(reference.gains, 2, function(x)
         gains_rate(gains = x)) * 100
     }
   } else if (x.metric == "cagr") {
     plot.title <- paste(plot.title, "CAGR", sep = "")
     x.label <- "CAGR (%)"
-    if (!is.null(reference.tickers)) {
+    if (! is.null(reference.tickers)) {
       reference.x <- apply(reference.gains, 2, function(x)
         gains_rate(gains = x, units.rate = units.year)) * 100
     }
   } else if (x.metric == "mdd") {
     plot.title <- paste(plot.title, "MDD", sep = "")
     x.label <- "MDD (%)"
-    if (!is.null(reference.tickers)) {
+    if (! is.null(reference.tickers)) {
       reference.x <- apply(reference.gains, 2, function(x)
         mdd(gains = x)) * 100
     }
@@ -818,47 +790,47 @@ threefunds_graph <- function(tickers = NULL, intercepts = NULL, slopes = NULL,
   } else if (x.metric == "sharpe") {
     plot.title <- paste(plot.title, "Sharpe Ratio", sep = "")
     x.label <- "Sharpe ratio"
-    if (!is.null(reference.tickers)) {
+    if (! is.null(reference.tickers)) {
       reference.x <- apply(reference.gains, 2, function(x) sharpe(gains = x))
     }
   } else if (x.metric == "sortino") {
     plot.title <- paste(plot.title, "Sortino Ratio", sep = "")
     x.label <- "Sortino ratio"
-    if (!is.null(reference.tickers)) {
+    if (! is.null(reference.tickers)) {
       reference.x <- apply(reference.gains, 2, function(x) sharpe(gains = x))
     }
   } else if (x.metric == "alpha") {
     plot.title <- paste(plot.title, "Alpha", sep = "")
     x.label <- paste("Alpha w/ ", benchmark.tickers[1], " (%)", sep = "")
-    if (!is.null(reference.tickers)) {
+    if (! is.null(reference.tickers)) {
       reference.x <- apply(reference.gains, 2, function(x)
         lm(x ~ benchmark.gains[, 1])$coef[1]) * 100
     }
   } else if (x.metric == "alpha2") {
     plot.title <- paste(plot.title, "Alpha", sep = "")
     x.label <- paste("Alpha w/ ", benchmark.tickers[2], " (%)", sep = "")
-    if (!is.null(reference.tickers)) {
+    if (! is.null(reference.tickers)) {
       reference.x <- apply(reference.gains, 2, function(x)
         lm(x ~ benchmark.gains[, 2])$coef[1]) * 100
     }
   } else if (x.metric == "beta") {
     plot.title <- paste(plot.title, "Beta", sep = "")
     x.label <- paste("Beta w/ ", benchmark.tickers[1], sep = "")
-    if (!is.null(reference.tickers)) {
+    if (! is.null(reference.tickers)) {
       reference.x <- apply(reference.gains, 2, function(x)
         lm(x ~ benchmark.gains[, 1])$coef[2])
     }
   } else if (x.metric == "beta2") {
     plot.title <- paste(plot.title, "Beta", sep = "")
     x.label <- paste("Beta w/ ", benchmark.tickers[2], sep = "")
-    if (!is.null(reference.tickers)) {
+    if (! is.null(reference.tickers)) {
       reference.x <- apply(reference.gains, 2, function(x)
         lm(x ~ benchmark.gains[, 2])$coef[2])
     }
   } else if (x.metric == "r.squared") {
     plot.title <- paste(plot.title, "R-squared", sep = "")
     x.label <- paste("R-squared w/ ", benchmark.tickers[1], sep = "")
-    if (!is.null(reference.tickers)) {
+    if (! is.null(reference.tickers)) {
       reference.x <- apply(reference.gains, 2, function(x)
         summary(lm(x ~ benchmark.gains[, 1]))$r.squared)
     }
@@ -866,7 +838,7 @@ threefunds_graph <- function(tickers = NULL, intercepts = NULL, slopes = NULL,
   } else if (x.metric == "r.squared2") {
     plot.title <- paste(plot.title, "R-squared", sep = "")
     x.label <- paste("R-squared w/ ", benchmark.tickers[2], sep = "")
-    if (!is.null(reference.tickers)) {
+    if (! is.null(reference.tickers)) {
       reference.x <- apply(reference.gains, 2, function(x)
         summary(lm(x ~ benchmark.gains[, 2]))$r.squared)
     }
@@ -874,42 +846,42 @@ threefunds_graph <- function(tickers = NULL, intercepts = NULL, slopes = NULL,
   } else if (x.metric == "pearson") {
     plot.title <- paste(plot.title, "Pearson Cor.", sep = "")
     x.label <- paste("Pearson cor. w/ ", benchmark.tickers[1], sep = "")
-    if (!is.null(reference.tickers)) {
+    if (! is.null(reference.tickers)) {
       reference.x <- apply(reference.gains, 2, function(x)
         cor(x, benchmark.gains[, 1]))
     }
   } else if (x.metric == "pearson") {
     plot.title <- paste(plot.title, "Pearson Cor.", sep = "")
     x.label <- paste("Pearson cor. w/ ", benchmark.tickers[2], sep = "")
-    if (!is.null(reference.tickers)) {
+    if (! is.null(reference.tickers)) {
       reference.x <- apply(reference.gains, 2, function(x)
         cor(x, benchmark.gains[, 2]))
     }
   } else if (x.metric == "spearman") {
     plot.title <- paste(plot.title, "Spearman Cor.", sep = "")
     x.label <- paste("Spearman cor. w/ ", benchmark.tickers[1], sep = "")
-    if (!is.null(reference.tickers)) {
+    if (! is.null(reference.tickers)) {
       reference.x <- apply(reference.gains, 2, function(x)
         cor(x, benchmark.gains[, 1], method = "spearman"))
     }
   } else if (x.metric == "spearman") {
     plot.title <- paste(plot.title, "Spearman Cor.", sep = "")
     x.label <- paste("Spearman cor. w/ ", benchmark.tickers[2], sep = "")
-    if (!is.null(reference.tickers)) {
+    if (! is.null(reference.tickers)) {
       reference.x <- apply(reference.gains, 2, function(x)
         cor(x, benchmark.gains[, 2], method = "spearman"))
     }
   } else if (x.metric == "auto.pearson") {
     plot.title <- paste(plot.title, "Autocorrelation", sep = "")
     x.label <- "Pearson autocorrelation"
-    if (!is.null(reference.tickers)) {
+    if (! is.null(reference.tickers)) {
       reference.x <- apply(reference.gains, 2, function(x)
         cor(x[-length(x)], x[-1]))
     }
   } else if (x.metric == "auto.spearman") {
     plot.title <- paste(plot.title, "Autocorrelation", sep = "")
     x.label <- "Spearman autocorrelation"
-    if (!is.null(reference.tickers)) {
+    if (! is.null(reference.tickers)) {
       reference.x <- apply(reference.gains, 2, function(x)
         cor(x[-length(x)], x[-1], method = "spearman"))
     }
@@ -941,7 +913,6 @@ threefunds_graph <- function(tickers = NULL, intercepts = NULL, slopes = NULL,
   }
   
   # Create color scheme for plot
-  n.sets <- ncol(tickers)
   if (is.null(colors)) {
     if (n.sets == 1) {
       colors <- "black"
@@ -954,6 +925,9 @@ threefunds_graph <- function(tickers = NULL, intercepts = NULL, slopes = NULL,
     } else if (n.sets > 4) {
       colors <- colorRampPalette(c("blue", "red"))(n.sets)
     }
+  }
+  if (is.null(lty)) {
+    lty <- rep(1, n.sets)
   }
   
   # Figure out features of graph, based on user inputs where available
@@ -972,7 +946,7 @@ threefunds_graph <- function(tickers = NULL, intercepts = NULL, slopes = NULL,
     
     tickerlabel.offsets <- cbind(rep(0, n.sets * 3), rep(NA, n.sets * 3))
     y.offset.mag <- (y2 - y1) / 40
-    for (ii in 1: ncol(tickers)) {
+    for (ii in 1: n.sets) {
       
       # Put label for ticker with higher y-value above its data point, and
       # label for other ticker below its data point
@@ -999,7 +973,7 @@ threefunds_graph <- function(tickers = NULL, intercepts = NULL, slopes = NULL,
     tickerlabel.offsets <- cbind(rep(tickerlabel.offsets[1], n.sets * 3),
                                  rep(tickerlabel.offsets[2], n.sets * 3))
   }
-  if (is.null(reflabel.offsets) & !is.null(reference.tickers)) {
+  if (is.null(reflabel.offsets) & ! is.null(reference.tickers)) {
     reflabel.offsets <- cbind(rep(0, length(reference.tickers)),
                               rep((y2 - y1) / 40, length(reference.tickers)))
   } else if (length(tickerlabel.offsets) == 2) {
@@ -1008,7 +982,7 @@ threefunds_graph <- function(tickers = NULL, intercepts = NULL, slopes = NULL,
   }
   
   # If pdf.list is not NULL, call pdf
-  if (!is.null(pdf.list)) {
+  if (! is.null(pdf.list)) {
     if (is.null(pdf.list$file)) {
       pdf.list$file <- "figure1.pdf"
     }
@@ -1016,7 +990,7 @@ threefunds_graph <- function(tickers = NULL, intercepts = NULL, slopes = NULL,
   }
   
   # If bmp.list is not NULL, call bmp
-  if (!is.null(bmp.list)) {
+  if (! is.null(bmp.list)) {
     if (is.null(bmp.list$file)) {
       bmp.list$file <- "figure1.bmp"
     }
@@ -1024,7 +998,7 @@ threefunds_graph <- function(tickers = NULL, intercepts = NULL, slopes = NULL,
   }
   
   # If jpeg.list is not NULL, call jpeg
-  if (!is.null(jpeg.list)) {
+  if (! is.null(jpeg.list)) {
     if (is.null(jpeg.list$file)) {
       jpeg.list$file <- "figure1.jpg"
     }
@@ -1032,7 +1006,7 @@ threefunds_graph <- function(tickers = NULL, intercepts = NULL, slopes = NULL,
   }
   
   # If png.list is not NULL, call png
-  if (!is.null(png.list)) {
+  if (! is.null(png.list)) {
     if (is.null(png.list$file)) {
       png.list$file <- "figure1.png"
     }
@@ -1040,7 +1014,7 @@ threefunds_graph <- function(tickers = NULL, intercepts = NULL, slopes = NULL,
   }
   
   # If tiff.list is not NULL, call tiff
-  if (!is.null(tiff.list)) {
+  if (! is.null(tiff.list)) {
     if (is.null(tiff.list$file)) {
       tiff.list$file <- "figure1.tif"
     }
@@ -1071,7 +1045,7 @@ threefunds_graph <- function(tickers = NULL, intercepts = NULL, slopes = NULL,
   }
   
   # Figure out indices for data points
-  if (!is.null(step.points)) {
+  if (! is.null(step.points)) {
     locs.points <- seq(1, num.points, step.points / step.data)
   } else {
     locs.points <- c(1, num.points)
@@ -1083,7 +1057,7 @@ threefunds_graph <- function(tickers = NULL, intercepts = NULL, slopes = NULL,
     # Add colored curves and data points
     lapply(portfolio.xy[[ii]], function(x) {
       do.call(points, c(list(x = x[, 1], y = x[, 2], type = "l",
-                             col = colors[ii]), points.list))
+                             col = colors[ii], lty = lty[ii]), points.list))
       do.call(points, c(list(x = x[locs.points, 1], y = x[locs.points, 2],
                              col = colors[ii]), points.list))
     })
@@ -1100,33 +1074,35 @@ threefunds_graph <- function(tickers = NULL, intercepts = NULL, slopes = NULL,
     do.call(points, c(list(x = fund3.xy[1], y = fund3.xy[2]), points.list))
     
     # Add text labels if not already on plot
-    if (ii == 1 | ! tickers[1, ii] %in% tickers[, 1: (ii - 1)]) {
+    if (ii == 1 | ! tickers[ii * 3 - 2] %in% tickers[1: (ii * 3 - 3)]) {
       do.call(text, c(list(x = fund1.xy[1] +
                              tickerlabel.offsets[(ii * 3 - 2), 1],
                            y = fund1.xy[2] +
                              tickerlabel.offsets[(ii * 3 - 2), 2],
-                           label = paste("100% ", tickers[1, ii], sep = "")),
+                           label = paste("100% ", tickers[ii * 3 - 2], 
+                                         sep = "")),
                       text.list))
     }
-    if (ii == 1 | ! tickers[2, ii] %in% tickers[, 1: (ii - 1)]) {
+    if (ii == 1 | ! tickers[ii * 3 - 1] %in% tickers[1: (ii * 3 - 2)]) {
       do.call(text, c(list(x = fund2.xy[1] +
                              tickerlabel.offsets[(ii * 3 - 1), 1],
                            y = fund2.xy[2] +
                              tickerlabel.offsets[(ii * 3 - 1), 2],
-                           label = paste("100% ", tickers[2, ii], sep = "")),
+                           label = paste("100% ", tickers[ii * 3 - 1], 
+                                         sep = "")),
                       text.list))
     }
-    if (ii == 1 | ! tickers[3, ii] %in% tickers[, 1: (ii - 1)]) {
+    if (ii == 1 | ! tickers[ii * 3] %in% tickers[1: (ii * 3 - 3)]) {
       do.call(text, c(list(x = fund3.xy[1] + tickerlabel.offsets[(ii * 3), 1],
                            y = fund3.xy[2] + tickerlabel.offsets[ii * 3, 2],
-                           label = paste("100% ", tickers[3, ii], sep = "")),
+                           label = paste("100% ", tickers[ii * 3], sep = "")),
                       text.list))
     }
     
   }
   
   # Add data point for reference funds (if given)
-  if (!is.null(reference.tickers)) {
+  if (! is.null(reference.tickers)) {
     
     # Loop through and add data points for each reference fund
     for (ii in 1: ncol(reference.gains)) {
@@ -1166,8 +1142,8 @@ threefunds_graph <- function(tickers = NULL, intercepts = NULL, slopes = NULL,
   }
   
   # Close graphics device if necessary
-  if (!is.null(pdf.list) | !is.null(bmp.list) | !is.null(jpeg.list) |
-      !is.null(png.list) | !is.null(tiff.list)) {
+  if (! is.null(pdf.list) | ! is.null(bmp.list) | ! is.null(jpeg.list) |
+      ! is.null(png.list) | ! is.null(tiff.list)) {
     dev.off()
   }
   

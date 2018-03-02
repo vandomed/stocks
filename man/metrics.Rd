@@ -10,37 +10,32 @@ metrics(tickers = NULL, ..., gains = NULL, prices = NULL,
   "auto.spearman"))
 }
 \arguments{
-\item{tickers}{Character vector of ticker symbols, if you wish to load data 
-on the fly rather than specify \code{gains} or \code{prices}.}
+\item{tickers}{Character vector of ticker symbols that Yahoo! Finance 
+recognizes, if you want to download data on the fly.}
 
 \item{...}{Arguments to pass along with \code{tickers} to 
 \code{\link{load_gains}}.}
 
-\item{gains}{Numeric matrix of gains, with 1 column for each investment.}
+\item{gains}{Numeric matrix with 1 column of gains for each investment (can 
+be a vector if there is only one).}
 
-\item{prices}{Numeric matrix of prices, with 1 column for each investment.}
+\item{prices}{Numeric matrix with 1 column of prices for each investment (can 
+be a vector if there is only one).}
 
-\item{perf.metrics}{Character vector specying metrics to calculate. If at 
-least 1 metric requires a benchmark, the first investment is used.}
+\item{perf.metrics}{Character vector specifying metrics to calculate.}
 }
 \value{
 List containing a data frame with the performance metrics and a correlation 
 matrix for gains for the various investments.
 }
 \description{
-Calculates variety of performance metrics from prices or gains.
+Useful for comparing metrics for several investments. The first investment is 
+used as the benchmark if requested metrics require one.
 }
 \examples{
-# Calculate performance metrics for leveraged ETFs SSO and UPRO, using SPY 
-# as benchmark for alpha and beta - "on the fly" method
-metrics1 <- metrics(tickers = c("SPY", "SSO", "UPRO"))
-
-# Calculate same performance metrics, but specify gains input
-gains <- load_gains(tickers = c("SPY", "SSO", "UPRO"))
-metrics2 <- metrics(gains = gains)
-
-# Results are identical
-all.equal(metrics1$perf.metrics, metrics2$perf.metrics)
+# # Calculate performance metrics for SSO and UPRO, using SPY as benchmark 
+# # for alpha and beta
+# metrics1 <- metrics(tickers = c("SPY", "SSO", "UPRO"))
 
 
 }

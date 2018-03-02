@@ -10,34 +10,20 @@ twofunds_graph(tickers = NULL, intercepts = NULL, slopes = NULL, ...,
   tickers.gains = NULL, benchmark.gains = NULL, reference.gains = NULL,
   step.data = 0.0025, step.points = 0.1, x.metric = "sd",
   y.metric = "mean", tickerlabel.offsets = NULL, reflabel.offsets = NULL,
-  add.plot = FALSE, colors = NULL, plot.list = NULL, points.list = NULL,
-  text.list = NULL, pdf.list = NULL, bmp.list = NULL, jpeg.list = NULL,
-  png.list = NULL, tiff.list = NULL)
+  add.plot = FALSE, colors = NULL, lty = NULL, plot.list = NULL,
+  points.list = NULL, text.list = NULL, pdf.list = NULL,
+  bmp.list = NULL, jpeg.list = NULL, png.list = NULL, tiff.list = NULL)
 }
 \arguments{
-\item{tickers}{Character vector or matrix of ticker symbols, if you want to 
-load data on the fly rather than specify \code{tickers.gains}. If a vector, 
-the first and second elements are assumed to be first pair, the third and 
-fourth the second pair, and so on. If a matrix, each two-row column should r
-epresent a different pair.}
+\item{tickers}{Character vector of ticker symbols that Yahoo! Finance 
+recognizes, if you want to download data on the fly.}
 
-\item{intercepts}{Numeric vector of values to add to daily gains for each 
-ticker. For example, if you have two tickers and want to simulate a 1\% 
-annual expense ratio for only the second fund, set 
-\code{intercepts = c(0, convert.rate(-0.01, units.in = 252, units.out = 1))}.}
-
-\item{slopes}{Numeric vector of values to multiply daily gains for each ticker 
-by. For example, if you have two tickers and want to simulate a 2x leveraged 
-version of the second fund, set \code{slopes = c(1, 2)}. The slopes are 
-multiplied prior to adding the intercepts.}
-
-\item{...}{Arguments to pass along with \code{tickers}, \code{intercepts}, 
-and \code{slopes} to \code{\link{load_gains}} function, if you want to load 
-data on the fly rather than specify \code{tickers.gains}.}
+\item{...}{Arguments to pass along with \code{tickers} to 
+\code{\link{load_gains}}.}
 
 \item{benchmark.tickers}{Character vector of length 1 or 2 indicating ticker 
 symbols for benchmark indexes. Only used if \code{x.metric} and/or 
-\code{y.metric} require benchmark indexes to calculate.  For example, to plot 
+\code{y.metric} require benchmark indexes to calculate. For example, to plot 
 correlation with SPY on the x-axis and correlation with TLT on the y-axis, 
 set \code{x.metric = "pearson"}, \code{y.metric = "pearson2"} (i.e. Pearson 
 correlation with 2nd benchmark), and 
@@ -47,8 +33,7 @@ correlation with 2nd benchmark), and
 graph as data points for comparative purposes.}
 
 \item{tickers.gains}{Numeric matrix of gains, where each column has gains for 
-a particular fund. The first and second columns are assumed to be the first 
-pair, third and fourth the second, and so on.}
+a particular fund.}
 
 \item{benchmark.gains}{Numeric vector or matrix of gains for 1 or 2 benchmark 
 indexes. Only used if \code{x.metric} and/or \code{y.metric} require 
@@ -60,14 +45,14 @@ input \code{benchmark.gains} as a 2-column matrix of gains for SPY and TLT.}
 \item{reference.gains}{Numeric vector or matrix of gains for funds to 
 include on graph as data points for comparative purposes.}
 
-\item{step.data}{Numeric value specifying allocation increments for data used 
-to fit curves.}
+\item{step.data}{Numeric value specifying allocation increments for plotting 
+curves.}
 
-\item{step.points}{Numeric value specifying allocation increments for data 
-points on top of curves. Set to \code{NULL} to suppress data points.}
+\item{step.points}{Numeric value specifying allocation increments for adding 
+data points on top of curves. Set to \code{NULL} to suppress data points.}
 
-\item{x.metric}{Character string specifying performance metric to plot on the 
-x-axis. Choices are: 
+\item{x.metric}{Character string specifying x-axis performance metric. 
+Choices are: 
 
 \code{"mean"} or \code{"sd"} for mean or standard deviation of gains 
 
@@ -89,38 +74,45 @@ benchmark index
 
 \code{"auto.pearson"} or \code{"auto.spearman"} for Pearson or Spearman 
 autocorrelation, defined as the correlation between subsequent gains
-  
+
 \code{"allocation"} for allocation to first fund in each pair.}
 
-\item{y.metric}{Same as \code{x.metric}, but for y-axis variable.}
+\item{y.metric}{Same as \code{x.metric}, but for the y-axis}
 
 \item{tickerlabel.offsets}{Either a numeric vector of length 2 giving the 
-x- and y-axis offsets for ticker labels, or a 2-column matrix where each row 
-gives the x- and y-axis offsets for a particular ticker, following the same 
-order of tickers as in the \code{tickers} matrix (going down each column, 
-then to the next row) or across the \code{ticker.gains} matrix.}
+x- and y-axis offsets for all ticker labels, or a 2-column matrix where each 
+row gives the x- and y-axis offsets for a ticker.}
 
 \item{reflabel.offsets}{Either a numeric vector of length 2 giving the x- and 
-y-axis offsets for reference ticker labels, or a 2-column matrix where each 
-row gives the x- and y-axis offsets for a particular reference ticker, 
-following the same order of tickers as in the \code{reference.tickers} vector 
-or across the \code{reference.gains} matrix.}
+y-axis offsets for all reference ticker labels, or a 2-column matrix where 
+each row gives the x- and y-axis offsets for a reference ticker.}
 
-\item{add.plot}{Logical value for whether to add plot data to the current 
-plot frame, as opposed to opening a new one.}
+\item{add.plot}{Logical value for whether to add plot data to current plot 
+frame rather than open a new one.}
 
-\item{colors}{Character string of colors for each fund pair.}
+\item{colors}{Character vector of colors for each curve.}
 
-\item{plot.list, points.list, text.list}{List of arguments to pass to 
-\code{\link[graphics]{plot}}, \code{\link[graphics]{points}}, and 
-\code{\link[graphics]{text}}.}
+\item{lty}{Numeric vector specifying line types for each curve.}
 
-\item{pdf.list, bmp.list, jpeg.list, png.list, tiff.list}{List of arguments to 
-pass to \code{\link[grDevices]{pdf}}, \code{\link[grDevices]{bmp}}, etc. For 
-each that is not \code{NULL}, the corresponding figure file gets created.}
+\item{plot.list}{List of arguments to pass to \code{\link[graphics]{plot}}.}
+
+\item{points.list}{List of arguments to pass to 
+\code{\link[graphics]{points}}.}
+
+\item{text.list}{List of arguments to pass to \code{\link[graphics]{text}}.}
+
+\item{pdf.list}{List of arguments to pass to \code{\link[grDevices]{pdf}}.}
+
+\item{bmp.list}{List of arguments to pass to \code{\link[grDevices]{bmp}}.}
+
+\item{jpeg.list}{List of arguments to pass to \code{\link[grDevices]{jpeg}}.}
+
+\item{png.list}{List of arguments to pass to \code{\link[grDevices]{png}}.}
+
+\item{tiff.list}{List of arguments to pass to \code{\link[grDevices]{tiff}}.}
 }
 \value{
-In addition to the graph, a list containing the following: 
+In addition to the graph, a list containing: 
 \enumerate{
 \item List named \code{portfolio.xy} where each element is a two-column 
 matrix of x- and y-axis values for a fund pair.
@@ -131,17 +123,19 @@ gains for each fund.
 }
 \description{
 Useful for visualizing performance of two-fund portfolios, typically by 
-plotting a measure of growth vs. a measure of volatility.
+plotting a measure of growth vs. a measure of volatility. First two 
+investments are used as the first two-fund pair, next two as the second 
+two-fund pair, and so on.
 }
 \examples{
-# Plot mean vs. SD for UPRO/VBLTX portfolio, and compare to VFINX and BRK-B
-fig1 <- twofunds_graph(tickers = c("UPRO", "VBLTX"), 
-                       reference.tickers = c("VFINX", "BRK-B"))
-                      
-# Same funds, but annualized growth vs. maximum drawdown
-fig2 <- twofunds_graph(tickers = c("UPRO", "VBLTX"), 
-                       reference.tickers = c("VFINX", "BRK-B"),
-                       x.metric = "mdd", y.metric = "cagr")
+# # Plot mean vs. SD for UPRO/VBLTX portfolio, and compare to VFINX and BRK-B
+# fig1 <- twofunds_graph(tickers = c("UPRO", "VBLTX"), 
+#                        reference.tickers = c("VFINX", "BRK-B"))
+#                     
+# # Same funds, but annualized growth vs. maximum drawdown
+# fig2 <- twofunds_graph(tickers = c("UPRO", "VBLTX"), 
+#                        reference.tickers = c("VFINX", "BRK-B"),
+#                        x.metric = "mdd", y.metric = "cagr")
 
 }
 \references{

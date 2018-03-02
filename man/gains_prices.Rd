@@ -2,21 +2,21 @@
 % Please edit documentation in R/gains_prices.R
 \name{gains_prices}
 \alias{gains_prices}
-\title{Convert Vector of Gains to Prices}
+\title{Convert Gains to Prices}
 \usage{
 gains_prices(gains, initial = 10000)
 }
 \arguments{
-\item{gains}{Numeric vector of gains.}
+\item{gains}{Numeric matrix with 1 column of gains for each investment (can 
+be a vector if there is only one).}
 
 \item{initial}{Numeric value.}
 }
 \value{
-Numeric vector.
+Numeric vector or matrix.
 }
 \description{
-Calculates vector of prices based on initial balance and vector of gains. 
-Defined simply as \code{initial * cumprod(gains + 1)}.
+Calculates prices based on initial balance and vector or matrix of gains.
 }
 \examples{
 # Simulate daily gains over a 5-year period

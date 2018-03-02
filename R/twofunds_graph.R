@@ -2,25 +2,17 @@
 #' Allocation Varies
 #' 
 #' Useful for visualizing performance of two-fund portfolios, typically by 
-#' plotting a measure of growth vs. a measure of volatility. 
+#' plotting a measure of growth vs. a measure of volatility. First two 
+#' investments are used as the first two-fund pair, next two as the second 
+#' two-fund pair, and so on. 
 #' 
 #' 
-#' @inheritParams load_gains
+#' @inheritParams metrics
 #' 
-#' 
-#' @param tickers Character vector or matrix of ticker symbols, if you want to 
-#' load data on the fly rather than specify \code{tickers.gains}. If a vector, 
-#' the first and second elements are assumed to be first pair, the third and 
-#' fourth the second pair, and so on. If a matrix, each two-row column should r
-#' epresent a different pair.
-#' 
-#' @param ... Arguments to pass along with \code{tickers}, \code{intercepts}, 
-#' and \code{slopes} to \code{\link{load_gains}} function, if you want to load 
-#' data on the fly rather than specify \code{tickers.gains}.
 #' 
 #' @param benchmark.tickers Character vector of length 1 or 2 indicating ticker 
 #' symbols for benchmark indexes. Only used if \code{x.metric} and/or 
-#' \code{y.metric} require benchmark indexes to calculate.  For example, to plot 
+#' \code{y.metric} require benchmark indexes to calculate. For example, to plot 
 #' correlation with SPY on the x-axis and correlation with TLT on the y-axis, 
 #' set \code{x.metric = "pearson"}, \code{y.metric = "pearson2"} (i.e. Pearson 
 #' correlation with 2nd benchmark), and 
@@ -30,8 +22,7 @@
 #' graph as data points for comparative purposes.
 #' 
 #' @param tickers.gains Numeric matrix of gains, where each column has gains for 
-#' a particular fund. The first and second columns are assumed to be the first 
-#' pair, third and fourth the second, and so on.
+#' a particular fund.
 #' 
 #' @param benchmark.gains Numeric vector or matrix of gains for 1 or 2 benchmark 
 #' indexes. Only used if \code{x.metric} and/or \code{y.metric} require 
@@ -43,14 +34,14 @@
 #' @param reference.gains Numeric vector or matrix of gains for funds to 
 #' include on graph as data points for comparative purposes.
 #' 
-#' @param step.data Numeric value specifying allocation increments for data used 
-#' to fit curves.
+#' @param step.data Numeric value specifying allocation increments for plotting 
+#' curves.
 #' 
-#' @param step.points Numeric value specifying allocation increments for data 
-#' points on top of curves. Set to \code{NULL} to suppress data points.
+#' @param step.points Numeric value specifying allocation increments for adding 
+#' data points on top of curves. Set to \code{NULL} to suppress data points.
 #' 
-#' @param x.metric Character string specifying performance metric to plot on the 
-#' x-axis. Choices are: 
+#' @param x.metric Character string specifying x-axis performance metric. 
+#' Choices are: 
 #' 
 #' \code{"mean"} or \code{"sd"} for mean or standard deviation of gains 
 #' 
@@ -72,39 +63,40 @@
 #' 
 #' \code{"auto.pearson"} or \code{"auto.spearman"} for Pearson or Spearman 
 #' autocorrelation, defined as the correlation between subsequent gains
-#'   
+#' 
 #' \code{"allocation"} for allocation to first fund in each pair.
 #' 
-#' @param y.metric Same as \code{x.metric}, but for y-axis variable.
+#' @param y.metric Same as \code{x.metric}, but for the y-axis
 #' 
 #' @param tickerlabel.offsets Either a numeric vector of length 2 giving the 
-#' x- and y-axis offsets for ticker labels, or a 2-column matrix where each row 
-#' gives the x- and y-axis offsets for a particular ticker, following the same 
-#' order of tickers as in the \code{tickers} matrix (going down each column, 
-#' then to the next row) or across the \code{ticker.gains} matrix.
+#' x- and y-axis offsets for all ticker labels, or a 2-column matrix where each 
+#' row gives the x- and y-axis offsets for a ticker.
 #' 
 #' @param reflabel.offsets Either a numeric vector of length 2 giving the x- and 
-#' y-axis offsets for reference ticker labels, or a 2-column matrix where each 
-#' row gives the x- and y-axis offsets for a particular reference ticker, 
-#' following the same order of tickers as in the \code{reference.tickers} vector 
-#' or across the \code{reference.gains} matrix.
+#' y-axis offsets for all reference ticker labels, or a 2-column matrix where 
+#' each row gives the x- and y-axis offsets for a reference ticker.
 #' 
-#' @param add.plot Logical value for whether to add plot data to the current 
-#' plot frame, as opposed to opening a new one.
+#' @param add.plot Logical value for whether to add plot data to current plot 
+#' frame rather than open a new one.
 #' 
-#' @param colors Character string of colors for each fund pair.
+#' @param colors Character vector of colors for each curve.
 #' 
-#' @param plot.list,points.list,text.list List of arguments to pass to 
-#' \code{\link[graphics]{plot}}, \code{\link[graphics]{points}}, and 
-#' \code{\link[graphics]{text}}.
+#' @param lty Numeric vector specifying line types for each curve.
 #' 
-#' @param pdf.list,bmp.list,jpeg.list,png.list,tiff.list List of arguments to 
-#' pass to \code{\link[grDevices]{pdf}}, \code{\link[grDevices]{bmp}}, etc. For 
-#' each that is not \code{NULL}, the corresponding figure file gets created.
+#' @param plot.list List of arguments to pass to \code{\link[graphics]{plot}}.
+#' @param points.list List of arguments to pass to 
+#' \code{\link[graphics]{points}}.
+#' @param text.list List of arguments to pass to \code{\link[graphics]{text}}.
+#' 
+#' @param pdf.list List of arguments to pass to \code{\link[grDevices]{pdf}}.
+#' @param bmp.list List of arguments to pass to \code{\link[grDevices]{bmp}}.
+#' @param jpeg.list List of arguments to pass to \code{\link[grDevices]{jpeg}}.
+#' @param png.list List of arguments to pass to \code{\link[grDevices]{png}}.
+#' @param tiff.list List of arguments to pass to \code{\link[grDevices]{tiff}}.
 #' 
 #' 
 #' @return
-#' In addition to the graph, a list containing the following: 
+#' In addition to the graph, a list containing: 
 #' \enumerate{
 #' \item List named \code{portfolio.xy} where each element is a two-column 
 #' matrix of x- and y-axis values for a fund pair.
@@ -118,14 +110,14 @@
 #' 
 #' 
 #' @examples
-#' # Plot mean vs. SD for UPRO/VBLTX portfolio, and compare to VFINX and BRK-B
-#' fig1 <- twofunds_graph(tickers = c("UPRO", "VBLTX"), 
-#'                        reference.tickers = c("VFINX", "BRK-B"))
-#'                       
-#' # Same funds, but annualized growth vs. maximum drawdown
-#' fig2 <- twofunds_graph(tickers = c("UPRO", "VBLTX"), 
-#'                        reference.tickers = c("VFINX", "BRK-B"),
-#'                        x.metric = "mdd", y.metric = "cagr")
+#' # # Plot mean vs. SD for UPRO/VBLTX portfolio, and compare to VFINX and BRK-B
+#' # fig1 <- twofunds_graph(tickers = c("UPRO", "VBLTX"), 
+#' #                        reference.tickers = c("VFINX", "BRK-B"))
+#' #                     
+#' # # Same funds, but annualized growth vs. maximum drawdown
+#' # fig2 <- twofunds_graph(tickers = c("UPRO", "VBLTX"), 
+#' #                        reference.tickers = c("VFINX", "BRK-B"),
+#' #                        x.metric = "mdd", y.metric = "cagr")
 #'
 #' @export
 twofunds_graph <- function(tickers = NULL, intercepts = NULL, slopes = NULL,
@@ -143,6 +135,7 @@ twofunds_graph <- function(tickers = NULL, intercepts = NULL, slopes = NULL,
                            reflabel.offsets = NULL,
                            add.plot = FALSE,
                            colors = NULL,
+                           lty = NULL,
                            plot.list = NULL,
                            points.list = NULL,
                            text.list = NULL,
@@ -155,48 +148,42 @@ twofunds_graph <- function(tickers = NULL, intercepts = NULL, slopes = NULL,
   # If tickers specified, load various historical prices from Yahoo! Finance
   if (! is.null(tickers)) {
     
-    # If vectors rather than matrices are provided for tickers, intercepts, or
-    # slopes, convert to 2-row matrices
-    if (is.vector(tickers)) {
-      tickers <- matrix(tickers, nrow = 2)
-    }
-    if (is.vector(intercepts)) {
-      intercepts <- matrix(intercepts, nrow = 2)
-    }
-    if (is.vector(slopes)) {
-      slopes <- matrix(slopes, nrow = 2)
-    }
+    # Get number of tickers
+    n.tickers <- length(tickers)
+    n.pairs <- n.tickers / 2
+    n.bench <- length(benchmark.tickers)
+    n.ref <- length(reference.tickers)
+    n.extra <- n.bench + n.ref
     
-    # If intercepts or slopes NULL, set to matrix of 0's and 1's, respectively
-    if (is.null(intercepts)) {
-      intercepts <- matrix(0, nrow = 2, ncol = ncol(tickers))
-    }
-    if (is.null(slopes)) {
-      slopes <- matrix(1, nrow = 2, ncol = ncol(tickers))
-    }
-    
-    # Create vector of "extra" tickers comprised of benchmark and reference
-    # tickers
+    # Create vector of "extra" tickers
     extra.tickers <- unique(c(benchmark.tickers, reference.tickers))
     
+    # If intercepts or slopes NULL, set to 0's and 1's, respectively
+    if (is.null(intercepts)) {
+      intercepts <- rep(0, n.tickers)
+    }
+    if (is.null(slopes)) {
+      slopes <- rep(1, n.tickers)
+    }
+    
     # Calculate gains matrix
-    tickers.vec <- c(as.vector(tickers), extra.tickers)
-    intercepts.vec <- c(as.vector(intercepts), rep(0, length(extra.tickers)))
-    slopes.vec <- c(as.vector(slopes), rep(1, length(extra.tickers)))
+    tickers.vec <- c(tickers, extra.tickers)
+    intercepts.vec <- c(intercepts, rep(0, n.extra))
+    slopes.vec <- c(slopes, rep(1, n.extra))
     gains <- load_gains(tickers = tickers.vec, intercepts = intercepts.vec,
                         slopes = slopes.vec, ...)
     
     # Update ticker names to show intercept/slope
-    tickers <- matrix(colnames(gains)[1: length(tickers)], nrow = 2)
+    tickers <- colnames(gains)[1: n.tickers]
     
     # Separate benchmark gains, reference gains, and ticker gains
-    tickers.gains <- gains[, 1: length(tickers), drop = F]
-    extra.gains <- gains[, -c(1: length(tickers)), drop = F]
-    if (! is.null(benchmark.tickers)) {
-      benchmark.gains <- extra.gains[, 1: length(benchmark.tickers), drop = F]
-      extra.gains <- extra.gains[, -c(1: length(benchmark.tickers)), drop = F]
+    tickers.gains <- gains[, 1: n.tickers, drop = F]
+    extra.gains <- gains[, -c(1: n.tickers), drop = F]
+    if (n.bench > 0) {
+      benchmark.gains <- extra.gains[, 1: n.bench, drop = F]
+      extra.gains <- extra.gains[, -c(1: n.bench), drop = F]
     }
-    if (! is.null(reference.tickers)) {
+    if (n.ref > 0) {
       reference.gains <- extra.gains
     }
     
@@ -204,10 +191,11 @@ twofunds_graph <- function(tickers = NULL, intercepts = NULL, slopes = NULL,
     
     # Figure out tickers from tickers.gains
     tickers <- colnames(tickers.gains)
+    n.tickers <- length(tickers)
+    n.pairs <- n.tickers / 2
     if (is.null(tickers)) {
-      tickers <- paste("FUND", 1: ncol(tickers.gains), sep = "")
+      tickers <- paste("FUND", 1: n.tickers, sep = "")
     }
-    tickers <- matrix(tickers, nrow = 2)
     
     # Convert reference.gains to matrix if necessary, and figure out
     # reference.tickers
@@ -272,7 +260,7 @@ twofunds_graph <- function(tickers = NULL, intercepts = NULL, slopes = NULL,
     }
   }
   
-  for (ii in 1: ncol(tickers)) {
+  for (ii in 1: n.pairs) {
     
     # Get subset of tickers.gains matrix for tickers of interest
     columns <- c(ii * 2 - 1, ii * 2)
@@ -854,7 +842,6 @@ twofunds_graph <- function(tickers = NULL, intercepts = NULL, slopes = NULL,
   }
   
   # Create color scheme for plot
-  n.pairs <- ncol(tickers)
   if (is.null(colors)) {
     if (n.pairs == 1) {
       colors <- "black"
@@ -867,6 +854,9 @@ twofunds_graph <- function(tickers = NULL, intercepts = NULL, slopes = NULL,
     } else if (n.pairs > 4) {
       colors <- colorRampPalette(c("blue", "red"))(n.pairs)
     }
+  }
+  if (is.null(lty)) {
+    lty <- rep(1, n.pairs)
   }
   
   # Figure out features of graph, based on user inputs where available
@@ -883,9 +873,9 @@ twofunds_graph <- function(tickers = NULL, intercepts = NULL, slopes = NULL,
   # Figure out positioning of ticker labels for 100% allocation to each fund
   if (is.null(tickerlabel.offsets)) {
     
-    tickerlabel.offsets <- cbind(rep(0, n.pairs * 2), rep(NA, n.pairs * 2))
+    tickerlabel.offsets <- cbind(rep(0, n.tickers), rep(NA, n.tickers))
     y.offset.mag <- (y2 - y1) / 40
-    for (ii in 1: ncol(tickers)) {
+    for (ii in 1: n.pairs) {
       
       # Put label for ticker with higher y-value above its data point, and
       # label for other ticker below its data point
@@ -914,7 +904,7 @@ twofunds_graph <- function(tickers = NULL, intercepts = NULL, slopes = NULL,
   }
   
   # If pdf.list is not NULL, call pdf
-  if (!is.null(pdf.list)) {
+  if (! is.null(pdf.list)) {
     if (is.null(pdf.list$file)) {
       pdf.list$file <- "figure1.pdf"
     }
@@ -922,7 +912,7 @@ twofunds_graph <- function(tickers = NULL, intercepts = NULL, slopes = NULL,
   }
   
   # If bmp.list is not NULL, call bmp
-  if (!is.null(bmp.list)) {
+  if (! is.null(bmp.list)) {
     if (is.null(bmp.list$file)) {
       bmp.list$file <- "figure1.bmp"
     }
@@ -930,7 +920,7 @@ twofunds_graph <- function(tickers = NULL, intercepts = NULL, slopes = NULL,
   }
   
   # If jpeg.list is not NULL, call jpeg
-  if (!is.null(jpeg.list)) {
+  if (! is.null(jpeg.list)) {
     if (is.null(jpeg.list$file)) {
       jpeg.list$file <- "figure1.jpg"
     }
@@ -938,7 +928,7 @@ twofunds_graph <- function(tickers = NULL, intercepts = NULL, slopes = NULL,
   }
   
   # If png.list is not NULL, call png
-  if (!is.null(png.list)) {
+  if (! is.null(png.list)) {
     if (is.null(png.list$file)) {
       png.list$file <- "figure1.png"
     }
@@ -946,7 +936,7 @@ twofunds_graph <- function(tickers = NULL, intercepts = NULL, slopes = NULL,
   }
   
   # If tiff.list is not NULL, call tiff
-  if (!is.null(tiff.list)) {
+  if (! is.null(tiff.list)) {
     if (is.null(tiff.list$file)) {
       tiff.list$file <- "figure1.tif"
     }
@@ -988,7 +978,7 @@ twofunds_graph <- function(tickers = NULL, intercepts = NULL, slopes = NULL,
     
     # Add colored curves and data points
     do.call(points, c(list(x = x[[ii]], y = y[[ii]], type = "l",
-                           col = colors[ii]), points.list))
+                           col = colors[ii], lty = lty[ii]), points.list))
     do.call(points, c(list(x = x[[ii]][locs.points], y = y[[ii]][locs.points],
                            col = colors[ii]), points.list))
     
@@ -1001,25 +991,25 @@ twofunds_graph <- function(tickers = NULL, intercepts = NULL, slopes = NULL,
     do.call(points, c(list(x = fund2.xy[1], y = fund2.xy[2]), points.list))
     
     # Add text labels if not already on plot
-    if (ii == 1 | ! tickers[1, ii] %in% tickers[, 1: (ii - 1)]) {
+    if (ii == 1 | ! tickers[ii * 2 - 1] %in% tickers[1: (ii * 2 - 2)]) {
       do.call(text, c(list(x = fund1.xy[1] +
                              tickerlabel.offsets[(ii * 2 - 1), 1],
                            y = fund1.xy[2] +
                              tickerlabel.offsets[(ii * 2 - 1), 2],
-                           label = paste("100% ", tickers[1, ii], sep = "")),
+                           label = paste("100% ", tickers[ii * 2 - 1], sep = "")),
                       text.list))
     }
-    if (ii == 1 | ! tickers[2, ii] %in% tickers[, 1: (ii - 1)]) {
+    if (ii == 1 | ! tickers[ii * 2] %in% tickers[1: (ii * 2 - 2)]) {
       do.call(text, c(list(x = fund2.xy[1] + tickerlabel.offsets[ii * 2, 1],
                            y = fund2.xy[2] + tickerlabel.offsets[ii * 2, 2],
-                           label = paste("100% ", tickers[2, ii], sep = "")),
+                           label = paste("100% ", tickers[ii * 2], sep = "")),
                       text.list))
     }
     
   }
   
   # Add data point for reference funds (if given)
-  if (!is.null(reference.tickers)) {
+  if (! is.null(reference.tickers)) {
     
     # Loop through and add data points for each reference fund
     for (ii in 1: ncol(reference.gains)) {

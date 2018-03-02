@@ -1,16 +1,18 @@
 #' Calculate Various Performance Metrics
 #' 
-#' Calculates variety of performance metrics from prices or gains.
+#' Useful for comparing metrics for several investments. The first investment is 
+#' used as the benchmark if requested metrics require one.
 #' 
 #' 
-#' @param tickers Character vector of ticker symbols, if you wish to load data 
-#' on the fly rather than specify \code{gains} or \code{prices}.
+#' @param tickers Character vector of ticker symbols that Yahoo! Finance 
+#' recognizes, if you want to download data on the fly.
 #' @param ... Arguments to pass along with \code{tickers} to 
 #' \code{\link{load_gains}}.
-#' @param gains Numeric matrix of gains, with 1 column for each investment.
-#' @param prices Numeric matrix of prices, with 1 column for each investment.
-#' @param perf.metrics Character vector specying metrics to calculate. If at 
-#' least 1 metric requires a benchmark, the first investment is used.
+#' @param gains Numeric matrix with 1 column of gains for each investment (can 
+#' be a vector if there is only one).
+#' @param prices Numeric matrix with 1 column of prices for each investment (can 
+#' be a vector if there is only one).
+#' @param perf.metrics Character vector specifying metrics to calculate.
 #' 
 #' 
 #' @return
@@ -22,16 +24,9 @@
 #' 
 #' 
 #' @examples
-#' # Calculate performance metrics for leveraged ETFs SSO and UPRO, using SPY 
-#' # as benchmark for alpha and beta - "on the fly" method
-#' metrics1 <- metrics(tickers = c("SPY", "SSO", "UPRO"))
-#' 
-#' # Calculate same performance metrics, but specify gains input
-#' gains <- load_gains(tickers = c("SPY", "SSO", "UPRO"))
-#' metrics2 <- metrics(gains = gains)
-#' 
-#' # Results are identical
-#' all.equal(metrics1$perf.metrics, metrics2$perf.metrics)
+#' # # Calculate performance metrics for SSO and UPRO, using SPY as benchmark 
+#' # # for alpha and beta
+#' # metrics1 <- metrics(tickers = c("SPY", "SSO", "UPRO"))
 #' 
 #' 
 #' @export
@@ -51,9 +46,21 @@ metrics <- function(tickers = NULL, ...,
     
   } else if (! is.null(prices)) {
     
+    # Convert to matrix if necessary
+    if (! is.matrix(prices)) {
+      prices <- matrix(prices, ncol = 1)
+    }
+    
     # Calculate gains based on price data
     gains <- apply(prices, 2, pchanges)
     rownames(gains) <- rownames(prices)[-1]
+    
+  } else if (! is.null(gains)) {
+    
+    # Convert to matrix if necessary
+    if (! is.matrix(gains)) {
+      gains <- matrix(gains, ncol = 1)
+    }
     
   }
   
