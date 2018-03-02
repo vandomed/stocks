@@ -1,3 +1,5 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
 ^LICENSE$
+^generate_lists.R$
+^largest_100.csv$
