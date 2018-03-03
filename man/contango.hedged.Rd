@@ -51,6 +51,20 @@ achieves zero beta.}
 
 \item{initial}{Numeric value giving the initial value of the portfolio.}
 }
+\value{
+List containing:
+\enumerate{
+\item Character vector named \code{holdings} indicating what fund was held 
+each day (XIV/SPXU, VXX/UPRO, or cash). 
+\item Numeric vector named \code{port.gains} giving the portfolio gain for 
+each day, which will be 0 for days that cash was held and the weighted 
+XIV/SPXU or VXX/UPRO gain for days that one of those positions was held. 
+\item Numeric vector named \code{port.balances} giving the portfolio balance 
+each day. 
+\item Numeric value named \code{trades} giving the total number of trades 
+executed.
+}
+}
 \description{
 Implements the following strategy: Each day, hold XIV/SPXU (weighted for zero 
 beta) if contango > \code{xiv.spxu.cutpoint}, hold VXX/UPRO (weighted for 

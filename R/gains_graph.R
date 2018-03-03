@@ -109,12 +109,14 @@ gains_graph <- function(tickers = NULL, ...,
     if (n.tickers == 2) {
       colors <- "black"
     } else if (n.tickers == 3) {
-      colors <- c("blue", "red")
+      colors <- c("black", "red")
     } else if (n.tickers == 4) {
-      colors <- c("blue", "red", "orange")
+      colors <- c("black", "red", "blue")
     } else if (n.tickers == 5) {
-      colors <- c("blue", "red", "orange", "purple")
-    } else if (n.tickers > 5) {
+      colors <- c("black", "red", "blue", "orange")
+    } else if (n.tickers == 6) {
+      colors <- c("black", "red", "blue", "orange", "purple")
+    } else if (n.tickers > 6) {
       colors <- colorRampPalette(c("blue", "red"))(n.curves)
     }
   }

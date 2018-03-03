@@ -5,7 +5,7 @@
 \title{Graph Investment Growth}
 \usage{
 growth_graph(tickers = NULL, ..., gains = NULL, prices = NULL,
-  initial = 10000, add.plot = FALSE, colors = NULL, lty = NULL,
+  initial = "10k", add.plot = FALSE, colors = NULL, lty = NULL,
   plot.list = NULL, points.list = NULL, grid.list = NULL,
   legend.list = NULL, pdf.list = NULL, bmp.list = NULL,
   jpeg.list = NULL, png.list = NULL, tiff.list = NULL)
@@ -23,8 +23,9 @@ be a vector if there is only one).}
 \item{prices}{Numeric matrix with 1 column of prices for each investment (can 
 be a vector if there is only one).}
 
-\item{initial}{Numeric value indicating what value to scale initial prices 
-to.}
+\item{initial}{Numeric value specifying what value to scale initial prices 
+to. Can also be character string ending in "k", e.g. \code{"10k"} to graph 
+growth of $10k without all the 0's.}
 
 \item{add.plot}{Logical value for whether to add plot data to current plot 
 frame rather than open a new one.}

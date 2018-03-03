@@ -12,17 +12,24 @@
 #' @param x.metric Character string specifying x-axis performance metric. 
 #' Choices are:
 #' 
-#' \code{"mean"} or \code{"sd"} for mean or standard deviation of gains .
+#' \code{"mean"} or \code{"sd"} for mean or standard deviation of gains.
+#' 
 #' \code{"growth"} or \code{"cagr"} for total or annualized growth.
+#' 
 #' \code{"mdd"} for maximum drawdown.
+#' 
 #' \code{"sharpe"} or \code{"sortino"} for Sharpe or Sortino ratio.
+#' 
 #' \code{"alpha"}, \code{"beta"}, or \code{"r.squared"} for those metrics from a 
 #' fitted linear regression on benchmark fund.
+#' 
 #' \code{"pearson"} or \code{"spearman"} for Pearson or Spearman correlation 
 #' with benchmark fund.
+#' 
 #' \code{"alpha2"}, \code{"beta2"}, \code{"r.squared2"}, \code{"pearson2"}, or 
 #' \code{"spearman2"} for same as previously described, but using the second 
 #' benchmark index.
+#' 
 #' \code{"auto.pearson"} or \code{"auto.spearman"} for Pearson or Spearman 
 #' autocorrelation, defined as the correlation between subsequent gains.
 #' 
@@ -384,12 +391,12 @@ twometrics_graph <- function(tickers = NULL, ...,
                              list2 = plot.list)
   points.list <- list_override(list1 = list(x = x, y = y,
                                             col = colors,
-                                            cex = 1, pch = 16),
+                                            cex = 0.8, pch = 16),
                                list2 = points.list)
   if (is.null(tickerlabel.offsets)) {
     tickerlabel.offsets.dat <- data.frame(ticker = tickers,
                                           x.offset = rep(0, n.tickers),
-                                          y.offset = rep((y2 - y1) / 40,
+                                          y.offset = rep((y2 - y1) / 30,
                                                          n.tickers),
                                           stringsAsFactors = FALSE)
   } else if (is.vector(tickerlabel.offsets) &
@@ -409,7 +416,7 @@ twometrics_graph <- function(tickers = NULL, ...,
              nrow(tickerlabel.offsets) < n.tickers) {
     tickerlabel.offsets.dat <- data.frame(ticker = tickers,
                                           x.offset = rep(0, n.tickers),
-                                          y.offset = rep((y2 - y1) / 40,
+                                          y.offset = rep((y2 - y1) / 30,
                                                          n.tickers),
                                           stringsAsFactors = FALSE)
     for (ii in 1: nrow(tickerlabel.offsets)) {
@@ -470,18 +477,18 @@ twometrics_graph <- function(tickers = NULL, ...,
   }
   
   # Add horizontal/vertical lines if useful for requested metrics
-  if (y.metric %in% c("mean", "sd", "sharpe", "sortino", "alpha", "alpha2",
-                      "beta", "beta2", "pearson", "pearson2", "spearman",
-                      "spearman2", "auto.pearson", "auto.spearman", "growth",
-                      "cagr")) {
+  if (y.metric %in% c("mean", "sd", "growth", "cagr", "mdd", "sharpe", 
+                      "sortino", "alpha", "alpha2", "beta", "beta2", "pearson", 
+                      "pearson2", "spearman", "spearman2", "auto.pearson", 
+                      "auto.spearman")) {
     abline(h = 0, lty = 2)
   } else if (y.metric %in% c("r.squared", "r.squared2")) {
     abline(h = 1, lty = 2)
   }
-  if (x.metric %in% c("mean", "sd", "sharpe", "sortino", "alpha", "alpha2",
-                      "beta", "beta2", "pearson", "pearson2", "spearman",
-                      "spearman2", "auto.pearson", "auto.spearman", "growth",
-                      "cagr")) {
+  if (x.metric %in% c("mean", "sd", "growth", "cagr", "mdd", "sharpe", 
+                      "sortino", "alpha", "alpha2", "beta", "beta2", "pearson", 
+                      "pearson2", "spearman", "spearman2", "auto.pearson", 
+                      "auto.spearman")) {
     abline(v = 0, lty = 2)
   } else if (x.metric %in% c("r.squared", "r.squared2")) {
     abline(v = 1, lty = 2)

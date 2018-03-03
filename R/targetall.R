@@ -1,4 +1,4 @@
-#' Backtest a Fixed-Allocation Trading Strategy Using N Funds
+#' Backtest a Fixed-Allocation Trading Strategy
 #' 
 #' Implements a trading strategy aimed at maintaining a fixed allocation to each 
 #' of several funds, rebalancing when the effective allocations deviate too far 
@@ -34,16 +34,16 @@
 #' 
 #' @examples
 #' # # Backtest equal-allocation UPRO/VBLTX/VWEHX strategy
-#' # port <- targetall_nfunds(tickers = c("UPRO", "VBLTX", "VWEHX"))
+#' # port <- targetall(tickers = c("UPRO", "VBLTX", "VWEHX"))
 #' # plot(port$fund.balances[, "Portfolio"])
 #'
 #' @export
-targetall_nfunds <- function(tickers = NULL, ...,
-                             tickers.gains = NULL,
-                             target.alls = NULL,
-                             tol = 0.05,
-                             rebalance.cost = 0,
-                             initial = 10000) {
+targetall <- function(tickers = NULL, ...,
+                      tickers.gains = NULL,
+                      target.alls = NULL,
+                      tol = 0.05,
+                      rebalance.cost = 0,
+                      initial = 10000) {
   
   # If tickers specified, load various historical prices from Yahoo! Finance
   if (! is.null(tickers)) {

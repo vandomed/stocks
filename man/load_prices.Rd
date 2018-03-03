@@ -36,7 +36,7 @@ as the defaults and set \code{preto.days = 50}.}
 to test a trading strategy starting on a particular date, but the strategy 
 requires data leading up to that date (e.g. trailing beta).}
 
-\item{initial}{Numeric value indicating what value to scale initial prices 
+\item{initial}{Numeric value specifying what value to scale initial prices 
 to.}
 
 \item{earliest}{Logical value for whether to retain only the subset of 

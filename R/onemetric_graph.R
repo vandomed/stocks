@@ -11,17 +11,20 @@
 #' @param y.metric Character string specifying y-axis performance metric. 
 #' Choices are: 
 #' 
-#' \code{"mean"} or \code{"sd"} for mean or standard deviation of gains .
+#' \code{"mean"} or \code{"sd"} for mean or standard deviation of gains.
+#' 
 #' \code{"growth"} or \code{"cagr"} for total or annualized growth.
+#' 
 #' \code{"mdd"} for maximum drawdown.
+#' 
 #' \code{"sharpe"} or \code{"sortino"} for Sharpe or Sortino ratio.
+#' 
 #' \code{"alpha"}, \code{"beta"}, or \code{"r.squared"} for those metrics from a 
 #' fitted linear regression on benchmark fund.
+#' 
 #' \code{"pearson"} or \code{"spearman"} for Pearson or Spearman correlation 
 #' with benchmark fund.
-#' \code{"alpha2"}, \code{"beta2"}, \code{"r.squared2"}, \code{"pearson2"}, or 
-#' \code{"spearman2"} for same as previously described, but using the second 
-#' benchmark index.
+#' 
 #' \code{"auto.pearson"} or \code{"auto.spearman"} for Pearson or Spearman 
 #' autocorrelation, defined as the correlation between subsequent gains.
 #' 
@@ -207,7 +210,7 @@ onemetric_graph <- function(tickers = NULL, ...,
                                           xlab = "Fund", ylab = y.label),
                              list2 = plot.list)
   points.list <- list_override(list1 = list(x = 1: n.tickers, y = y,
-                                            cex = 1, pch = 16),
+                                            cex = 0.8, pch = 16),
                                list2 = points.list)
   axis.list <- list_override(list1 = list(side = 1, at = 1: n.tickers,
                                           labels = tickers),
@@ -259,9 +262,9 @@ onemetric_graph <- function(tickers = NULL, ...,
   }
   
   # Add horizontal/vertical lines if useful for requested metrics
-  if (y.metric %in% c("mean", "sharpe", "sortino", "alpha", "beta", "pearson",
-                      "spearman", "auto.pearson", "auto.spearman", "growth",
-                      "cagr")) {
+  if (y.metric %in% c("mean", "sd", "growth", "cagr", "mdd", "sharpe", 
+                      "sortino", "alpha", "beta", "pearson", "spearman", 
+                      "auto.pearson", "auto.spearman")) {
     abline(h = 0, lty = 2)
   } else if (y.metric == "r.squared") {
     abline(h = 1, lty = 2)

@@ -58,7 +58,7 @@ load_gains <- function(tickers, intercepts = NULL, slopes = NULL,
   
   # Adjust from date if preto.days or prefrom.days are specified
   from.initial <- from <- as.Date(from)
-  to <- as.Date(to)
+  to <- as.Date(to) + 1
   if (! is.null(preto.days)) {
     from <- to - ifelse(preto.days <= 10, 20, ceiling(preto.days * 1.65))
   }

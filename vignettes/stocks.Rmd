@@ -1,0 +1,223 @@
+---
+title: "Get Rich with 'stocks'"
+author: "Dane Van Domelen"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+bibliography: bibliography.bib
+nocite: | 
+  @quantmod,
+  @PerformanceAnalytics,
+  @printr
+vignette: >
+  %\VignetteIndexEntry{Get Rich with 'stocks'}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  message = FALSE
+)
+
+# Load packages
+library("xtable")
+library("knitr")
+
+# Set xtable options
+options("xtable.caption.placement" = "top", 
+        "xtable.include.rownames" = TRUE, 
+        "xtable.comment" = FALSE)
+```
+
+## 'stocks' package
+
+The **stocks** package has a variety of functions for analyzing investments and investment strategies. I use it for a lot of my articles on [Seeking Alpha](https://seekingalpha.com/author/dane-van-domelen/articles#regular_articles). The package relies heavily on [Yahoo! Finance](https://finance.yahoo.com/) for historical prices and the **quantmod** package for downloading that data.
+
+There are functions for calculating performance metrics, backtesting trading strategies, and visualizing the performance of funds or strategies. I would say it is similar in spirit to the website [Portfolio Visualizer](https://www.portfoliovisualizer.com/) and the R package **PerformanceAnalytics**.
+
+Like most vignettes, the purpose here will be to illustrate typical usage of the functions in **stocks**. I'll try to incorporate some interesting examples.
+
+To start, here are the functions:
+
+| Function                  |Application
+|:--------------------------|:-----------------------------------------------------
+|*load_prices*              |Download and align historical prices for a set of tickers.
+|*load_gains*               |Download and align gains for a set of tickers. 
+|*prices_rate*              |Calculate growth rate from a vector of prices.
+|*gains_rate*               |Calculate growth rate from a vector of gains. 
+|*sharpe*                   |Sharpe ratio.
+|*sortino*                  |Sortino ratio.
+|*mdd*                      |Maximum drawdown.
+|*rrr*                      |Risk-return ratio.
+|*metrics*                  |Calculate various performance metrics.
+|*twofunds_graph*           |Graph one performance metric vs. another for two-fund portfolios as allocation varies.
+|*threefunds_graph*         |Graph One performance metric vs. another for three-fund portfolios as allocation varies.
+|*onemetric_graph*          |Graph performance metric for various investments. 
+|*onemetric_overtime_graph* |Graph performance metric over time for various investments. 
+|*twometrics_graph*         |Graph one performance metric vs. another for various investments.
+|*targetbeta_twofunds*      |Backtest a two-fund strategy that targets a certain beta. 
+|*targetall*                |Backtest a fixed-allocation trading strategy.
+
+
+
+
+## Loading data from Yahoo! Finance
+
+The functions *load_prices* and *load_gains* let you download historical data from Yahoo! Finance. They use **quantmod**'s *getSymbols* function. Here are some examples. (Note: R output is printed in nice tables rather than usual-looking R output because I loaded **printr**)
+
+```{r}
+library("stocks")
+library("printr")
+prices <- load_prices(c("SPY", "TLT"), to = "2018-03-02")
+head(prices, n = 3)
+
+gains <- load_gains(c("SPY", "TLT"), to = "2018-03-02")
+head(gains, n = 3)
+```
+
+In either case, data going as far back as possible for SPY and TLT (which happens to be mid-2002) are retrieved.
+
+
+## Performance metrics
+
+### Total or annualized growth, Sharpe ratio, max drawdown
+
+There are functions for calculating various performance metrics based on a vector of prices or gains. To illustrate a few, here's net growth based on either data type:
+
+```{r}
+apply(prices, 2, prices_rate)
+apply(gains, 2, gains_rate)
+```
+
+Values of 3.03 and 1.60 mean SPY grew 303% and TLT 160%. For annualized rather than total growth:
+
+```{r}
+apply(prices, 2, function(x) prices_rate(x, units.rate = 252))
+apply(gains, 2, function(x) gains_rate(x, units.rate = 252))
+```
+
+Sharpe ratio and max drawdown:
+
+```{r}
+apply(prices, 2, sharpe)
+apply(gains, 2, function(x) sharpe(gains = x))
+
+apply(prices, 2, mdd)
+apply(gains, 2, function(x) mdd(gains = x))
+```
+
+### All-in-one
+
+Better yet, a single call to *metrics* produces a data frame with all of these metrics (and potentially others) and a correlation matrix for gains.
+
+```{r}
+bond.metrics <- metrics(gains = gains, perf.metrics = c("growth", "cagr", "sharpe", "mdd"))
+bond.metrics$perf.metrics
+bond.metrics$cor.mat
+```
+
+Looking at the performance metrics, we see that SPY achieved almost 2x the growth of TLT, but also had a max drawdown more than 2x as severe. A higher Sharpe ratio suggests better risk-adjusted returns for SPY.
+
+
+## Graphics
+
+### Growth of $10k
+
+Let's look at the famous FANG stocks (Facebook Amazon, Netflix, Google) for the past 3 years, with the S&P 500 ETF SPY included for reference.
+
+```{r, fig.width = 6, fig.height = 5}
+fig <- growth_graph(c("SPY", "FB", "AMZN", "NFLX", "GOOG"), from = "2015-03-02", 
+                    to = "2018-03-02")
+```
+
+Notice that I just gave `growth_graph` a vector of ticker symbols, not a matrix of prices or gains. All of the graphing functions in *stocks* have this feature built-in.
+
+Clearly the FANG stocks have continued with their remarkable growth over the past 3 years. I actually held Amazon and Google briefly, but sold them once I decided individual stock-picking was for fools and switched strategies. I'm an idiot. 
+
+
+### Gains vs. benchmark (alpha, beta, R-squared)
+
+Before buying a fund, you should always have a rough idea of how it tends to move with the market. The classic way of doing this is plotting the fund's daily gains vs. a benchmark (typically the S&P) and looking at the estimated intercept ("alpha") and slope ("beta"). For example, for Vanguard's long-term bond fund VBLTX, over the past 5 years:
+
+```{r, fig.width = 5, fig.height = 5}
+fig <- gains_graph(c("SPY", "VBLTX"), from = "2013-03-02", to = "2018-03-02")
+```
+
+Definitely a negative trend there, although a weak one: $R^2 = 0.08$ means only 8% of variability in VBLTX gains are explained by the regression on SPY.
+
+Looking at the regression equation, we see positive alpha and negative beta, suggesting VBLTX and SPY would complement each other nicely in a retirement portfolio. 
+
+
+### Compare funds on 1 metric
+
+To compare annualized growth for the 10 Select Sector SPDR ETFs over the past year:
+
+```{r, fig.width = 6.5, fig.height = 5}
+data(sector_spdr_etfs)
+fig <- onemetric_graph(tickers = sector_spdr_etfs$ticker, 
+                       from = "2017-03-02", to = "2018-03-02")
+```
+
+Notice that I loaded the 10 ticker symbols with `data(sector_spdr_etfs)`. That worked because a dataset called `sector_spdr_etfs` is included in **stocks**. Quite a few other ticker lists are also available (run `data(package = "stocks")` to see them).
+
+Looks like only 6 of the 10 sectors had positive growth over the past year; XLK (technology) was the best performer with 30.3% growth.
+
+
+### Compare funds on 2 metrics
+
+To simultaneousy look at annualized growth and maximum drawdown for the sector ETFs:
+
+```{r, fig.width = 5, fig.height = 5}
+fig <- twometrics_graph(tickers = sector_spdr_etfs$ticker, 
+                        from = "2017-03-02", to = "2018-03-02", 
+                        x.metric = "mdd", y.metric = "cagr")
+```
+
+Here XLY (consumer discretionary) looks pretty good, with the best max drawdown and second-best growth.
+
+### One metric over time
+
+Let's move to another example: Warren Buffett's Berkshire Hathaway (BRK-B). Let's see whether BRK-B has consistently outperformed SPY over the past 15 years, looking at the 100-day moving Sharpe ratio:
+
+```{r, fig.width = 5, fig.height = 5}
+fig <- onemetric_overtime_graph(tickers = c("SPY", "BRK-B"), 
+                                from = "2003-03-02", to = "2018-03-02", 
+                                window.units = 100, y.metric = "sharpe")
+```
+
+There are certainly some periods where SPy does a lot better, and some where BRK-B does a lot better. There's no obvious winner here, visually. The actual 100-day Sharpe ratios are returned by *onemetric_overtime_graph*, so we can compare the medians and see what percent of the time BRK-B's is higher:
+
+```{r}
+apply(fig, 2, median)
+mean(fig[, 2] > fig[, 1])
+```
+
+Not good, Mr. Buffett!
+
+
+### 2-fund portfolio optimization
+
+Until recently, my own retirement portfolio was simply 1/3 UPRO, 2/3 VBLTX. UPRO is a 3x daily S&P 500 ETF, and VBLTX is Vanguard's long-term bond mutual fund. A good way of visualizing the characteristics of a two-fund portfolio is to plot mean vs. standard deviation of daily gains, for allocations ranging from 100% fund 1 to 100% fund 2. To do that, using data over UPRO's lifetime (i.e. back to 6/25/09):
+
+```{r}
+fig <- twofunds_graph(tickers = c("UPRO", "VBLTX"), reference.tickers = "SPY",  
+                      to = "2018-03-02")
+```
+
+The UPRO/VBLTX strategy sort of trumps SPY, because there are regions on the curve with higher returns and lower volatility than SPY.
+
+
+### 3-fund portfolio optimization
+
+The change I made recently was adding Vanguard's high-yield (aka "junk bond") mutual fund, VWEHX, to the mix. To visualize characteristics of UPRO/VBLTX/VWEHX, this time looking at annualized growth vs. max drawdown:
+
+```{r}
+fig <- threefunds_graph(tickers = c("VWEHX", "UPRO", "VBLTX"), 
+                        reference.tickers = "SPY",  
+                        to = "2018-03-02", 
+                        x.metric = "mdd", y.metric = "cagr")
+```
+
+## References

@@ -7,7 +7,7 @@
 #' 
 #' 
 #' @inheritParams load_gains
-#' @param initial Numeric value indicating what value to scale initial prices 
+#' @param initial Numeric value specifying what value to scale initial prices 
 #' to.
 #' 
 #' 
@@ -35,11 +35,11 @@ load_prices <- function(tickers, intercepts = NULL, slopes = NULL,
   
   # Adjust from date if preto.days or prefrom.days are specified
   from.initial <- from <- as.Date(from)
-  to <- as.Date(to)
-  if (!is.null(preto.days)) {
+  to <- as.Date(to) + 1
+  if (! is.null(preto.days)) {
     from <- to - ifelse(preto.days <= 10, 20, ceiling(preto.days * 1.65))
   }
-  if (!is.null(prefrom.days)) {
+  if ( ! is.null(prefrom.days)) {
     from <- from - ifelse(prefrom.days <= 10, 20, ceiling(prefrom.days * 1.65))
   }
   
@@ -65,7 +65,7 @@ load_prices <- function(tickers, intercepts = NULL, slopes = NULL,
   }
   
   # Drop tickers that could not be loaded
-  locs <- sapply(prices, function(x) !is.null(x))
+  locs <- sapply(prices, function(x) ! is.null(x))
   if (! all(locs)) {
     tickers <- tickers[locs]
     prices <- prices[locs]
@@ -136,7 +136,7 @@ load_prices <- function(tickers, intercepts = NULL, slopes = NULL,
       dates.fund2 <- as.Date(rownames(prices.fund2))
       
       # As long as at least 1 date doesn't match up, remove the unmatched date
-      while (!suppressWarnings(all(dates.fund1 == dates.fund2))) {
+      while (! suppressWarnings(all(dates.fund1 == dates.fund2))) {
         
         loc <- suppressWarnings(which(dates.fund1 != dates.fund2))[1]
         if (dates.fund1[loc] < dates.fund2[loc]) {

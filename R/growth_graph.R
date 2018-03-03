@@ -7,6 +7,9 @@
 #' @inheritParams load_prices
 #' @inheritParams twofunds_graph
 #' 
+#' @param initial Numeric value specifying what value to scale initial prices 
+#' to. Can also be character string ending in "k", e.g. \code{"10k"} to graph 
+#' growth of $10k without all the 0's.
 #' @param grid.list List of arguments to pass to \code{\link[graphics]{grid}}.
 #' @param legend.list List of arguments to pass to 
 #' \code{\link[graphics]{legend}}.
@@ -34,7 +37,7 @@
 growth_graph <- function(tickers = NULL, ...,
                          gains = NULL, 
                          prices = NULL,
-                         initial = 10000,
+                         initial = "10k",
                          add.plot = FALSE,
                          colors = NULL,
                          lty = NULL,
@@ -47,6 +50,15 @@ growth_graph <- function(tickers = NULL, ...,
                          jpeg.list = NULL,
                          png.list = NULL,
                          tiff.list = NULL) {
+  
+  # If initial ends with "k", extract number before it and prep labels
+  initial.text <- initial
+  if (length(grep("k$", x = initial)) == 1) {
+    initial <- as.numeric(sub("k", replacement = "", x = initial))
+    ylab.text <- "Balance ($1,000)"
+  } else {
+    ylab.text <- "Balance ($)"
+  }
   
   # If tickers specified, load various historical prices from Yahoo! Finance
   if (! is.null(tickers)) {
@@ -91,12 +103,14 @@ growth_graph <- function(tickers = NULL, ...,
     if (n.tickers == 1) {
       colors <- "black"
     } else if (n.tickers == 2) {
-      colors <- c("blue", "red")
+      colors <- c("black", "red")
     } else if (n.tickers == 3) {
-      colors <- c("blue", "red", "orange")
+      colors <- c("black", "red", "blue")
     } else if (n.tickers == 4) {
-      colors <- c("blue", "red", "orange", "purple")
-    } else if (n.tickers > 4) {
+      colors <- c("black", "red", "blue", "orange")
+    } else if (n.tickers == 5) {
+      colors <- c("black", "red", "blue", "orange", "purple")
+    } else if (n.tickers > 5) {
       colors <- colorRampPalette(c("blue", "red"))(n.tickers)
     }
   }
@@ -105,14 +119,15 @@ growth_graph <- function(tickers = NULL, ...,
   }
   
   # Figure out features of graph, based on user inputs where available
-  plot.list <- list_override(list1 = list(x = dates, y = prices[, 1],
-                                          type = "n",
-                                          main = paste("Growth of $", initial,
-                                                       sep = ""),
-                                          cex.main = 1.25,
-                                          xlab = "Date", ylab = "Balance ($)",
-                                          xlim = range(dates),
-                                          ylim = c(0, max(prices) * 1.05)),
+  plot.list <- 
+    list_override(list1 = list(x = dates, y = prices[, 1], 
+                               type = "n",
+                               main = paste("Growth of $", initial.text, 
+                                            sep = ""),
+                               cex.main = 1.25,
+                               xlab = "Date", ylab = ylab.text,
+                               xlim = range(dates),
+                               ylim = c(0, max(prices) * 1.05)),
                              list2 = plot.list)
   legend.list <- list_override(list1 = list(x = "topleft", col = colors,
                                             lty = lty, legend = tickers),
