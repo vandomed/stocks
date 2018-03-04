@@ -1,10 +1,9 @@
-#' Graph One Performance Metric vs. Another for Three-Fund Portfolios as 
+#' Graph One Performance Metric vs. Another for Three-Fund Portfolio as 
 #' Allocation Varies
 #' 
 #' Useful for visualizing performance of three-fund portfolios, typically by 
-#' plotting a measure of growth vs. a measure of volatility. First three 
-#' investments are used as the first three-fund set, next three as the second 
-#' three-fund set, and so on. 
+#' plotting a measure of growth vs. a measure of volatility. Only works for one 
+#' three-fund set at a time.
 #' 
 #' 
 #' @inheritParams twofunds_graph
@@ -16,9 +15,8 @@
 #' @return
 #' In addition to the graph, a list containing: 
 #' \enumerate{
-#' \item List named \code{portfolio.xy} where each element is a list of 
-#' two-column matrices of x- and y-axis values for a particular three-fund set 
-#' with a particular allocation to fund 1.
+#' \item List named \code{portfolio.xy} where each element is a two-column 
+#' matrix of x- and y-axis values for a curve.
 #' \item Numeric vector named \code{means} with mean gains for each fund.
 #' \item Numeric matrix named \code{corr.matrix} with a correlation matrix for 
 #' gains for each fund.
@@ -69,9 +67,7 @@ threefunds_graph <- function(tickers = NULL, intercepts = NULL, slopes = NULL,
   # If tickers specified, load various historical prices from Yahoo! Finance
   if (! is.null(tickers)) {
     
-    # Get number of tickers
-    n.tickers <- length(tickers)
-    n.sets <- n.tickers / 3
+    # Get number of benchmark and reference tickers
     n.bench <- length(benchmark.tickers)
     n.ref <- length(reference.tickers)
     n.extra <- n.bench + n.ref
@@ -81,10 +77,10 @@ threefunds_graph <- function(tickers = NULL, intercepts = NULL, slopes = NULL,
     
     # If intercepts or slopes NULL, set to 0's and 1's, respectively
     if (is.null(intercepts)) {
-      intercepts <- rep(0, n.tickers)
+      intercepts <- rep(0, 3)
     }
     if (is.null(slopes)) {
-      slopes <- rep(1, n.tickers)
+      slopes <- rep(1, 3)
     }
     
     # Calculate gains matrix
@@ -95,11 +91,11 @@ threefunds_graph <- function(tickers = NULL, intercepts = NULL, slopes = NULL,
                         slopes = slopes.vec, ...)
     
     # Update ticker names to show intercept/slope
-    tickers <- colnames(gains)[1: length(tickers)]
+    tickers <- colnames(gains)[1: 3]
     
     # Separate benchmark gains, reference gains, and ticker gains
-    tickers.gains <- gains[, 1: n.tickers, drop = F]
-    extra.gains <- gains[, -c(1: n.tickers), drop = F]
+    tickers.gains <- gains[, 1: 3, drop = F]
+    extra.gains <- gains[, -c(1: 3), drop = F]
     if (n.bench > 0) {
       benchmark.gains <- extra.gains[, 1: n.bench, drop = F]
       extra.gains <- extra.gains[, -c(1: n.bench), drop = F]
@@ -112,10 +108,8 @@ threefunds_graph <- function(tickers = NULL, intercepts = NULL, slopes = NULL,
     
     # Figure out tickers from tickers.gains
     tickers <- colnames(tickers.gains)
-    n.tickers <- length(tickers)
-    n.sets <- n.tickers / 3
     if (is.null(tickers)) {
-      tickers <- paste("FUND", 1: n.tickers, sep = "")
+      tickers <- paste("FUND", 1: 3, sep = "")
     }
     
     # Convert reference.gains to matrix if necessary, and figure out
@@ -143,16 +137,6 @@ threefunds_graph <- function(tickers = NULL, intercepts = NULL, slopes = NULL,
     }
     
   }
-  
-  # Initialize portfolio.xy to store data for each three-fund set
-  portfolio.xy <- list()
-  
-  # Loop through three-fund sets
-  fund1.all <- seq(0, 1, step.curves)
-  fund2.all <- seq(0, 1, step.data)
-  fund3.all <- 1 - fund2.all
-  num.curves <- length(fund1.all)
-  num.points <- length(fund2.all)
   
   # Figure out how many units are in a year, for CAGR and axis labels. If
   # unknown, assume daily.
@@ -182,427 +166,416 @@ threefunds_graph <- function(tickers = NULL, intercepts = NULL, slopes = NULL,
     }
   }
   
-  # Going in different direction. If doesn't work, revert back to version in
-  # exports file
-  for (ii in 1: n.sets) {
+  # Initialize list to store x-axis values and y-axis values
+  portfolio.xy <- list()
+  
+  # Loop through three-fund sets
+  fund1.all <- seq(0, 1, step.curves)
+  fund2.all <- seq(0, 1, step.data)
+  fund3.all <- 1 - fund2.all
+  n.curves <- length(fund1.all)
+  n.points <- length(fund2.all)
+  
+  # Calculate x-axis value for each allocation
+  if (x.metric == "mean") {
     
-    # Initialize list to store x-axis values and y-axis values for current
-    # three-fund set
-    x <- y <- list()
+    means <- apply(tickers.gains, 2, mean) * 100
+    x <- lapply(fund1.all, function(x)
+      x * means[1] + (1 - x) * fund2.all * means[2] +
+        (1 - x) * fund3.all * means[3])
     
-    # Get subset of tickers.gains matrix for tickers of interest
-    columns <- (ii * 3 - 2): (ii * 3)
-    tickers.gains.sub <- tickers.gains[, columns]
+  } else if (x.metric == "sd") {
     
-    # Calculate x-axis value for each allocation
-    if (x.metric == "mean") {
-      
-      means <- apply(tickers.gains.sub, 2, mean) * 100
-      x <- lapply(fund1.all, function(x)
-        x * means[1] + (1 - x) * fund2.all * means[2] +
-          (1 - x) * fund3.all * means[3])
-      
-    } else if (x.metric == "sd") {
-      
-      vars <- var(tickers.gains.sub * 100)
-      x <- lapply(fund1.all, function(x)
-        sqrt(x^2 * vars[1, 1] + ((1 - x) * fund2.all)^2 * vars[2, 2] +
-               ((1 - x) * fund3.all)^2 * vars[3, 3] +
-               2 * x * (1 - x) * fund2.all * vars[1, 2] +
-               2 * x * (1 - x) * fund3.all * vars[1, 3] +
-               2 * (1 - x) * fund2.all * (1 - x) * fund3.all * vars[2, 3]))
-      
-    } else if (x.metric == "growth") {
-      
-      x <- lapply(fund1.all, function(x) {
-        apply(tickers.gains.sub %*% matrix(c(rep(x, num.points),
-                                             (1 - x) * fund2.all,
-                                             (1 - x) * fund3.all),
-                                           nrow = 3, byrow = TRUE),
-              2, function(x) gains_rate(gains = x) * 100)
-      })
-      
-    } else if (x.metric == "cagr") {
-      
-      x <- lapply(fund1.all, function(x) {
-        apply(tickers.gains.sub %*% matrix(c(rep(x, num.points),
-                                             (1 - x) * fund2.all,
-                                             (1 - x) * fund3.all),
-                                           nrow = 3, byrow = TRUE),
-              2, function(x)
-                gains_rate(gains = x, units.rate = units.year) * 100)
-      })
-      
-    } else if (x.metric == "mdd") {
-      
-      x <- lapply(fund1.all, function(x) {
-        apply(tickers.gains.sub %*% matrix(c(rep(x, num.points),
-                                             (1 - x) * fund2.all,
-                                             (1 - x) * fund3.all),
-                                           nrow = 3, byrow = TRUE),
-              2, function(x) mdd(gains = x) * 100)
-      })
-      
-    } else if (x.metric == "sharpe") {
-      
-      x <- lapply(fund1.all, function(x) {
-        apply(tickers.gains.sub %*% matrix(c(rep(x, num.points),
-                                             (1 - x) * fund2.all,
-                                             (1 - x) * fund3.all),
-                                           nrow = 3, byrow = TRUE),
-              2, function(x) sharpe(gains = x))
-      })
-      
-    } else if (x.metric == "sortino") {
-      
-      x <- lapply(fund1.all, function(x) {
-        apply(tickers.gains.sub %*% matrix(c(rep(x, num.points),
-                                             (1 - x) * fund2.all,
-                                             (1 - x) * fund3.all),
-                                           nrow = 3, byrow = TRUE),
-              2, function(x) sortino(gains = x))
-      })
-      
-    } else if (x.metric == "alpha") {
-      
-      x <- lapply(fund1.all, function(x) {
-        apply(tickers.gains.sub %*% matrix(c(rep(x, num.points),
-                                             (1 - x) * fund2.all,
-                                             (1 - x) * fund3.all),
-                                           nrow = 3, byrow = TRUE),
-              2, function(x) lm(x ~ benchmark.gains[, 1])$coef[1] * 100)
-      })
-      
-    } else if (x.metric == "alpha2") {
-      
-      x <- lapply(fund1.all, function(x) {
-        apply(tickers.gains.sub %*% matrix(c(rep(x, num.points),
-                                             (1 - x) * fund2.all,
-                                             (1 - x) * fund3.all),
-                                           nrow = 3, byrow = TRUE),
-              2, function(x) lm(x ~ benchmark.gains[, 2])$coef[1] * 100)
-      })
-      
-    } else if (x.metric == "beta") {
-      
-      x <- lapply(fund1.all, function(x) {
-        apply(tickers.gains.sub %*% matrix(c(rep(x, num.points),
-                                             (1 - x) * fund2.all,
-                                             (1 - x) * fund3.all),
-                                           nrow = 3, byrow = TRUE),
-              2, function(x) lm(x ~ benchmark.gains[, 1])$coef[2] * 100)
-      })
-      
-    } else if (x.metric == "beta2") {
-      
-      x <- lapply(fund1.all, function(x) {
-        apply(tickers.gains.sub %*% matrix(c(rep(x, num.points),
-                                             (1 - x) * fund2.all,
-                                             (1 - x) * fund3.all),
-                                           nrow = 3, byrow = TRUE),
-              2, function(x) lm(x ~ benchmark.gains[, 2])$coef[2] * 100)
-      })
-      
-    } else if (x.metric == "r.squared") {
-      
-      x <- lapply(fund1.all, function(x) {
-        apply(tickers.gains.sub %*% matrix(c(rep(x, num.points),
-                                             (1 - x) * fund2.all,
-                                             (1 - x) * fund3.all),
-                                           nrow = 3, byrow = TRUE),
-              2, function(x) summary(lm(x ~ benchmark.gains[, 1]))$r.squared)
-      })
-      
-    } else if (x.metric == "r.squared2") {
-      
-      x <- lapply(fund1.all, function(x) {
-        apply(tickers.gains.sub %*% matrix(c(rep(x, num.points),
-                                             (1 - x) * fund2.all,
-                                             (1 - x) * fund3.all),
-                                           nrow = 3, byrow = TRUE),
-              2, function(x) summary(lm(x ~ benchmark.gains[, 2]))$r.squared)
-      })
-      
-    } else if (x.metric == "pearson") {
-      
-      x <- lapply(fund1.all, function(x) {
-        apply(tickers.gains.sub %*% matrix(c(rep(x, num.points),
-                                             (1 - x) * fund2.all,
-                                             (1 - x) * fund3.all),
-                                           nrow = 3, byrow = TRUE),
-              2, function(x) cor(x, benchmark.gains[, 1]))
-      })
-      
-    } else if (x.metric == "pearson2") {
-      
-      x <- lapply(fund1.all, function(x) {
-        apply(tickers.gains.sub %*% matrix(c(rep(x, num.points),
-                                             (1 - x) * fund2.all,
-                                             (1 - x) * fund3.all),
-                                           nrow = 3, byrow = TRUE),
-              2, function(x) cor(x, benchmark.gains[, 2]))
-      })
-      
-    } else if (x.metric == "spearman") {
-      
-      x <- lapply(fund1.all, function(x) {
-        apply(tickers.gains.sub %*% matrix(c(rep(x, num.points),
-                                             (1 - x) * fund2.all,
-                                             (1 - x) * fund3.all),
-                                           nrow = 3, byrow = TRUE),
-              2, function(x) cor(x, benchmark.gains[, 1], method = "spearman"))
-      })
-      
-    } else if (x.metric == "spearman2") {
-      
-      x <- lapply(fund1.all, function(x) {
-        apply(tickers.gains.sub %*% matrix(c(rep(x, num.points),
-                                             (1 - x) * fund2.all,
-                                             (1 - x) * fund3.all),
-                                           nrow = 3, byrow = TRUE),
-              2, function(x) cor(x, benchmark.gains[, 2], method = "spearman"))
-      })
-      
-    } else if (x.metric == "auto.pearson") {
-      
-      x <- lapply(fund1.all, function(x) {
-        apply(tickers.gains.sub %*% matrix(c(rep(x, num.points),
-                                             (1 - x) * fund2.all,
-                                             (1 - x) * fund3.all),
-                                           nrow = 3, byrow = TRUE),
-              2, function(x) cor(x[-length(x)], x[-1]))
-      })
-      
-    } else if (x.metric == "auto.spearman") {
-      
-      x <- lapply(fund1.all, function(x) {
-        apply(tickers.gains.sub %*% matrix(c(rep(x, num.points),
-                                             (1 - x) * fund2.all,
-                                             (1 - x) * fund3.all),
-                                           nrow = 3, byrow = TRUE),
-              2, function(x) cor(x[-length(x)], x[-1], method = "spearman"))
-      })
-      
-    } else if (x.metric == "allocation") {
-      
-      x <- lapply(fund1.all, function(x) fund2.all * 100)
-      
-    }
+    vars <- var(tickers.gains * 100)
+    x <- lapply(fund1.all, function(x)
+      sqrt(x^2 * vars[1, 1] + ((1 - x) * fund2.all)^2 * vars[2, 2] +
+             ((1 - x) * fund3.all)^2 * vars[3, 3] +
+             2 * x * (1 - x) * fund2.all * vars[1, 2] +
+             2 * x * (1 - x) * fund3.all * vars[1, 3] +
+             2 * (1 - x) * fund2.all * (1 - x) * fund3.all * vars[2, 3]))
     
-    # Calculate y-axis value for each allocation
-    if (y.metric == "mean") {
-      
-      means <- apply(tickers.gains.sub, 2, mean) * 100
-      y <- lapply(fund1.all, function(x)
-        x * means[1] + (1 - x) * fund2.all * means[2] +
-          (1 - x) * fund3.all * means[3])
-      
-    } else if (y.metric == "sd") {
-      
-      vars <- var(tickers.gains.sub * 100)
-      y <- lapply(fund1.all, function(x)
-        sqrt(x^2 * vars[1, 1] + ((1 - x) * fund2.all)^2 * vars[2, 2] +
-               ((1 - x) * fund3.all)^2 * vars[3, 3] +
-               2 * x * (1 - x) * fund2.all * vars[1, 2] +
-               2 * x * (1 - x) * fund3.all * vars[1, 3] +
-               2 * (1 - x) * fund2.all * (1 - x) * fund3.all * vars[2, 3]))
-      
-    } else if (y.metric == "growth") {
-      
-      y <- lapply(fund1.all, function(x) {
-        apply(tickers.gains.sub %*% matrix(c(rep(x, num.points),
-                                             (1 - x) * fund2.all,
-                                             (1 - x) * fund3.all),
-                                           nrow = 3, byrow = TRUE),
-              2, function(x) gains_rate(gains = x) * 100)
-      })
-      
-    } else if (y.metric == "cagr") {
-      
-      y <- lapply(fund1.all, function(x) {
-        apply(tickers.gains.sub %*% matrix(c(rep(x, num.points),
-                                             (1 - x) * fund2.all,
-                                             (1 - x) * fund3.all),
-                                           nrow = 3, byrow = TRUE),
-              2, function(x)
-                gains_rate(gains = x, units.rate = units.year) * 100)
-      })
-      
-    } else if (y.metric == "mdd") {
-      
-      y <- lapply(fund1.all, function(x) {
-        apply(tickers.gains.sub %*% matrix(c(rep(x, num.points),
-                                             (1 - x) * fund2.all,
-                                             (1 - x) * fund3.all),
-                                           nrow = 3, byrow = TRUE),
-              2, function(x) mdd(gains = x) * 100)
-      })
-      
-    } else if (y.metric == "sharpe") {
-      
-      y <- lapply(fund1.all, function(x) {
-        apply(tickers.gains.sub %*% matrix(c(rep(x, num.points),
-                                             (1 - x) * fund2.all,
-                                             (1 - x) * fund3.all),
-                                           nrow = 3, byrow = TRUE),
-              2, function(x) sharpe(gains = x))
-      })
-      
-    } else if (y.metric == "sortino") {
-      
-      y <- lapply(fund1.all, function(x) {
-        apply(tickers.gains.sub %*% matrix(c(rep(x, num.points),
-                                             (1 - x) * fund2.all,
-                                             (1 - x) * fund3.all),
-                                           nrow = 3, byrow = TRUE),
-              2, function(x) sortino(gains = x))
-      })
-      
-    } else if (y.metric == "alpha") {
-      
-      y <- lapply(fund1.all, function(x) {
-        apply(tickers.gains.sub %*% matrix(c(rep(x, num.points),
-                                             (1 - x) * fund2.all,
-                                             (1 - x) * fund3.all),
-                                           nrow = 3, byrow = TRUE),
-              2, function(x) lm(x ~ benchmark.gains[, 1])$coef[1] * 100)
-      })
-      
-    } else if (y.metric == "alpha2") {
-      
-      y <- lapply(fund1.all, function(x) {
-        apply(tickers.gains.sub %*% matrix(c(rep(x, num.points),
-                                             (1 - x) * fund2.all,
-                                             (1 - x) * fund3.all),
-                                           nrow = 3, byrow = TRUE),
-              2, function(x) lm(x ~ benchmark.gains[, 2])$coef[1] * 100)
-      })
-      
-    } else if (y.metric == "beta") {
-      
-      y <- lapply(fund1.all, function(x) {
-        apply(tickers.gains.sub %*% matrix(c(rep(x, num.points),
-                                             (1 - x) * fund2.all,
-                                             (1 - x) * fund3.all),
-                                           nrow = 3, byrow = TRUE),
-              2, function(x) lm(x ~ benchmark.gains[, 1])$coef[2] * 100)
-      })
-      
-    } else if (y.metric == "beta2") {
-      
-      y <- lapply(fund1.all, function(x) {
-        apply(tickers.gains.sub %*% matrix(c(rep(x, num.points),
-                                             (1 - x) * fund2.all,
-                                             (1 - x) * fund3.all),
-                                           nrow = 3, byrow = TRUE),
-              2, function(x) lm(x ~ benchmark.gains[, 2])$coef[2] * 100)
-      })
-      
-    } else if (y.metric == "r.squared") {
-      
-      y <- lapply(fund1.all, function(x) {
-        apply(tickers.gains.sub %*% matrix(c(rep(x, num.points),
-                                             (1 - x) * fund2.all,
-                                             (1 - x) * fund3.all),
-                                           nrow = 3, byrow = TRUE),
-              2, function(x) summary(lm(x ~ benchmark.gains[, 1]))$r.squared)
-      })
-      
-    } else if (y.metric == "r.squared2") {
-      
-      y <- lapply(fund1.all, function(x) {
-        apply(tickers.gains.sub %*% matrix(c(rep(x, num.points),
-                                             (1 - x) * fund2.all,
-                                             (1 - x) * fund3.all),
-                                           nrow = 3, byrow = TRUE),
-              2, function(x) summary(lm(x ~ benchmark.gains[, 2]))$r.squared)
-      })
-      
-    } else if (y.metric == "pearson") {
-      
-      y <- lapply(fund1.all, function(x) {
-        apply(tickers.gains.sub %*% matrix(c(rep(x, num.points),
-                                             (1 - x) * fund2.all,
-                                             (1 - x) * fund3.all),
-                                           nrow = 3, byrow = TRUE),
-              2, function(x) cor(x, benchmark.gains[, 1]))
-      })
-      
-    } else if (y.metric == "pearson2") {
-      
-      y <- lapply(fund1.all, function(x) {
-        apply(tickers.gains.sub %*% matrix(c(rep(x, num.points),
-                                             (1 - x) * fund2.all,
-                                             (1 - x) * fund3.all),
-                                           nrow = 3, byrow = TRUE),
-              2, function(x) cor(x, benchmark.gains[, 2]))
-      })
-      
-    } else if (y.metric == "spearman") {
-      
-      y <- lapply(fund1.all, function(x) {
-        apply(tickers.gains.sub %*% matrix(c(rep(x, num.points),
-                                             (1 - x) * fund2.all,
-                                             (1 - x) * fund3.all),
-                                           nrow = 3, byrow = TRUE),
-              2, function(x) cor(x, benchmark.gains[, 1], method = "spearman"))
-      })
-      
-    } else if (y.metric == "spearman2") {
-      
-      y <- lapply(fund1.all, function(x) {
-        apply(tickers.gains.sub %*% matrix(c(rep(x, num.points),
-                                             (1 - x) * fund2.all,
-                                             (1 - x) * fund3.all),
-                                           nrow = 3, byrow = TRUE),
-              2, function(x) cor(x, benchmark.gains[, 2], method = "spearman"))
-      })
-      
-    } else if (y.metric == "auto.pearson") {
-      
-      y <- lapply(fund1.all, function(x) {
-        apply(tickers.gains.sub %*% matrix(c(rep(x, num.points),
-                                             (1 - x) * fund2.all,
-                                             (1 - x) * fund3.all),
-                                           nrow = 3, byrow = TRUE),
-              2, function(x) cor(x[-length(x)], x[-1]))
-      })
-      
-    } else if (y.metric == "auto.spearman") {
-      
-      y <- lapply(fund1.all, function(x) {
-        apply(tickers.gains.sub %*% matrix(c(rep(x, num.points),
-                                             (1 - x) * fund2.all,
-                                             (1 - x) * fund3.all),
-                                           nrow = 3, byrow = TRUE),
-              2, function(x) cor(x[-length(x)], x[-1], method = "spearman"))
-      })
-      
-    } else if (y.metric == "allocation") {
-      
-      y <- lapply(fund1.all, function(x) fund2.all * 100)
-      
-    }
+  } else if (x.metric == "growth") {
     
-    # Create list where each element is a two-column matrix of x and y values
-    # for a particular fund-1 allocation
-    set.list <- mapply(function(x, y)
-      list(cbind(unlist(x), unlist(y))), x, y, SIMPLIFY = TRUE)
-    names(set.list) <- paste(fund1.all * 100, "% ", tickers[ii * 3 - 2], sep = "")
+    x <- lapply(fund1.all, function(x) {
+      apply(tickers.gains %*% matrix(c(rep(x, n.points),
+                                       (1 - x) * fund2.all,
+                                       (1 - x) * fund3.all),
+                                     nrow = 3, byrow = TRUE),
+            2, function(x) gains_rate(gains = x) * 100)
+    })
     
-    # Add set.list to portfolio.xy
-    portfolio.xy[[ii]] <- set.list
+  } else if (x.metric == "cagr") {
+    
+    x <- lapply(fund1.all, function(x) {
+      apply(tickers.gains %*% matrix(c(rep(x, n.points),
+                                       (1 - x) * fund2.all,
+                                       (1 - x) * fund3.all),
+                                     nrow = 3, byrow = TRUE),
+            2, function(x)
+              gains_rate(gains = x, units.rate = units.year) * 100)
+    })
+    
+  } else if (x.metric == "mdd") {
+    
+    x <- lapply(fund1.all, function(x) {
+      apply(tickers.gains %*% matrix(c(rep(x, n.points),
+                                       (1 - x) * fund2.all,
+                                       (1 - x) * fund3.all),
+                                     nrow = 3, byrow = TRUE),
+            2, function(x) mdd(gains = x) * 100)
+    })
+    
+  } else if (x.metric == "sharpe") {
+    
+    x <- lapply(fund1.all, function(x) {
+      apply(tickers.gains %*% matrix(c(rep(x, n.points),
+                                       (1 - x) * fund2.all,
+                                       (1 - x) * fund3.all),
+                                     nrow = 3, byrow = TRUE),
+            2, function(x) sharpe(gains = x))
+    })
+    
+  } else if (x.metric == "sortino") {
+    
+    x <- lapply(fund1.all, function(x) {
+      apply(tickers.gains %*% matrix(c(rep(x, n.points),
+                                       (1 - x) * fund2.all,
+                                       (1 - x) * fund3.all),
+                                     nrow = 3, byrow = TRUE),
+            2, function(x) sortino(gains = x))
+    })
+    
+  } else if (x.metric == "alpha") {
+    
+    x <- lapply(fund1.all, function(x) {
+      apply(tickers.gains %*% matrix(c(rep(x, n.points),
+                                       (1 - x) * fund2.all,
+                                       (1 - x) * fund3.all),
+                                     nrow = 3, byrow = TRUE),
+            2, function(x) lm(x ~ benchmark.gains[, 1])$coef[1] * 100)
+    })
+    
+  } else if (x.metric == "alpha2") {
+    
+    x <- lapply(fund1.all, function(x) {
+      apply(tickers.gains %*% matrix(c(rep(x, n.points),
+                                       (1 - x) * fund2.all,
+                                       (1 - x) * fund3.all),
+                                     nrow = 3, byrow = TRUE),
+            2, function(x) lm(x ~ benchmark.gains[, 2])$coef[1] * 100)
+    })
+    
+  } else if (x.metric == "beta") {
+    
+    x <- lapply(fund1.all, function(x) {
+      apply(tickers.gains %*% matrix(c(rep(x, n.points),
+                                       (1 - x) * fund2.all,
+                                       (1 - x) * fund3.all),
+                                     nrow = 3, byrow = TRUE),
+            2, function(x) lm(x ~ benchmark.gains[, 1])$coef[2] * 100)
+    })
+    
+  } else if (x.metric == "beta2") {
+    
+    x <- lapply(fund1.all, function(x) {
+      apply(tickers.gains %*% matrix(c(rep(x, n.points),
+                                       (1 - x) * fund2.all,
+                                       (1 - x) * fund3.all),
+                                     nrow = 3, byrow = TRUE),
+            2, function(x) lm(x ~ benchmark.gains[, 2])$coef[2] * 100)
+    })
+    
+  } else if (x.metric == "r.squared") {
+    
+    x <- lapply(fund1.all, function(x) {
+      apply(tickers.gains %*% matrix(c(rep(x, n.points),
+                                       (1 - x) * fund2.all,
+                                       (1 - x) * fund3.all),
+                                     nrow = 3, byrow = TRUE),
+            2, function(x) summary(lm(x ~ benchmark.gains[, 1]))$r.squared)
+    })
+    
+  } else if (x.metric == "r.squared2") {
+    
+    x <- lapply(fund1.all, function(x) {
+      apply(tickers.gains %*% matrix(c(rep(x, n.points), 
+                                       (1 - x) * fund2.all,
+                                       (1 - x) * fund3.all), 
+                                     nrow = 3, byrow = TRUE),
+            2, function(x) summary(lm(x ~ benchmark.gains[, 2]))$r.squared)
+    })
+    
+  } else if (x.metric == "pearson") {
+    
+    x <- lapply(fund1.all, function(x) {
+      apply(tickers.gains %*% matrix(c(rep(x, n.points),
+                                       (1 - x) * fund2.all,
+                                       (1 - x) * fund3.all),
+                                     nrow = 3, byrow = TRUE),
+            2, function(x) cor(x, benchmark.gains[, 1]))
+    })
+    
+  } else if (x.metric == "pearson2") {
+    
+    x <- lapply(fund1.all, function(x) {
+      apply(tickers.gains %*% matrix(c(rep(x, n.points),
+                                       (1 - x) * fund2.all,
+                                       (1 - x) * fund3.all),
+                                     nrow = 3, byrow = TRUE),
+            2, function(x) cor(x, benchmark.gains[, 2]))
+    })
+    
+  } else if (x.metric == "spearman") {
+    
+    x <- lapply(fund1.all, function(x) {
+      apply(tickers.gains %*% matrix(c(rep(x, n.points),
+                                       (1 - x) * fund2.all,
+                                       (1 - x) * fund3.all),
+                                     nrow = 3, byrow = TRUE),
+            2, function(x) cor(x, benchmark.gains[, 1], method = "spearman"))
+    })
+    
+  } else if (x.metric == "spearman2") {
+    
+    x <- lapply(fund1.all, function(x) {
+      apply(tickers.gains %*% matrix(c(rep(x, n.points),
+                                       (1 - x) * fund2.all,
+                                       (1 - x) * fund3.all),
+                                     nrow = 3, byrow = TRUE),
+            2, function(x) cor(x, benchmark.gains[, 2], method = "spearman"))
+    })
+    
+  } else if (x.metric == "auto.pearson") {
+    
+    x <- lapply(fund1.all, function(x) {
+      apply(tickers.gains %*% matrix(c(rep(x, n.points),
+                                       (1 - x) * fund2.all,
+                                       (1 - x) * fund3.all),
+                                     nrow = 3, byrow = TRUE),
+            2, function(x) cor(x[-length(x)], x[-1]))
+    })
+    
+  } else if (x.metric == "auto.spearman") {
+    
+    x <- lapply(fund1.all, function(x) {
+      apply(tickers.gains %*% matrix(c(rep(x, n.points),
+                                       (1 - x) * fund2.all,
+                                       (1 - x) * fund3.all),
+                                     nrow = 3, byrow = TRUE),
+            2, function(x) cor(x[-length(x)], x[-1], method = "spearman"))
+    })
+    
+  } else if (x.metric == "allocation") {
+    
+    x <- lapply(fund1.all, function(x) fund2.all * 100)
     
   }
   
-  # Create labels for 3-fund sets
-  set.labels <- paste(tickers[seq(1, length(tickers), 3)], 
-                      tickers[seq(2, length(tickers), 3)], 
-                      tickers[seq(3, length(tickers), 3)], sep = "-")
+  # Calculate y-axis value for each allocation
+  if (y.metric == "mean") {
+    
+    means <- apply(tickers.gains, 2, mean) * 100
+    y <- lapply(fund1.all, function(x)
+      x * means[1] + (1 - x) * fund2.all * means[2] +
+        (1 - x) * fund3.all * means[3])
+    
+  } else if (y.metric == "sd") {
+    
+    vars <- var(tickers.gains * 100)
+    y <- lapply(fund1.all, function(x)
+      sqrt(x^2 * vars[1, 1] + ((1 - x) * fund2.all)^2 * vars[2, 2] +
+             ((1 - x) * fund3.all)^2 * vars[3, 3] +
+             2 * x * (1 - x) * fund2.all * vars[1, 2] +
+             2 * x * (1 - x) * fund3.all * vars[1, 3] +
+             2 * (1 - x) * fund2.all * (1 - x) * fund3.all * vars[2, 3]))
+    
+  } else if (y.metric == "growth") {
+    
+    y <- lapply(fund1.all, function(x) {
+      apply(tickers.gains %*% matrix(c(rep(x, n.points),
+                                       (1 - x) * fund2.all,
+                                       (1 - x) * fund3.all),
+                                     nrow = 3, byrow = TRUE),
+            2, function(x) gains_rate(gains = x) * 100)
+    })
+    
+  } else if (y.metric == "cagr") {
+    
+    y <- lapply(fund1.all, function(x) {
+      apply(tickers.gains %*% matrix(c(rep(x, n.points),
+                                       (1 - x) * fund2.all,
+                                       (1 - x) * fund3.all),
+                                     nrow = 3, byrow = TRUE),
+            2, function(x)
+              gains_rate(gains = x, units.rate = units.year) * 100)
+    })
+    
+  } else if (y.metric == "mdd") {
+    
+    y <- lapply(fund1.all, function(x) {
+      apply(tickers.gains %*% matrix(c(rep(x, n.points),
+                                       (1 - x) * fund2.all,
+                                       (1 - x) * fund3.all),
+                                     nrow = 3, byrow = TRUE),
+            2, function(x) mdd(gains = x) * 100)
+    })
+    
+  } else if (y.metric == "sharpe") {
+    
+    y <- lapply(fund1.all, function(x) {
+      apply(tickers.gains %*% matrix(c(rep(x, n.points),
+                                       (1 - x) * fund2.all,
+                                       (1 - x) * fund3.all),
+                                     nrow = 3, byrow = TRUE),
+            2, function(x) sharpe(gains = x))
+    })
+    
+  } else if (y.metric == "sortino") {
+    
+    y <- lapply(fund1.all, function(x) {
+      apply(tickers.gains %*% matrix(c(rep(x, n.points),
+                                       (1 - x) * fund2.all,
+                                       (1 - x) * fund3.all),
+                                     nrow = 3, byrow = TRUE),
+            2, function(x) sortino(gains = x))
+    })
+    
+  } else if (y.metric == "alpha") {
+    
+    y <- lapply(fund1.all, function(x) {
+      apply(tickers.gains %*% matrix(c(rep(x, n.points),
+                                       (1 - x) * fund2.all,
+                                       (1 - x) * fund3.all),
+                                     nrow = 3, byrow = TRUE),
+            2, function(x) lm(x ~ benchmark.gains[, 1])$coef[1] * 100)
+    })
+    
+  } else if (y.metric == "alpha2") {
+    
+    y <- lapply(fund1.all, function(x) {
+      apply(tickers.gains %*% matrix(c(rep(x, n.points),
+                                       (1 - x) * fund2.all,
+                                       (1 - x) * fund3.all),
+                                     nrow = 3, byrow = TRUE),
+            2, function(x) lm(x ~ benchmark.gains[, 2])$coef[1] * 100)
+    })
+    
+  } else if (y.metric == "beta") {
+    
+    y <- lapply(fund1.all, function(x) {
+      apply(tickers.gains %*% matrix(c(rep(x, n.points),
+                                       (1 - x) * fund2.all,
+                                       (1 - x) * fund3.all),
+                                     nrow = 3, byrow = TRUE),
+            2, function(x) lm(x ~ benchmark.gains[, 1])$coef[2] * 100)
+    })
+    
+  } else if (y.metric == "beta2") {
+    
+    y <- lapply(fund1.all, function(x) {
+      apply(tickers.gains %*% matrix(c(rep(x, n.points),
+                                       (1 - x) * fund2.all,
+                                       (1 - x) * fund3.all),
+                                     nrow = 3, byrow = TRUE),
+            2, function(x) lm(x ~ benchmark.gains[, 2])$coef[2] * 100)
+    })
+    
+  } else if (y.metric == "r.squared") {
+    
+    y <- lapply(fund1.all, function(x) {
+      apply(tickers.gains %*% matrix(c(rep(x, n.points),
+                                       (1 - x) * fund2.all,
+                                       (1 - x) * fund3.all),
+                                     nrow = 3, byrow = TRUE),
+            2, function(x) summary(lm(x ~ benchmark.gains[, 1]))$r.squared)
+    })
+    
+  } else if (y.metric == "r.squared2") {
+    
+    y <- lapply(fund1.all, function(x) {
+      apply(tickers.gains %*% matrix(c(rep(x, n.points),
+                                       (1 - x) * fund2.all,
+                                       (1 - x) * fund3.all),
+                                     nrow = 3, byrow = TRUE),
+            2, function(x) summary(lm(x ~ benchmark.gains[, 2]))$r.squared)
+    })
+    
+  } else if (y.metric == "pearson") {
+    
+    y <- lapply(fund1.all, function(x) {
+      apply(tickers.gains %*% matrix(c(rep(x, n.points),
+                                       (1 - x) * fund2.all,
+                                       (1 - x) * fund3.all),
+                                     nrow = 3, byrow = TRUE),
+            2, function(x) cor(x, benchmark.gains[, 1]))
+    })
+    
+  } else if (y.metric == "pearson2") {
+    
+    y <- lapply(fund1.all, function(x) {
+      apply(tickers.gains %*% matrix(c(rep(x, n.points),
+                                       (1 - x) * fund2.all,
+                                       (1 - x) * fund3.all),
+                                     nrow = 3, byrow = TRUE),
+            2, function(x) cor(x, benchmark.gains[, 2]))
+    })
+    
+  } else if (y.metric == "spearman") {
+    
+    y <- lapply(fund1.all, function(x) {
+      apply(tickers.gains %*% matrix(c(rep(x, n.points),
+                                       (1 - x) * fund2.all,
+                                       (1 - x) * fund3.all),
+                                     nrow = 3, byrow = TRUE),
+            2, function(x) cor(x, benchmark.gains[, 1], method = "spearman"))
+    })
+    
+  } else if (y.metric == "spearman2") {
+    
+    y <- lapply(fund1.all, function(x) {
+      apply(tickers.gains %*% matrix(c(rep(x, n.points),
+                                       (1 - x) * fund2.all,
+                                       (1 - x) * fund3.all),
+                                     nrow = 3, byrow = TRUE),
+            2, function(x) cor(x, benchmark.gains[, 2], method = "spearman"))
+    })
+    
+  } else if (y.metric == "auto.pearson") {
+    
+    y <- lapply(fund1.all, function(x) {
+      apply(tickers.gains %*% matrix(c(rep(x, n.points),
+                                       (1 - x) * fund2.all,
+                                       (1 - x) * fund3.all),
+                                     nrow = 3, byrow = TRUE),
+            2, function(x) cor(x[-length(x)], x[-1]))
+    })
+    
+  } else if (y.metric == "auto.spearman") {
+    
+    y <- lapply(fund1.all, function(x) {
+      apply(tickers.gains %*% matrix(c(rep(x, n.points),
+                                       (1 - x) * fund2.all,
+                                       (1 - x) * fund3.all),
+                                     nrow = 3, byrow = TRUE),
+            2, function(x) cor(x[-length(x)], x[-1], method = "spearman"))
+    })
+    
+  } else if (y.metric == "allocation") {
+    
+    y <- lapply(fund1.all, function(x) fund2.all * 100)
+    
+  }
   
-  # Extract all x and y values from portfolio.xy
-  x <- lapply(portfolio.xy, function(x) lapply(x, function(x) x[, 1]))
-  y <- lapply(portfolio.xy, function(x) lapply(x, function(x) x[, 2]))
+  # Create list where each element is a two-column matrix of x and y values
+  # for a particular fund-1 allocation
+  portfolio.xy <- mapply(function(x, y)
+    list(cbind(unlist(x), unlist(y))), x, y, SIMPLIFY = TRUE)
+  names(portfolio.xy) <- paste(fund1.all * 100, "% ", tickers[1], sep = "")
+  
+  # Figure out (x, y) coordinates for 100% fund 1, fund 2, and fund 3
+  fund1.xy <- portfolio.xy[[n.curves]][1, ]
+  fund2.xy <- portfolio.xy[[1]][n.points, ]
+  fund3.xy <- portfolio.xy[[1]][1, ]
   
   # Create variables for plot
   x1 <- x2 <- y1 <- y2 <- NULL
@@ -914,20 +887,24 @@ threefunds_graph <- function(tickers = NULL, intercepts = NULL, slopes = NULL,
   
   # Create color scheme for plot
   if (is.null(colors)) {
-    if (n.sets == 1) {
+    if (n.curves == 1) {
       colors <- "black"
-    } else if (n.sets == 2) {
-      colors <- c("blue", "red")
-    } else if (n.sets == 3) {
-      colors <- c("blue", "red", "orange")
-    } else if (n.sets == 4) {
-      colors <- c("blue", "red", "orange", "purple")
-    } else if (n.sets > 4) {
-      colors <- colorRampPalette(c("blue", "red"))(n.sets)
+    } else if (n.curves == 2) {
+      colors <- c("black", "black")
+    } else if (n.curves == 3) {
+      colors <- c("black", "red", "black")
+    } else if (n.curves == 4) {
+      colors <- c("black", "red", "blue", "black")
+    } else if (n.curves == 5) {
+      colors <- c("black", "red", "blue", "orange", "black")
+    } else if (n.curves == 6) {
+      colors <- c("black", "red", "blue", "orange", "purple", "black")
+    } else if (n.curves > 6) {
+      colors <- colorRampPalette(c("blue", "red"))(n.curves)
     }
   }
   if (is.null(lty)) {
-    lty <- rep(1, n.sets)
+    lty <- rep(1, n.curves)
   }
   
   # Figure out features of graph, based on user inputs where available
@@ -936,7 +913,7 @@ threefunds_graph <- function(tickers = NULL, intercepts = NULL, slopes = NULL,
                                           xlab = x.label, ylab = y.label,
                                           xlim = c(x1, x2), ylim = c(y1, y2)),
                              list2 = plot.list)
-  points.list <- list_override(list1 = list(pch = 16, cex = 0.7),
+  points.list <- list_override(list1 = list(pch = 16, cex = 0.6),
                                list2 = points.list)
   text.list <- list_override(list1 = list(cex = 0.7),
                              list2 = text.list)
@@ -944,41 +921,36 @@ threefunds_graph <- function(tickers = NULL, intercepts = NULL, slopes = NULL,
   # Figure out positioning of ticker labels for 100% allocation to each fund
   if (is.null(tickerlabel.offsets)) {
     
-    tickerlabel.offsets <- cbind(rep(0, n.sets * 3), rep(NA, n.sets * 3))
+    tickerlabel.offsets <- cbind(rep(0, 3), rep(NA, 3))
     y.offset.mag <- (y2 - y1) / 40
-    for (ii in 1: n.sets) {
-      
-      # Put label for ticker with higher y-value above its data point, and
-      # label for other ticker below its data point
-      fund1.xy <- portfolio.xy[[ii]][[num.curves]][1, 1: 2]
-      fund2.xy <- portfolio.xy[[ii]][[1]][num.points, 1: 2]
-      fund3.xy <- portfolio.xy[[ii]][[1]][1, 1: 2]
-      whichmax.y <- which.max(c(fund1.xy[2], fund2.xy[2], fund3.xy[2]))
-      if (whichmax.y == 1) {
-        tickerlabel.offsets[(ii * 3 - 2), 2] <- y.offset.mag
-        tickerlabel.offsets[(ii * 3 - 1), 2] <- -y.offset.mag
-        tickerlabel.offsets[ii * 3, 2] <- -y.offset.mag
-      } else if (whichmax.y == 2) {
-        tickerlabel.offsets[(ii * 3 - 2), 2] <- -y.offset.mag
-        tickerlabel.offsets[(ii * 3 - 1), 2] <- y.offset.mag
-        tickerlabel.offsets[ii * 3, 2] <- -y.offset.mag
-      } else {
-        tickerlabel.offsets[(ii * 3 - 2), 2] <- -y.offset.mag
-        tickerlabel.offsets[(ii * 3 - 1), 2] <- -y.offset.mag
-        tickerlabel.offsets[ii * 3, 2] <- y.offset.mag
-      }
+    
+    # Put label for ticker with higher y-value above its data point, and
+    # label for other ticker below its data point
+    whichmax.y <- which.max(c(fund1.xy[2], fund2.xy[2], fund3.xy[2]))
+    if (whichmax.y == 1) {
+      tickerlabel.offsets[1, 2] <- y.offset.mag
+      tickerlabel.offsets[2, 2] <- -y.offset.mag
+      tickerlabel.offsets[3, 2] <- -y.offset.mag
+    } else if (whichmax.y == 2) {
+      tickerlabel.offsets[1, 2] <- -y.offset.mag
+      tickerlabel.offsets[2, 2] <- y.offset.mag
+      tickerlabel.offsets[3, 2] <- -y.offset.mag
+    } else {
+      tickerlabel.offsets[1, 2] <- -y.offset.mag
+      tickerlabel.offsets[2, 2] <- -y.offset.mag
+      tickerlabel.offsets[3, 2] <- y.offset.mag
     }
     
   } else if (length(tickerlabel.offsets) == 3) {
-    tickerlabel.offsets <- cbind(rep(tickerlabel.offsets[1], n.sets * 3),
-                                 rep(tickerlabel.offsets[2], n.sets * 3))
+    tickerlabel.offsets <- cbind(rep(tickerlabel.offsets[1], 3),
+                                 rep(tickerlabel.offsets[2], 3))
   }
   if (is.null(reflabel.offsets) & ! is.null(reference.tickers)) {
     reflabel.offsets <- cbind(rep(0, length(reference.tickers)),
                               rep((y2 - y1) / 40, length(reference.tickers)))
   } else if (length(tickerlabel.offsets) == 2) {
-    tickerlabel.offsets <- cbind(rep(tickerlabel.offsets[1], n.sets * 3),
-                                 rep(tickerlabel.offsets[2], n.sets * 3))
+    tickerlabel.offsets <- cbind(rep(tickerlabel.offsets[1], 3),
+                                 rep(tickerlabel.offsets[2], 3))
   }
   
   # If pdf.list is not NULL, call pdf
@@ -1027,18 +999,18 @@ threefunds_graph <- function(tickers = NULL, intercepts = NULL, slopes = NULL,
   }
   
   # Add horizontal/vertical lines if useful for requested metrics
-  if (y.metric %in% c("mean", "sd", "sharpe", "sortino", "alpha", "alpha2",
-                      "beta", "beta2", "pearson", "pearson2", "spearman",
-                      "spearman2", "auto.pearson", "auto.spearman", "growth",
-                      "cagr")) {
+  if (y.metric %in% c("mean", "sd", "growth", "cagr", "mdd", "sharpe", 
+                      "sortino", "alpha", "alpha2", "beta", "beta2", "pearson", 
+                      "pearson2", "spearman", "spearman2", "auto.pearson", 
+                      "auto.spearman")) {
     abline(h = 0, lty = 2)
   } else if (y.metric %in% c("r.squared", "r.squared2")) {
     abline(h = 1, lty = 2)
   }
-  if (x.metric %in% c("mean", "sd", "sharpe", "sortino", "alpha", "alpha2",
-                      "beta", "beta2", "pearson", "pearson2", "spearman",
-                      "spearman2", "auto.pearson", "auto.spearman", "growth",
-                      "cagr")) {
+  if (x.metric %in% c("mean", "sd", "growth", "cagr", "mdd", "sharpe", 
+                      "sortino", "alpha", "alpha2", "beta", "beta2", "pearson", 
+                      "pearson2", "spearman", "spearman2", "auto.pearson", 
+                      "auto.spearman")) {
     abline(v = 0, lty = 2)
   } else if (x.metric %in% c("r.squared", "r.squared2")) {
     abline(v = 1, lty = 2)
@@ -1046,60 +1018,39 @@ threefunds_graph <- function(tickers = NULL, intercepts = NULL, slopes = NULL,
   
   # Figure out indices for data points
   if (! is.null(step.points)) {
-    locs.points <- seq(1, num.points, step.points / step.data)
+    locs.points <- seq(1, n.points, step.points / step.data)
   } else {
-    locs.points <- c(1, num.points)
+    locs.points <- c(1, n.points)
   }
   
-  # Add curves for each set
-  for (ii in 1: n.sets) {
-    
-    # Add colored curves and data points
-    lapply(portfolio.xy[[ii]], function(x) {
-      do.call(points, c(list(x = x[, 1], y = x[, 2], type = "l",
-                             col = colors[ii], lty = lty[ii]), points.list))
-      do.call(points, c(list(x = x[locs.points, 1], y = x[locs.points, 2],
-                             col = colors[ii]), points.list))
-    })
-    
-    # Figure out (x, y) coordinates for 100% fund 1, 100% fund 2, and 100% fund
-    # 3
-    fund1.xy <- portfolio.xy[[ii]][[num.curves]][1, 1: 2]
-    fund2.xy <- portfolio.xy[[ii]][[1]][num.points, 1: 2]
-    fund3.xy <- portfolio.xy[[ii]][[1]][1, 1: 2]
-    
-    # Add black data points at 100% fund 1, 100% fund2, and 100% fund 3
-    do.call(points, c(list(x = fund1.xy[1], y = fund1.xy[2]), points.list))
-    do.call(points, c(list(x = fund2.xy[1], y = fund2.xy[2]), points.list))
-    do.call(points, c(list(x = fund3.xy[1], y = fund3.xy[2]), points.list))
-    
-    # Add text labels if not already on plot
-    if (ii == 1 | ! tickers[ii * 3 - 2] %in% tickers[1: (ii * 3 - 3)]) {
-      do.call(text, c(list(x = fund1.xy[1] +
-                             tickerlabel.offsets[(ii * 3 - 2), 1],
-                           y = fund1.xy[2] +
-                             tickerlabel.offsets[(ii * 3 - 2), 2],
-                           label = paste("100% ", tickers[ii * 3 - 2], 
-                                         sep = "")),
-                      text.list))
-    }
-    if (ii == 1 | ! tickers[ii * 3 - 1] %in% tickers[1: (ii * 3 - 2)]) {
-      do.call(text, c(list(x = fund2.xy[1] +
-                             tickerlabel.offsets[(ii * 3 - 1), 1],
-                           y = fund2.xy[2] +
-                             tickerlabel.offsets[(ii * 3 - 1), 2],
-                           label = paste("100% ", tickers[ii * 3 - 1], 
-                                         sep = "")),
-                      text.list))
-    }
-    if (ii == 1 | ! tickers[ii * 3] %in% tickers[1: (ii * 3 - 3)]) {
-      do.call(text, c(list(x = fund3.xy[1] + tickerlabel.offsets[(ii * 3), 1],
-                           y = fund3.xy[2] + tickerlabel.offsets[ii * 3, 2],
-                           label = paste("100% ", tickers[ii * 3], sep = "")),
-                      text.list))
-    }
-    
+  # Add curves and data points
+  for (ii in 1: n.curves) {
+    x.ii <- x[[ii]]
+    y.ii <- y[[ii]]
+    do.call(points, c(list(x = x.ii, y = y.ii, type = "l",
+                           col = colors[ii], lty = lty), points.list))
+    do.call(points, c(list(x = x.ii[locs.points], y = y.ii[locs.points],
+                           col = colors[ii]), points.list))
   }
+  
+  # Add black data points at 100% fund 1, 100% fund2, and 100% fund 3
+  do.call(points, c(list(x = fund1.xy[1], y = fund1.xy[2]), points.list))
+  do.call(points, c(list(x = fund2.xy[1], y = fund2.xy[2]), points.list))
+  do.call(points, c(list(x = fund3.xy[1], y = fund3.xy[2]), points.list))
+  
+  # Add text labels
+  do.call(text, c(list(x = fund1.xy[1] + tickerlabel.offsets[1, 1],
+                       y = fund1.xy[2] + tickerlabel.offsets[1, 2],
+                       label = paste("100% ", tickers[1], sep = "")),
+                  text.list))
+  do.call(text, c(list(x = fund2.xy[1] + tickerlabel.offsets[2, 1],
+                       y = fund2.xy[2] + tickerlabel.offsets[2, 2],
+                       label = paste("100% ", tickers[2], sep = "")),
+                  text.list))
+  do.call(text, c(list(x = fund3.xy[1] + tickerlabel.offsets[3, 1],
+                       y = fund3.xy[2] + tickerlabel.offsets[3, 2],
+                       label = paste("100% ", tickers[3], sep = "")),
+                  text.list))
   
   # Add data point for reference funds (if given)
   if (! is.null(reference.tickers)) {

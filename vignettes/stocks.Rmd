@@ -181,7 +181,7 @@ Here XLY (consumer discretionary) looks pretty good, with the best max drawdown 
 
 Let's move to another example: Warren Buffett's Berkshire Hathaway (BRK-B). Let's see whether BRK-B has consistently outperformed SPY over the past 15 years, looking at the 100-day moving Sharpe ratio:
 
-```{r, fig.width = 5, fig.height = 5}
+```{r, fig.width = 6, fig.height = 5}
 fig <- onemetric_overtime_graph(tickers = c("SPY", "BRK-B"), 
                                 from = "2003-03-02", to = "2018-03-02", 
                                 window.units = 100, y.metric = "sharpe")
@@ -201,7 +201,7 @@ Not good, Mr. Buffett!
 
 Until recently, my own retirement portfolio was simply 1/3 UPRO, 2/3 VBLTX. UPRO is a 3x daily S&P 500 ETF, and VBLTX is Vanguard's long-term bond mutual fund. A good way of visualizing the characteristics of a two-fund portfolio is to plot mean vs. standard deviation of daily gains, for allocations ranging from 100% fund 1 to 100% fund 2. To do that, using data over UPRO's lifetime (i.e. back to 6/25/09):
 
-```{r}
+```{r, fig.width = 6, fig.height = 5}
 fig <- twofunds_graph(tickers = c("UPRO", "VBLTX"), reference.tickers = "SPY",  
                       to = "2018-03-02")
 ```
@@ -211,13 +211,17 @@ The UPRO/VBLTX strategy sort of trumps SPY, because there are regions on the cur
 
 ### 3-fund portfolio optimization
 
-The change I made recently was adding Vanguard's high-yield (aka "junk bond") mutual fund, VWEHX, to the mix. To visualize characteristics of UPRO/VBLTX/VWEHX, this time looking at annualized growth vs. max drawdown:
+The change I made recently was adding Vanguard's high-yield (aka "junk bond") mutual fund, VWEHX, to the mix. To visualize characteristics of VWEHX/UPRO/VBLTX:
 
-```{r}
+```{r, fig.width = 6, fig.height = 5}
 fig <- threefunds_graph(tickers = c("VWEHX", "UPRO", "VBLTX"), 
                         reference.tickers = "SPY",  
-                        to = "2018-03-02", 
-                        x.metric = "mdd", y.metric = "cagr")
+                        to = "2018-03-02")
 ```
+
+Each curve is for a fixed allocation to the first fund. The black curve is 0% VWEHX, so it is the same as the UPRO/VBLTX curve in the previous graph. The red curve is 20% VWEHX, and the remaining 80% allocated entirely to VBLTX (bottom-most point), entirely to UPRO (top-right data point), and everywhere in between. 
+
+At SPY's SD, the black curve (0% VWEHX) achieves the highest mean. At SPY's mean, the blue (40% VWEHX) or red (20% VWEHX) curve has the lowest SD. So depending on what you're going for, it may or may not be worthwhile adding VWEHX. My rationale was sort of qualitative: two nearly independent alpha-generating bond funds seems better than one. 
+
 
 ## References

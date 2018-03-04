@@ -2,7 +2,7 @@
 % Please edit documentation in R/threefunds_graph.R
 \name{threefunds_graph}
 \alias{threefunds_graph}
-\title{Graph One Performance Metric vs. Another for Three-Fund Portfolios as 
+\title{Graph One Performance Metric vs. Another for Three-Fund Portfolio as 
 Allocation Varies}
 \usage{
 threefunds_graph(tickers = NULL, intercepts = NULL, slopes = NULL, ...,
@@ -118,9 +118,8 @@ frame rather than open a new one.}
 \value{
 In addition to the graph, a list containing: 
 \enumerate{
-\item List named \code{portfolio.xy} where each element is a list of 
-two-column matrices of x- and y-axis values for a particular three-fund set 
-with a particular allocation to fund 1.
+\item List named \code{portfolio.xy} where each element is a two-column 
+matrix of x- and y-axis values for a curve.
 \item Numeric vector named \code{means} with mean gains for each fund.
 \item Numeric matrix named \code{corr.matrix} with a correlation matrix for 
 gains for each fund.
@@ -128,9 +127,8 @@ gains for each fund.
 }
 \description{
 Useful for visualizing performance of three-fund portfolios, typically by 
-plotting a measure of growth vs. a measure of volatility. First three 
-investments are used as the first three-fund set, next three as the second 
-three-fund set, and so on.
+plotting a measure of growth vs. a measure of volatility. Only works for one 
+three-fund set at a time.
 }
 \examples{
 # # Plot mean vs. SD for UPRO/VBLTX/VWEHX portfolio, and compare to VFINX and 

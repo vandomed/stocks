@@ -223,15 +223,6 @@ twofunds_graph <- function(tickers = NULL, intercepts = NULL, slopes = NULL,
     
   }
   
-  # Initialize list to store x-axis values and y-axis values for each pair
-  x <- y <- portfolio.xy <- list()
-  
-  # Loop through fund pairs
-  fund1.all <- seq(0, 1, step.data)
-  fund2.all <- 1 - fund1.all
-  fund.all <- cbind(fund1.all, fund2.all)
-  num.points <- length(fund1.all)
-  
   # Figure out how many units are in a year, for CAGR and axis labels. If
   # unknown, assume daily.
   if (hasArg(time.scale)) {
@@ -259,6 +250,15 @@ twofunds_graph <- function(tickers = NULL, intercepts = NULL, slopes = NULL,
       units.year <- 252
     }
   }
+  
+  # Initialize list to store x-axis values and y-axis values for each pair
+  x <- y <- portfolio.xy <- list()
+  
+  # Loop through fund pairs
+  fund1.all <- seq(0, 1, step.data)
+  fund2.all <- 1 - fund1.all
+  fund.all <- cbind(fund1.all, fund2.all)
+  num.points <- length(fund1.all)
   
   for (ii in 1: n.pairs) {
     
@@ -865,7 +865,7 @@ twofunds_graph <- function(tickers = NULL, intercepts = NULL, slopes = NULL,
                                           xlab = x.label, ylab = y.label,
                                           xlim = c(x1, x2), ylim = c(y1, y2)),
                              list2 = plot.list)
-  points.list <- list_override(list1 = list(pch = 16, cex = 0.7),
+  points.list <- list_override(list1 = list(pch = 16, cex = 0.6),
                                list2 = points.list)
   text.list <- list_override(list1 = list(cex = 0.7),
                              list2 = text.list)
