@@ -18,8 +18,8 @@
 #' 
 #' 
 #' @examples 
-#' # Load prices for Netflix and Amazon over their mutual lifetimes
-#' prices <- load_prices(c("NFLX", "AMZN"))
+#' # # Load prices for Netflix and Amazon over their mutual lifetimes
+#' # prices <- load_prices(c("NFLX", "AMZN"))
 #' 
 #' 
 #' @inherit load_gains references
@@ -215,10 +215,10 @@ load_prices <- function(tickers, intercepts = NULL, slopes = NULL,
     # Scale each column of closing prices
     for (ii in 1: length(tickers)) {
       if (intercepts[ii] != 0 | slopes[ii] != 1) {
-        closing.prices[, ii] <- balances(ratios = 1 + intercepts[ii] +
-                                           slopes[ii] *
-                                           pchanges(closing.prices[, ii]),
-                                         initial = closing.prices[1, ii])
+        closing.prices[, ii] <- 
+          gains_prices(gains = intercepts[ii] + slopes[ii] * 
+                         pchanges(closing.prices[, ii]), 
+                       initial = closing.prices[1, ii])
         if (slopes[ii] != 1) {
           tickers[ii] <- paste(slopes[ii], "x ", tickers[ii], sep = "")
         }

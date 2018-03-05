@@ -7,7 +7,8 @@
 prices_rate(prices, units.rate = NULL)
 }
 \arguments{
-\item{prices}{Numeric vector of prices.}
+\item{prices}{Numeric matrix with 1 column of prices for each investment (can 
+be a vector if there is only one).}
 
 \item{units.rate}{Numeric value specifying the number of units for growth 
 rate calculation, if you want something other than total growth. For 
@@ -15,7 +16,8 @@ annualized growth rate, set to 252 if \code{prices} has daily prices, 12 if
 \code{prices} has monthly prices, etc.}
 }
 \value{
-Numeric value.
+Numeric value if \code{prices} is a vector, numeric matrix if 
+\code{prices} is a matrix.
 }
 \description{
 The formula is simply: \code{prices[length(prices)] / prices[1] - 1}. If 

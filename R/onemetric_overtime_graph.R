@@ -10,7 +10,8 @@
 #' @inheritParams twofunds_graph
 #' 
 #' @param window.units Numeric value specifying the width of the moving window.
-#'
+#' @param legend.list List of arguments to pass to 
+#' \code{\link[graphics]{legend}}.
 #' 
 #' @return
 #' In addition to the graph, a numeric matrix containing the performance metric 

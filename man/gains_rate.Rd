@@ -7,7 +7,8 @@
 gains_rate(gains, units.rate = NULL)
 }
 \arguments{
-\item{gains}{Numeric vector of gains.}
+\item{gains}{Numeric matrix with 1 column of gains for each investment (can 
+be a vector if there is only one).}
 
 \item{units.rate}{Numeric value specifying the number of units for growth 
 rate calculation, if you want something other than total growth. For 
@@ -15,7 +16,8 @@ annualized growth rate, set to 252 if \code{gains} has daily gains, 12 if
 \code{gains} has monthly gains, etc.}
 }
 \value{
-Numeric value.
+Numeric value if \code{gains} is a vector, numeric matrix if 
+\code{gains} is a matrix.
 }
 \description{
 The formula is simply: \code{prod(gains + 1) - 1}. If \code{units.rate} is 

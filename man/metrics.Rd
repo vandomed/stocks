@@ -25,8 +25,12 @@ be a vector if there is only one).}
 \item{perf.metrics}{Character vector specifying metrics to calculate.}
 }
 \value{
-List containing a data frame with the performance metrics and a correlation 
-matrix for gains for the various investments.
+List containing:
+\enumerate{
+\item Numeric matrix named \code{perf.metrics} with performance metrics. 
+\item Numeric matrix named \code{cor.mat} with correlation matrix for gains 
+for the various investments.
+}
 }
 \description{
 Useful for comparing metrics for several investments. The first investment is 

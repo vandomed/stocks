@@ -1,17 +1,17 @@
 #' Convert Gain from One Time Interval to Another
 #' 
-#' For example, you can use this function to figure out that an 8\% gain over 
-#' 70 trading days corresponds to 31.9\% annualized.
+#' For example, you can use this function to figure out that an 8% gain over 70 
+#' trading days is 31.9% annualized.
 #' 
 #' 
-#' @param gain Numeric value specifying a gain, e.g. 0.03 for 3\%.
+#' @param gain Numeric value specifying a gain, e.g. 0.005 for 0.5%. Can also be 
+#' a vector of gains.
 #' @param units.in Numeric value gving the time period over which the gain was 
 #' achieved.
-#' @param units.out Numeric value giving the time period you want to 
-#' convert to.
+#' @param units.out Numeric value giving the time period you want to convert to.
 #' 
 #' 
-#' @return Numeric value.
+#' @return Numeric value or vector.
 #' 
 #' 
 #' @examples 

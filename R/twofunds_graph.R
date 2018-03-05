@@ -8,7 +8,7 @@
 #' 
 #' 
 #' @inheritParams metrics
-#' 
+#' @inheritParams load_gains
 #' 
 #' @param benchmark.tickers Character vector of length 1 or 2 indicating ticker 
 #' symbols for benchmark indexes. Only used if \code{x.metric} and/or 

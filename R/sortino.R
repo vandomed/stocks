@@ -5,13 +5,12 @@
 #' risk-free rate of return.
 #' 
 #' 
-#' @param gains Numeric vector.
-#' @param prices Numeric vector.
+#' @inheritParams metrics
 #' @param rf Numeric value.
 #' 
 #' 
 #' @return
-#' Numeric value.
+#' Numeric value or vector.
 #' 
 #' 
 #' @examples
@@ -20,7 +19,7 @@
 #' stock.gains <- rnorm(252 * 5, 0.0005, 0.01)
 #' 
 #' # Calculate Sortino ratio using risk-free return of 0
-#' sortino.ratio(stock.gains)
+#' sortino(stock.gains)
 #' 
 #' 
 #' @export
@@ -29,11 +28,19 @@ sortino <- function(gains = NULL,
                     rf = 0) {
   
   # Convert from prices to gains if necessary
-  if (!is.null(prices)) {
-    gains <- gains[!is.na(gains)]
+  if (! is.null(prices)) {
+    gains <- prices_gains(prices)
   }
   
   # Calculate and return Sortino ratio
-  return((mean(gains) - rf) / sd(gains[gains < 0]))
+  if (is.vector(gains)) {
+    sortino.ratio <- (mean_n(gains) - rf) / sd_n(gains[gains < 0])
+  } else {
+    means <- apply(gains, 2, mean_n)
+    sds <- apply(gains, 2, function(x) sd_n(x[x < 0]))
+    sortino.ratio <- (means - rf) / sds
+  }
+  
+  return(sortino.ratio)
   
 }

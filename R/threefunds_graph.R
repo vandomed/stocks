@@ -7,6 +7,7 @@
 #' 
 #' 
 #' @inheritParams twofunds_graph
+#' @inheritParams load_gains
 #' 
 #' @param step.curves Numeric value specifying allocation increments for first 
 #' fund in each set.

@@ -19,6 +19,12 @@ threefunds_graph(tickers = NULL, intercepts = NULL, slopes = NULL, ...,
 \item{tickers}{Character vector of ticker symbols that Yahoo! Finance 
 recognizes, if you want to download data on the fly.}
 
+\item{intercepts}{Numeric vector of values to add to daily gains for each 
+ticker.}
+
+\item{slopes}{Numeric vector of values to multiply daily gains for each ticker 
+by. Slopes are multiplied prior to adding intercepts.}
+
 \item{...}{Arguments to pass along with \code{tickers} to 
 \code{\link{load_gains}}.}
 

@@ -4,14 +4,15 @@
 #' specified, then it converts to x-unit growth rate.
 #' 
 #' 
-#' @param gains Numeric vector of gains.
+#' @inheritParams metrics
 #' @param units.rate Numeric value specifying the number of units for growth 
 #' rate calculation, if you want something other than total growth. For 
 #' annualized growth rate, set to 252 if \code{gains} has daily gains, 12 if 
 #' \code{gains} has monthly gains, etc.
 #' 
 #' 
-#' @return Numeric value.
+#' @return Numeric value if \code{gains} is a vector, numeric matrix if 
+#' \code{gains} is a matrix.
 #' 
 #' 
 #' @examples 
@@ -31,9 +32,19 @@
 #' @export
 gains_rate <- function(gains, units.rate = NULL) {
   
-  # Calculate overall growth
-  length.gains <- length(gains)
-  rate1 <- prod(gains + 1) - 1
+  if (is.vector(gains)) {
+    
+    # Calculate overall growth
+    length.gains <- length(gains)
+    rate1 <- prod(gains + 1) - 1
+    
+  } else {
+    
+    # Calculate overall growth for each fund
+    length.gains <- nrow(gains)
+    rate1 <- apply(gains, 2, function(x) prod(x + 1) - 1)
+    
+  }
   
   # Convert to x-unit growth rate if xunit.rate is specified
   if (! is.null(units.rate) && ! (units.rate == length.gains)) {

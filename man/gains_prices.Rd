@@ -13,10 +13,11 @@ be a vector if there is only one).}
 \item{initial}{Numeric value.}
 }
 \value{
-Numeric vector or matrix.
+Numeric value if \code{gains} is a vector, numeric matrix if 
+\code{gains} is a matrix.
 }
 \description{
-Calculates prices based on initial balance and vector or matrix of gains.
+Calculates prices based on initial balance and vector of gains.
 }
 \examples{
 # Simulate daily gains over a 5-year period

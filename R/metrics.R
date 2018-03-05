@@ -16,8 +16,12 @@
 #' 
 #' 
 #' @return
-#' List containing a data frame with the performance metrics and a correlation 
-#' matrix for gains for the various investments.
+#' List containing:
+#' \enumerate{
+#' \item Numeric matrix named \code{perf.metrics} with performance metrics. 
+#' \item Numeric matrix named \code{cor.mat} with correlation matrix for gains 
+#' for the various investments.
+#' }
 #' 
 #' 
 #' @inherit ticker_dates references
@@ -100,56 +104,71 @@ metrics <- function(tickers = NULL, ...,
   }
   
   # Calculate performance metrics for each fund
-  p.metrics <- data.frame(ticker = tickers, stringsAsFactors = FALSE)
-  if ("mean" %in% perf.metrics) {
-    p.metrics$mean <- apply(gains, 2, mean)
+  p.metrics <- NULL
+  labels <- c()
+  for (ii in 1: length(perf.metrics)) {
+    
+    metric.ii <- perf.metrics[ii]
+    if (metric.ii == "mean") {
+      p.metrics <- cbind(p.metrics, apply(gains, 2, mean_n))
+      labels[ii] <- "Mean"
+    } else if (metric.ii == "sd") {
+      p.metrics <- cbind(p.metrics, apply(gains, 2, sd_n))
+      labels[ii] <- "SD"
+    } else if (metric.ii == "growth") {
+      p.metrics <- cbind(p.metrics, gains_rate(gains))
+      labels[ii] <- "Growth"
+    } else if (metric.ii == "cagr") {
+      p.metrics <- cbind(p.metrics, gains_rate(gains, units.rate = units.year))
+      labels[ii] <- "CAGR"
+    } else if (metric.ii == "mdd") {
+      p.metrics <- cbind(p.metrics, mdd(gains = gains))
+      labels[ii] <- "MDD"
+    } else if (metric.ii == "sharpe") {
+      p.metrics <- cbind(p.metrics, sharpe(gains))
+      labels[ii] <- "Sharpe"
+    } else if (metric.ii == "sortino") {
+      p.metrics <- cbind(p.metrics, sortino(gains))
+      labels[ii] <- "Sortino"
+    } else if (metric.ii == "alpha") {
+      p.metrics <- cbind(p.metrics, 
+                         c(0, apply(gains[, -1, drop = F], 2, function(x) 
+                           lm(x ~ gains[, 1])$coef[1])))
+      labels[ii] <- "Alpha"
+    } else if (metric.ii == "beta") {
+      p.metrics <- cbind(p.metrics, 
+                         c(0, apply(gains[, -1, drop = F], 2, function(x) 
+                           lm(x ~ gains[, 1])$coef[2])))
+      labels[ii] <- "Beta"
+    } else if (metric.ii == "r.squared") {
+      p.metrics <- cbind(p.metrics,  
+                         c(1, apply(gains[, -1, drop = F], 2, function(x) 
+                           summary(lm(x ~ gains[, 1]))$r.squared)))
+      labels[ii] <- "R-squared"
+    } else if (metric.ii == "pearson") {
+      p.metrics <- cbind(p.metrics, 
+                         apply(gains, 2, function(x) cor(x, gains[, 1])))
+      labels[ii] <- "Pearson r"
+    } else if (metric.ii == "spearman") {
+      p.metrics <- cbind(p.metrics, 
+                         apply(gains, 2, function(x) 
+                           cor(x, gains[, 1], method = "spearman")))
+      labels[ii] <- "Spearman rho"
+    } else if (metric.ii == "auto.pearson") {
+      p.metrics <- cbind(p.metrics, 
+                         apply(gains, 2, function(x) cor(x[-length(x)], x[-1])))
+      labels[ii] <- "Pearson autocor."
+    } else if (metric.ii == "auto.spearman") {
+      p.metrics <- cbind(p.metrics, 
+                         apply(gains, 2, function(x) 
+                           cor(x[-length(x)], x[-1], method = "spearman")))
+      labels[ii] <- "Spearman autocor."
+    }
   }
-  if ("sd" %in% perf.metrics) {
-    p.metrics$sd <- apply(gains, 2, sd)
-  }
-  if ("growth" %in% perf.metrics) {
-    p.metrics$growth <- apply(gains, 2, function(x) gains_rate(gains = x))
-  }
-  if ("cagr" %in% perf.metrics) {
-    p.metrics$cagr <- apply(gains, 2, function(x)
-      gains_rate(gains = x, units.rate = units.year))
-  }
-  if ("mdd" %in% perf.metrics) {
-    p.metrics$mdd <- apply(gains, 2, function(x) mdd(gains = x))
-  }
-  if ("sharpe" %in% perf.metrics) {
-    p.metrics$sharpe <- apply(gains, 2, function(x) sharpe(gains = x))
-  }
-  if ("sortino" %in% perf.metrics) {
-    p.metrics$sortino <- apply(gains, 2, function(x) sortino(gains = x))
-  }
-  if ("alpha" %in% perf.metrics) {
-    p.metrics$alpha <- c(0, apply(gains[, -1, drop = F], 2, function(x)
-      lm(x ~ gains[, 1])$coef[1]))
-  }
-  if ("beta" %in% perf.metrics) {
-    p.metrics$beta <- c(1, apply(gains[, -1, drop = F], 2, function(x)
-      lm(x ~ gains[, 1])$coef[2]))
-  }
-  if ("r.squared" %in% perf.metrics) {
-    p.metrics$r.squared <- c(1, apply(gains[, -1, drop = F], 2, function(x)
-      summary(lm(x ~ gains[, 1]))$r.squared))
-  }
-  if ("pearson" %in% perf.metrics) {
-    p.metrics$pearson <- apply(gains, 2, function(x) cor(x, gains[, 1]))
-  }
-  if ("spearman" %in% perf.metrics) {
-    p.metrics$spearman <- apply(gains, 2, function(x)
-      cor(x, gains[, 1], method = "spearman"))
-  }
-  if ("auto.pearson" %in% perf.metrics) {
-    p.metrics$auto.pearson <- apply(gains, 2, function(x)
-      cor(x[-length(x)], x[-1]))
-  }
-  if ("auto.spearman" %in% perf.metrics) {
-    p.metrics$auto.spearman <- apply(gains, 2, function(x)
-      cor(x[-length(x)], x[-1], method = "spearman"))
-  }
+  
+  # Add labels for performance metrics
+  colnames(p.metrics) <- labels
+  rownames(p.metrics) <- tickers
   
   # Calculate correlation matrix
   cor.mat <- cor(gains)

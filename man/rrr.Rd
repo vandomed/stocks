@@ -7,12 +7,14 @@
 rrr(prices = NULL, gains = NULL)
 }
 \arguments{
-\item{prices}{Numeric vector.}
+\item{prices}{Numeric matrix with 1 column of prices for each investment (can 
+be a vector if there is only one).}
 
-\item{gains}{Numeric vector.}
+\item{gains}{Numeric matrix with 1 column of gains for each investment (can 
+be a vector if there is only one).}
 }
 \value{
-Numeric value.
+Numeric value or vector.
 }
 \description{
 Calculates risk-return ratio, defined as growth rate divided by maximum 

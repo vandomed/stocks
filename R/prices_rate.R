@@ -4,14 +4,15 @@
 #' \code{units.rate} is specified, then it converts to x-unit growth rate.
 #' 
 #' 
-#' @param prices Numeric vector of prices.
+#' @inheritParams metrics
 #' @param units.rate Numeric value specifying the number of units for growth 
 #' rate calculation, if you want something other than total growth. For 
 #' annualized growth rate, set to 252 if \code{prices} has daily prices, 12 if 
 #' \code{prices} has monthly prices, etc.
 #' 
 #' 
-#' @return Numeric value.
+#' @return Numeric value if \code{prices} is a vector, numeric matrix if 
+#' \code{prices} is a matrix.
 #' 
 #' 
 #' @examples 
@@ -31,14 +32,25 @@
 #' @export
 prices_rate <- function(prices, units.rate = NULL) {
   
-  # Calculate overall growth
-  length.prices <- length(prices)
-  rate1 <- prices[length.prices] / prices[1] - 1
+  if (is.vector(prices)) {
+    
+    # Calculate overall growth
+    length.prices <- length(prices)
+    rate1 <- prices[length.prices] / prices[1] - 1
+    
+  } else {
+    
+    # Calculate overall growth for each fund
+    length.prices <- nrow(prices)
+    rate1 <- prices[length.prices, ] / prices[1, ] - 1
+    
+  }
   
   # Convert to x-unit growth rate if units.rate is specified
   if (! is.null(units.rate) && units.rate != length.prices - 1) {
-    rate1 <- convert_gain(gain = rate1,
-                          units.in = length.prices - 1, units.out = units.rate)
+    rate1 <- convert_gain(gain = rate1, 
+                          units.in = length.prices - 1, 
+                          units.out = units.rate)
   }
   
   # Return rate

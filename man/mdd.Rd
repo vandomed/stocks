@@ -8,23 +8,22 @@ mdd(prices = NULL, highs = NULL, lows = NULL, gains = NULL,
   indices = FALSE)
 }
 \arguments{
-\item{prices}{Numeric vector. Can be daily closing prices, but intraday 
-prices are preferred since maximum drawdown is really calculated from overall 
-highs and lows, not closing prices.}
+\item{prices}{Numeric matrix with 1 column of prices for each investment (can 
+be a vector if there is only one).}
 
 \item{highs}{Numeric vector of daily high prices.}
 
 \item{lows}{Numeric vector of daily low prices.}
 
-\item{gains}{Numeric vector.}
+\item{gains}{Numeric matrix with 1 column of gains for each investment (can 
+be a vector if there is only one).}
 
 \item{indices}{Logical value for whether to include indices for when the 
 maximum drawdown occurred.}
 }
 \value{
-if \code{indices = FALSE}, numeric value with maximum drawdown; if 
-\code{indices = TRUE}, numeric vector with maximum drawdown and 
-indices for start/end of the drawdown period.
+Numeric value, vector, or matrix depending on \code{indices} and whether 
+there is 1 fund or several.
 }
 \description{
 Calculates maximum drawdown from vector of closing prices, highs and lows, or 

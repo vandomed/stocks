@@ -1,23 +1,19 @@
 #' Maximum Drawdown
 #' 
 #' Calculates maximum drawdown from vector of closing prices, highs and lows, or 
-#' gains.
+#' gains. 
 #' 
 #' 
-#' @param prices Numeric vector. Can be daily closing prices, but intraday 
-#' prices are preferred since maximum drawdown is really calculated from overall 
-#' highs and lows, not closing prices.
+#' @inheritParams metrics
 #' @param highs Numeric vector of daily high prices.
 #' @param lows Numeric vector of daily low prices.
-#' @param gains Numeric vector.
 #' @param indices Logical value for whether to include indices for when the 
 #' maximum drawdown occurred.
 #' 
 #' 
 #' @return
-#' if \code{indices = FALSE}, numeric value with maximum drawdown; if 
-#' \code{indices = TRUE}, numeric vector with maximum drawdown and 
-#' indices for start/end of the drawdown period.
+#' Numeric value, vector, or matrix depending on \code{indices} and whether 
+#' there is 1 fund or several.
 #' 
 #' 
 #' @examples
@@ -45,26 +41,40 @@ mdd <- function(prices = NULL,
                 indices = FALSE) {
   
   # If gains specified rather than prices, convert to prices
-  if (!is.null(gains)) {
+  if (! is.null(gains)) {
     prices <- gains_prices(gains = gains, initial = 1)
   }
   
-  # Call C++ function depending on indices and whether prices or highs and lows
-  # specified
   if (! is.null(prices)) {
-    if (indices) {
-      mdd.out <- .Call(`_stocks_mdd_p_indices`, prices)
-      names(mdd.out) <- c("mdd", "start.index", "end.index")
+    
+    if (is.vector(prices)) {
+      
+      # Vector of prices input
+      if (indices) {
+        mdd.out <- .Call(`_stocks_mdd_p_indices`, prices)
+        names(mdd.out) <- c("mdd", "start.index", "end.index")
+      } else {
+        mdd.out <- .Call(`_stocks_mdd_p`, prices)
+      }
+      
     } else {
-      mdd.out <- .Call(`_stocks_mdd_p`, prices)
+      
+      # Matrix of prices input
+      mdd.out <- apply(prices, 2, function(x) 
+        mdd(prices = x, indices = indices))
+      
     }
+    
   } else {
+    
+    # Vector of highs and lows input
     if (indices) {
-      mdd.out <- .Call(`_stocks_mdd_hl_indices`, prices)
+      mdd.out <- .Call(`_stocks_mdd_hl_indices`, highs, lows)
       names(mdd.out) <- c("mdd", "start.index", "end.index")
     } else {
-      mdd.out <- .Call(`_stocks_mdd_hl`, prices)
+      mdd.out <- .Call(`_stocks_mdd_hl`, highs, lows)
     }
+    
   }
   
   # Return mdd.out

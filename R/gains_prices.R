@@ -1,13 +1,14 @@
 #' Convert Gains to Prices
 #' 
-#' Calculates prices based on initial balance and vector or matrix of gains.
+#' Calculates prices based on initial balance and vector of gains.
 #' 
 #' 
 #' @inheritParams metrics
 #' @param initial Numeric value.
 #' 
 #' 
-#' @return Numeric vector or matrix.
+#' @return Numeric value if \code{gains} is a vector, numeric matrix if 
+#' \code{gains} is a matrix.
 #' 
 #' 
 #' @examples 

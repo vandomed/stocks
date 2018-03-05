@@ -49,6 +49,7 @@
 #' @inheritParams onemetric_graph
 #' @inheritParams twofunds_graph
 #' @inheritParams load_gains
+#' @inheritParams load_prices
 #' 
 #' @param tickers Character vector specifying 2 ticker symbols that Yahoo! 
 #' Finance recognizes, if you want to download data on the fly.
@@ -345,11 +346,11 @@ targetbeta_twofunds <- function(tickers = NULL,
     # If reference funds provided, add to fund.balances matrix
     if (! is.null(reference.gains)) {
       
-      fund.balances <- cbind(fund.balances,
-                             apply(reference.gains, 2, function(x)
-                               balances(ratios = x[(window.units + 1):
-                                                     length(x)] + 1,
-                                        initial = initial)))
+      fund.balances <- 
+        cbind(fund.balances, 
+              apply(reference.gains, 2, function(x) 
+                gains_prices(gains = x[(window.units + 1): length(x)], 
+                             initial = initial)))
       
     }
     

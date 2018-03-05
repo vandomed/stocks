@@ -15,7 +15,7 @@
 #' column, subtracting 1, and then multiplying by 100.
 #' 
 #' To load daily gains for XIV, SPXU, VXX, and UPRO, you can use 
-#' \code{\link{load.gains}}, which uses the \pkg{quantmod} package to load 
+#' \code{\link{load_gains}}, which uses the \pkg{quantmod} package to load 
 #' data from Yahoo! Finance. You will have to specify the \code{from} and 
 #' \code{to} inputs to match the date range for your contango values.
 #' 
@@ -78,7 +78,7 @@
 #' 
 #'
 #' @export
-contango.hedged <- function(contango,
+contango_hedged <- function(contango,
                             xiv.spxu.gains = NULL, vxx.upro.gains = NULL,
                             xiv.spxu.cutpoint = 6.36, vxx.upro.cutpoint = 5.45,
                             xiv.allocation = 0.46, vxx.allocation = 0.46,
@@ -124,7 +124,7 @@ contango.hedged <- function(contango,
   }
   
   # Calculate portfolio balance over time
-  port.balances <- balances(ratios = port.gains + 1, initial = initial)
+  port.balances <- gains_prices(gains = port.gains, initial = initial)
   
   # Calculate number of trades
   trades <- length(rle(holdings)$lengths)

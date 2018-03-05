@@ -64,6 +64,9 @@ you might want \code{maxall.tol} to be less than \code{tol} is to avoid
 frequently triggering another trade on the very next day, as fund 2's beta 
 changes a little and moves the portfolio beta outside of 
 \code{[target.beta - tol, target.beta + tol]}.}
+
+\item{initial}{Numeric value specifying what value to scale initial prices 
+to.}
 }
 \value{
 For each method, a 4-element list containing: 

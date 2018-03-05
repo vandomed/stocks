@@ -8,7 +8,7 @@
 #' 
 #' 
 #' @return
-#' Numeric value.
+#' Numeric value or vector.
 #' 
 #' 
 #' @examples

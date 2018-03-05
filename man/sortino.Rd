@@ -7,14 +7,16 @@
 sortino(gains = NULL, prices = NULL, rf = 0)
 }
 \arguments{
-\item{gains}{Numeric vector.}
+\item{gains}{Numeric matrix with 1 column of gains for each investment (can 
+be a vector if there is only one).}
 
-\item{prices}{Numeric vector.}
+\item{prices}{Numeric matrix with 1 column of prices for each investment (can 
+be a vector if there is only one).}
 
 \item{rf}{Numeric value.}
 }
 \value{
-Numeric value.
+Numeric value or vector.
 }
 \description{
 Calculates Sortino ratio from vector of gains or prices. The formula is: 
@@ -27,7 +29,7 @@ set.seed(123)
 stock.gains <- rnorm(252 * 5, 0.0005, 0.01)
 
 # Calculate Sortino ratio using risk-free return of 0
-sortino.ratio(stock.gains)
+sortino(stock.gains)
 
 
 }

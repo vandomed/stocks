@@ -28,8 +28,8 @@
 #' 
 #' 
 #' @examples
-#' # Plot daily gains for SSO and UPRO vs. VFINX
-#' fig <- gains_graph(c("VFINX", "SSO", "UPRO"))
+#' # # Plot daily gains for SSO and UPRO vs. VFINX
+#' # fig <- gains_graph(c("VFINX", "SSO", "UPRO"))
 #'
 #' @export
 gains_graph <- function(tickers = NULL, ...,
@@ -140,7 +140,7 @@ gains_graph <- function(tickers = NULL, ...,
                                xlim = range(gains[, 1]) * 1.05,
                                ylim = range(gains[, -1]) * 1.05),
                   list2 = plot.list)
-  points.list <- list_override(list1 = list(cex = 0.7),
+  points.list <- list_override(list1 = list(cex = 0.6),
                                list2 = points.list)
   
   # If pdf.list is not NULL, call pdf

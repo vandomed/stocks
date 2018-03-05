@@ -1,6 +1,6 @@
 ---
 title: "Get Rich with 'stocks'"
-author: "Dane Van Domelen"
+author: "Dane Van Domelen <br> vandomed@gmail.com"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 bibliography: bibliography.bib
@@ -29,11 +29,14 @@ library("knitr")
 options("xtable.caption.placement" = "top", 
         "xtable.include.rownames" = TRUE, 
         "xtable.comment" = FALSE)
+
+# Other options
+options(digits = 4)
 ```
 
 ## 'stocks' package
 
-The **stocks** package has a variety of functions for analyzing investments and investment strategies. I use it for a lot of my articles on [Seeking Alpha](https://seekingalpha.com/author/dane-van-domelen/articles#regular_articles). The package relies heavily on [Yahoo! Finance](https://finance.yahoo.com/) for historical prices and the **quantmod** package for downloading that data.
+The **stocks** package has a variety of functions for analyzing investments and investment strategies. I use it for a lot of my articles on [Seeking Alpha](https://seekingalpha.com/author/dane-van-domelen/articles#regular_articles). The package relies heavily on [Yahoo! Finance](https://finance.yahoo.com/) for historical prices and on the **quantmod** package for downloading that data into R.
 
 There are functions for calculating performance metrics, backtesting trading strategies, and visualizing the performance of funds or strategies. I would say it is similar in spirit to the website [Portfolio Visualizer](https://www.portfoliovisualizer.com/) and the R package **PerformanceAnalytics**.
 
@@ -41,7 +44,7 @@ Like most vignettes, the purpose here will be to illustrate typical usage of the
 
 To start, here are the functions:
 
-| Function                  |Application
+| Function                  |Purpose
 |:--------------------------|:-----------------------------------------------------
 |*load_prices*              |Download and align historical prices for a set of tickers.
 |*load_gains*               |Download and align gains for a set of tickers. 
@@ -65,16 +68,16 @@ To start, here are the functions:
 
 ## Loading data from Yahoo! Finance
 
-The functions *load_prices* and *load_gains* let you download historical data from Yahoo! Finance. They use **quantmod**'s *getSymbols* function. Here are some examples. (Note: R output is printed in nice tables rather than usual-looking R output because I loaded **printr**)
+The functions *load_prices* and *load_gains* let you download historical data from Yahoo! Finance. They use **quantmod**'s *getSymbols* function internally. Here are some examples. (Note: R output is printed in nice tables rather than usual-looking R output because I loaded **printr**)
 
 ```{r}
 library("stocks")
 library("printr")
 prices <- load_prices(c("SPY", "TLT"), to = "2018-03-02")
-head(prices, n = 3)
+head(prices)
 
 gains <- load_gains(c("SPY", "TLT"), to = "2018-03-02")
-head(gains, n = 3)
+head(gains)
 ```
 
 In either case, data going as far back as possible for SPY and TLT (which happens to be mid-2002) are retrieved.
@@ -84,28 +87,28 @@ In either case, data going as far back as possible for SPY and TLT (which happen
 
 ### Total or annualized growth, Sharpe ratio, max drawdown
 
-There are functions for calculating various performance metrics based on a vector of prices or gains. To illustrate a few, here's net growth based on either data type:
+There are functions for calculating various performance metrics based on a vector of prices or gains, or a matrix where each column has prices or gains for a different fund. To illustrate a few, here's net growth based on either data type:
 
 ```{r}
-apply(prices, 2, prices_rate)
-apply(gains, 2, gains_rate)
+prices_rate(prices)
+gains_rate(gains)
 ```
 
-Values of 3.03 and 1.60 mean SPY grew 303% and TLT 160%. For annualized rather than total growth:
+Values of 3.025 and 1.599 mean SPY grew 302.5% and TLT 159.9%. For annualized rather than total growth:
 
 ```{r}
-apply(prices, 2, function(x) prices_rate(x, units.rate = 252))
-apply(gains, 2, function(x) gains_rate(x, units.rate = 252))
+prices_rate(prices, units.rate = 252)
+gains_rate(gains, units.rate = 252)
 ```
 
 Sharpe ratio and max drawdown:
 
 ```{r}
-apply(prices, 2, sharpe)
-apply(gains, 2, function(x) sharpe(gains = x))
+sharpe(prices = prices)
+sharpe(gains = gains)
 
-apply(prices, 2, mdd)
-apply(gains, 2, function(x) mdd(gains = x))
+mdd(prices = prices)
+mdd(gains = gains)
 ```
 
 ### All-in-one
@@ -125,21 +128,21 @@ Looking at the performance metrics, we see that SPY achieved almost 2x the growt
 
 ### Growth of $10k
 
-Let's look at the famous FANG stocks (Facebook Amazon, Netflix, Google) for the past 3 years, with the S&P 500 ETF SPY included for reference.
+Let's look at the famous FANG stocks (Facebook, Amazon, Netflix, Google) for the past 3 years, with SPY (an S&P 500 ETF) included for reference.
 
 ```{r, fig.width = 6, fig.height = 5}
 fig <- growth_graph(c("SPY", "FB", "AMZN", "NFLX", "GOOG"), from = "2015-03-02", 
                     to = "2018-03-02")
 ```
 
-Notice that I just gave `growth_graph` a vector of ticker symbols, not a matrix of prices or gains. All of the graphing functions in *stocks* have this feature built-in.
+Notice that I specified a vector of ticker symbols, not a matrix of prices or gains. All of the graphing functions in *stocks* have the ability to download data on the fly.
 
-Clearly the FANG stocks have continued with their remarkable growth over the past 3 years. I actually held Amazon and Google briefly, but sold them once I decided individual stock-picking was for fools and switched strategies. I'm an idiot. 
+Clearly the FANG stocks have continued with their remarkable growth over the past 3 years. I actually held Amazon and Google briefly, but sold them once I decided I couldn't beat the market through stock-picking. I can't, but in this case I wish I would have kept trying.
 
 
 ### Gains vs. benchmark (alpha, beta, R-squared)
 
-Before buying a fund, you should always have a rough idea of how it tends to move with the market. The classic way of doing this is plotting the fund's daily gains vs. a benchmark (typically the S&P) and looking at the estimated intercept ("alpha") and slope ("beta"). For example, for Vanguard's long-term bond fund VBLTX, over the past 5 years:
+Before buying a fund, you should have a rough idea of how it tends to move with the market. The classic way of doing this is plotting the fund's daily gains vs. a benchmark (typically the S&P) and looking at the estimated intercept ("alpha") and slope ("beta"). For example, for Vanguard's long-term bond fund VBLTX, over the past 5 years:
 
 ```{r, fig.width = 5, fig.height = 5}
 fig <- gains_graph(c("SPY", "VBLTX"), from = "2013-03-02", to = "2018-03-02")
@@ -194,12 +197,12 @@ apply(fig, 2, median)
 mean(fig[, 2] > fig[, 1])
 ```
 
-Not good, Mr. Buffett!
+BRK-B has a tendency for worse risk-adjusted returns than SPY - not good, Mr. Buffett!
 
 
 ### 2-fund portfolio optimization
 
-Until recently, my own retirement portfolio was simply 1/3 UPRO, 2/3 VBLTX. UPRO is a 3x daily S&P 500 ETF, and VBLTX is Vanguard's long-term bond mutual fund. A good way of visualizing the characteristics of a two-fund portfolio is to plot mean vs. standard deviation of daily gains, for allocations ranging from 100% fund 1 to 100% fund 2. To do that, using data over UPRO's lifetime (i.e. back to 6/25/09):
+Until recently, my own retirement portfolio was simply 1/3 UPRO, 2/3 VBLTX. UPRO is a 3x daily S&P 500 ETF, and VBLTX is Vanguard's long-term bond mutual fund. A good way of visualizing the characteristics of a two-fund portfolio is to plot mean vs. standard deviation of daily gains, for allocations ranging from 100% fund 1 to 100% fund 2. To do that, using data over UPRO's lifetime, going back to 6/25/09:
 
 ```{r, fig.width = 6, fig.height = 5}
 fig <- twofunds_graph(tickers = c("UPRO", "VBLTX"), reference.tickers = "SPY",  
@@ -208,6 +211,26 @@ fig <- twofunds_graph(tickers = c("UPRO", "VBLTX"), reference.tickers = "SPY",
 
 The UPRO/VBLTX strategy sort of trumps SPY, because there are regions on the curve with higher returns and lower volatility than SPY.
 
+For another example, we, could look at annualized growth vs. maximum drawdown rather than mean vs. standard deviation, and look at UPRO/VBLTX as well as UPRO/VBMFX, to see how swapping the long-term fund VBLTX with the total bond fund VBMFX would affect our portfolio.
+
+```{r, fig.width = 6, fig.height = 5}
+fig <- twofunds_graph(tickers = c("UPRO", "VBLTX", "UPRO", "VBMFX"), 
+                      reference.tickers = "SPY",  
+                      to = "2018-03-02", 
+                      x.metric = "mdd", y.metric = "cagr")
+```
+
+UPRO/VBLTX clearly has much better performance. One more example, this time Sharpe ratio vs. allocation, for the same two funds plus UPRO/TLT:
+
+```{r, fig.width = 6, fig.height = 5}
+fig <- twofunds_graph(tickers = c("UPRO", "VBLTX", "UPRO", "VBMFX", "UPRO", "TLT"), 
+                      reference.tickers = "SPY",  
+                      to = "2018-03-02", 
+                      x.metric = "mean", y.metric = "sharpe", 
+                      plot.list = list(ylim = c(0, 0.12)))
+```
+
+The rationale for this graph is that we might want to target the same level of expected returns as SPY, but with as high of a Sharpe ratio as possible. If you go straight up on the graph from the SPY data point, you hit the red curve first, then the orange, and finally the blue. So we would choose UPRO/VBLTX, with something like 75-80% allocated to VBLTX. 
 
 ### 3-fund portfolio optimization
 
@@ -223,5 +246,9 @@ Each curve is for a fixed allocation to the first fund. The black curve is 0% VW
 
 At SPY's SD, the black curve (0% VWEHX) achieves the highest mean. At SPY's mean, the blue (40% VWEHX) or red (20% VWEHX) curve has the lowest SD. So depending on what you're going for, it may or may not be worthwhile adding VWEHX. My rationale was sort of qualitative: two nearly independent alpha-generating bond funds seems better than one. 
 
+
+## Conclusions
+
+Hopefully this gives you a good idea of the main functions in **stocks**. There are a lot of options I didn't cover, especially for the graphics functions. You can read about these options by looking at the relevant help files (e.g. run `?twofunds_graph` in R). Please feel free to e-mail me at <vandomed@gmail.com> with questions or suggestions, or, better yet, contribute to the project on [GitHub](https://github.com/vandomed/stocks).
 
 ## References

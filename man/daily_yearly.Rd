@@ -4,27 +4,28 @@
 \alias{daily_yearly}
 \title{Convert Daily Gain to X-year Gain}
 \usage{
-daily_yearly(daily.gain, years = 1)
+daily_yearly(gain, years = 1)
 }
 \arguments{
-\item{daily.gain}{Numeric value, e.g. 0.001 for 0.1\%.}
+\item{gain}{Numeric value specifying a gain, e.g. 0.005 for 0.5%. Can also be 
+a vector of gains.}
 
 \item{years}{Numeric value.}
 }
 \value{
-Numeric value.
+Numeric value or vector.
 }
 \description{
 For example, you can use this function to calculate that an investment that 
-gains 0.1\% per day would gain approximately 28.5\% in a year (252 trading 
+gains 0.1% per day would gain approximately 28.5% in a year (252 trading 
 days).
 }
 \examples{
 # Calculate annual gain for an investment that gains 0.1\% per day
-daily_yearly(daily.gain = 0.001)
+daily_yearly(gain = 0.001)
 
 # Calculate 5-year gains corresponding to various daily gains
-daily_yearly(daily.gain = seq(0, 0.001, 0.0001), years = 5)
+daily_yearly(gain = seq(0, 0.001, 0.0001), years = 5)
 
 
 }

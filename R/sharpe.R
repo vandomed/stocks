@@ -5,8 +5,7 @@
 #' of return.
 #' 
 #' 
-#' @param gains Numeric vector.
-#' @param prices Numeric vector.
+#' @inheritParams metrics
 #' @param rf Numeric value.
 #' 
 #' 
@@ -30,10 +29,17 @@ sharpe <- function(gains = NULL,
   
   # Convert from prices to gains if necessary
   if (! is.null(prices)) {
-    gains <- pchanges(prices)
+    gains <- prices_gains(prices)
   }
     
   # Calculate and return Sharpe ratio
-  return((mean(gains) - rf) / sd(gains))
+  if (is.vector(gains)) {
+    sharpe.ratio <- (mean_n(gains) - rf) / sd_n(gains)
+  } else {
+    means <- apply(gains, 2, mean_n)
+    sds <- apply(gains, 2, sd_n)
+    sharpe.ratio <- (means - rf) / sds
+  }
+  return(sharpe.ratio)
   
 }

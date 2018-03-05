@@ -2,15 +2,15 @@
 #'
 #' Functions for analyzing stocks or other investments. Main features are
 #' loading and aligning historical data for ticker symbols, calculating
-#' performance metrics for individual funds or portfolios (e.g. compound
-#' annualized growth rate, maximum drawdown, Sharpe/Sortino ratio), and creating
-#' graphs. C++ code is used where possible to improve processing speed.
+#' performance metrics for individual funds or portfolios (e.g. annualized 
+#' growth, maximum drawdown, Sharpe/Sortino ratio), and creating graphs. C++ 
+#' code is used to improve processing speed where possible.
 #'
 #' \tabular{ll}{
 #' Package: \tab stocks \cr
 #' Type: \tab Package \cr
 #' Version: \tab 1.1.2 \cr
-#' Date: \tab 2018-03-02 \cr
+#' Date: \tab 2018-03-05 \cr
 #' License: \tab GPL-3 \cr
 #' }
 #'
@@ -32,7 +32,7 @@
 #'
 #'
 #' @import curl
-#' @importFrom dvmisc inside list_override
+#' @importFrom dvmisc inside list_override mean_n sd_n
 #' @import graphics
 #' @import grDevices
 #' @importFrom Hmisc capitalize

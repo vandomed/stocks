@@ -57,6 +57,9 @@ frame rather than open a new one.}
 \item{points.list}{List of arguments to pass to 
 \code{\link[graphics]{points}}.}
 
+\item{legend.list}{List of arguments to pass to 
+\code{\link[graphics]{legend}}.}
+
 \item{pdf.list}{List of arguments to pass to \code{\link[grDevices]{pdf}}.}
 
 \item{bmp.list}{List of arguments to pass to \code{\link[grDevices]{bmp}}.}

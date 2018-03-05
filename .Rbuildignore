@@ -2,4 +2,6 @@
 ^\.Rproj\.user$
 ^LICENSE$
 ^generate_lists.R$
-^largest_100.csv$
+^largest100.csv$
+^README\.Rmd$
+^README-.*\.png$

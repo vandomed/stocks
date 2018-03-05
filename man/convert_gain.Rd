@@ -7,20 +7,20 @@
 convert_gain(gain, units.in = 1, units.out = 1)
 }
 \arguments{
-\item{gain}{Numeric value specifying a gain, e.g. 0.03 for 3\%.}
+\item{gain}{Numeric value specifying a gain, e.g. 0.005 for 0.5%. Can also be 
+a vector of gains.}
 
 \item{units.in}{Numeric value gving the time period over which the gain was 
 achieved.}
 
-\item{units.out}{Numeric value giving the time period you want to 
-convert to.}
+\item{units.out}{Numeric value giving the time period you want to convert to.}
 }
 \value{
-Numeric value.
+Numeric value or vector.
 }
 \description{
-For example, you can use this function to figure out that an 8\% gain over 
-70 trading days corresponds to 31.9\% annualized.
+For example, you can use this function to figure out that an 8% gain over 70 
+trading days is 31.9% annualized.
 }
 \examples{
 # Calculate annualized gain for an 8\% gain over a 70-day period
