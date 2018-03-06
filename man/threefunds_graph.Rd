@@ -137,15 +137,11 @@ plotting a measure of growth vs. a measure of volatility. Only works for one
 three-fund set at a time.
 }
 \examples{
-# # Plot mean vs. SD for UPRO/VBLTX/VWEHX portfolio, and compare to VFINX and 
-# # BRK-B
-# fig1 <- threefunds_graph(tickers = c("VWEHX", "VBLTX", "UPRO"), 
-#                          reference.tickers = c("VFINX", "BRK-B"))
-#                      
-# # Same funds, but annualized growth vs. maximum drawdown
-# fig2 <- threefunds_graph(tickers = c("VWEHX", "VBLTX", "UPRO"), 
-#                          reference.tickers = c("VFINX", "BRK-B"),
-#                          x.metric = "mdd", y.metric = "cagr")
+# Plot mean vs. SD for UPRO/VBLTX/VWEHX portfolio, and compare to VFINX and 
+# BRK-B
+fig <- threefunds_graph(tickers = c("VWEHX", "VBLTX", "UPRO"), 
+                        reference.tickers = c("VFINX", "BRK-B"))
+
 
 }
 \references{

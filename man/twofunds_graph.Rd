@@ -134,14 +134,14 @@ investments are used as the first two-fund pair, next two as the second
 two-fund pair, and so on.
 }
 \examples{
-# # Plot mean vs. SD for UPRO/VBLTX portfolio, and compare to VFINX and BRK-B
-# fig1 <- twofunds_graph(tickers = c("UPRO", "VBLTX"), 
-#                        reference.tickers = c("VFINX", "BRK-B"))
-#                     
-# # Same funds, but annualized growth vs. maximum drawdown
-# fig2 <- twofunds_graph(tickers = c("UPRO", "VBLTX"), 
-#                        reference.tickers = c("VFINX", "BRK-B"),
-#                        x.metric = "mdd", y.metric = "cagr")
+# Plot mean vs. SD for UPRO/VBLTX portfolio, and compare to VFINX and BRK-B
+fig1 <- twofunds_graph(tickers = c("UPRO", "VBLTX"), 
+                       reference.tickers = c("VFINX", "BRK-B"))
+                     
+# Same funds, but annualized growth vs. maximum drawdown
+fig2 <- twofunds_graph(tickers = c("UPRO", "VBLTX"), 
+                       reference.tickers = c("VFINX", "BRK-B"),
+                       x.metric = "mdd", y.metric = "cagr")
 
 }
 \references{

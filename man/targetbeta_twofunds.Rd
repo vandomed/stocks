@@ -128,9 +128,9 @@ When \code{failure.method = "closer"}, the entire portfolio balance is
 allocated to whichever fund has a beta closer to \code{target.beta}.
 }
 \examples{
-# # Backtest zero-beta UPRO/VBLTX strategy
-# beta0 <- targetbeta_twofunds(tickers = c("UPRO", "VBLTX"), target.beta = 0)
-# plot(beta0$fund.balances[, "Portfolio"])
+# Backtest zero-beta UPRO/VBLTX strategy
+beta0 <- targetbeta_twofunds(tickers = c("UPRO", "VBLTX"), target.beta = 0)
+plot(beta0$fund.balances[, "Portfolio"])
 
 }
 \references{

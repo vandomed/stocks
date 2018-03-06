@@ -43,9 +43,9 @@
 #' 
 #' 
 #' @examples
-#' # # Compare annualized growth for VFINX, SSO, and UPRO
-#' # fig <- onemetric_graph(tickers = c("VFINX", "SSO", "UPRO"), 
-#' #                        plot.list = list(ylim = c(0, 50)))
+#' # Compare annualized growth for VFINX, SSO, and UPRO
+#' fig <- onemetric_graph(tickers = c("VFINX", "SSO", "UPRO"), 
+#'                        plot.list = list(ylim = c(0, 50)))
 #'
 #' @export
 onemetric_graph <- function(tickers = NULL, ...,

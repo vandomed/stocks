@@ -28,8 +28,8 @@
 #' 
 #' 
 #' @examples
-#' # # Plot daily gains for SSO and UPRO vs. VFINX
-#' # fig <- gains_graph(c("VFINX", "SSO", "UPRO"))
+#' # Plot daily gains for SSO and UPRO vs. VFINX
+#' fig <- gains_graph(c("VFINX", "SSO", "UPRO"))
 #'
 #' @export
 gains_graph <- function(tickers = NULL, ...,

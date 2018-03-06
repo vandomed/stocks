@@ -80,10 +80,10 @@ The first investment is used as the benchmark if the requested metric
 requires one.
 }
 \examples{
-# # Plot BRK-B's 50-day alpha over time since the start of 2016
-# fig <- onemetric_overtime_graph(tickers = c("VFINX", "BRK-B"), 
-#                                 y.metric = "alpha", 
-#                                 from = "2016-01-01")
+# Plot BRK-B's 50-day alpha over time since the start of 2016
+fig <- onemetric_overtime_graph(tickers = c("VFINX", "BRK-B"), 
+                                y.metric = "alpha", 
+                                from = "2016-01-01")
 
 }
 \references{

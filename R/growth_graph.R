@@ -30,8 +30,8 @@
 #' 
 #' 
 #' @examples
-#' # # Plot growth of $10k in VFINX and BRK-B
-#' # fig <- growth_graph(c("VFINX", "BRK-B"))
+#' # Plot growth of $10k in VFINX and BRK-B
+#' fig <- growth_graph(c("VFINX", "BRK-B"))
 #'
 #' @export
 growth_graph <- function(tickers = NULL, ...,

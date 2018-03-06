@@ -37,9 +37,9 @@ Useful for comparing metrics for several investments. The first investment is
 used as the benchmark if requested metrics require one.
 }
 \examples{
-# # Calculate performance metrics for SSO and UPRO, using SPY as benchmark 
-# # for alpha and beta
-# metrics1 <- metrics(tickers = c("SPY", "SSO", "UPRO"))
+# Calculate performance metrics for SSO and UPRO, using SPY as benchmark 
+# for alpha and beta
+metrics1 <- metrics(tickers = c("SPY", "SSO", "UPRO"))
 
 
 }

@@ -4,12 +4,19 @@
 \alias{targetall}
 \title{Backtest a Fixed-Allocation Trading Strategy}
 \usage{
-targetall(tickers = NULL, ..., tickers.gains = NULL, target.alls = NULL,
-  tol = 0.05, rebalance.cost = 0, initial = 10000)
+targetall(tickers = NULL, intercepts = NULL, slopes = NULL, ...,
+  tickers.gains = NULL, target.alls = NULL, tol = 0.05,
+  rebalance.cost = 0, initial = 10000)
 }
 \arguments{
 \item{tickers}{Character vector of ticker symbols that Yahoo! Finance 
 recognizes, if you want to download data on the fly.}
+
+\item{intercepts}{Numeric vector of values to add to daily gains for each 
+ticker.}
+
+\item{slopes}{Numeric vector of values to multiply daily gains for each ticker 
+by. Slopes are multiplied prior to adding intercepts.}
 
 \item{...}{Arguments to pass along with \code{tickers} to 
 \code{\link{load_gains}}.}
@@ -45,9 +52,9 @@ of several funds, rebalancing when the effective allocations deviate too far
 from the targets.
 }
 \examples{
-# # Backtest equal-allocation UPRO/VBLTX/VWEHX strategy
-# port <- targetall(tickers = c("UPRO", "VBLTX", "VWEHX"))
-# plot(port$fund.balances[, "Portfolio"])
+# Backtest equal-allocation UPRO/VBLTX/VWEHX strategy
+port <- targetall(tickers = c("UPRO", "VBLTX", "VWEHX"))
+plot(port$fund.balances[, "Portfolio"])
 
 }
 \references{

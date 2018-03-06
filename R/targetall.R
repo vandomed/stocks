@@ -33,12 +33,12 @@
 #' 
 #' 
 #' @examples
-#' # # Backtest equal-allocation UPRO/VBLTX/VWEHX strategy
-#' # port <- targetall(tickers = c("UPRO", "VBLTX", "VWEHX"))
-#' # plot(port$fund.balances[, "Portfolio"])
+#' # Backtest equal-allocation UPRO/VBLTX/VWEHX strategy
+#' port <- targetall(tickers = c("UPRO", "VBLTX", "VWEHX"))
+#' plot(port$fund.balances[, "Portfolio"])
 #'
 #' @export
-targetall <- function(tickers = NULL, ...,
+targetall <- function(tickers = NULL, intercepts = NULL, slopes = NULL, ...,
                       tickers.gains = NULL,
                       target.alls = NULL,
                       tol = 0.05,

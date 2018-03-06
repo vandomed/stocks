@@ -86,8 +86,8 @@ require one benchmark, and the first two investments are used as benchmarks
 if \code{x.metric} and \code{y.metric} require different benchmarks.
 }
 \examples{
-# # Plot annualized growth vs. maximum drawdown for VFINX, SSO, and UPRO
-# fig <- twometrics_graph(tickers = c("VFINX", "SSO", "UPRO"))
+# Plot annualized growth vs. maximum drawdown for VFINX, SSO, and UPRO
+fig <- twometrics_graph(tickers = c("VFINX", "SSO", "UPRO"))
 
 }
 \references{
