@@ -476,11 +476,11 @@ targetbeta_twofunds <- function(tickers = NULL,
     # If reference funds provided, add to fund.balances matrix
     if (! is.null(reference.gains)) {
       
-      fund.balances <- cbind(fund.balances,
-                             apply(reference.gains, 2, function(x)
-                               balances(ratios = x[(window.units + 1):
-                                                     length(x)] + 1,
-                                        initial = initial)))
+      fund.balances <- 
+        cbind(fund.balances, 
+              apply(reference.gains, 2, function(x) 
+                gains_prices(gains = x[(window.units + 1): length(x)], 
+                             initial = initial)))
       
     }
     
@@ -606,11 +606,10 @@ targetbeta_twofunds <- function(tickers = NULL,
     # If reference funds provided, add to fund.balances matrix
     if (! is.null(reference.gains)) {
       
-      fund.balances <- cbind(fund.balances,
-                             apply(reference.gains, 2, function(x)
-                               balances(ratios = x[(window.units + 1):
-                                                     length(x)] + 1,
-                                        initial = initial)))
+      fund.balances <- 
+        cbind(fund.balances, apply(reference.gains, 2, function(x) 
+          gains_prices(gains = x[(window.units + 1): length(x)], 
+                       initial = initial)))
       
     }
     
@@ -782,11 +781,10 @@ targetbeta_twofunds <- function(tickers = NULL,
     # If reference funds provided, add to fund.balances matrix
     if (! is.null(reference.gains)) {
       
-      fund.balances <- cbind(fund.balances,
-                             apply(reference.gains, 2, function(x)
-                               balances(ratios = x[(window.units + 1):
-                                                     length(x)] + 1,
-                                        initial = initial)))
+      fund.balances <- 
+        cbind(fund.balances, apply(reference.gains, 2, function(x) 
+          gains_prices(gains = x[(window.units + 1): length(x)], 
+                       initial = initial)))
       
     }
     
@@ -958,11 +956,10 @@ targetbeta_twofunds <- function(tickers = NULL,
     # If reference funds provided, add to fund.balances matrix
     if (! is.null(reference.gains)) {
       
-      fund.balances <- cbind(fund.balances,
-                             apply(reference.gains, 2, function(x)
-                               balances(ratios = x[(window.units + 1):
-                                                     length(x)] + 1,
-                                        initial = initial)))
+      fund.balances <- 
+        cbind(fund.balances, apply(reference.gains, 2, function(x) 
+          gains_prices(gains = x[(window.units + 1): length(x)], 
+                       initial = initial)))
       
     }
     
@@ -1222,11 +1219,10 @@ targetbeta_twofunds <- function(tickers = NULL,
     # If reference funds provided, add to fund.balances matrix
     if (! is.null(reference.gains)) {
       
-      fund.balances <- cbind(fund.balances,
-                             apply(reference.gains, 2, function(x)
-                               balances(ratios = x[(window.units + 1):
-                                                     length(x)] + 1,
-                                        initial = initial)))
+      fund.balances <- 
+        cbind(fund.balances, apply(reference.gains, 2, function(x) 
+          gains_prices(gains = x[(window.units + 1): length(x)], 
+                       initial = initial)))
       
     }
     
@@ -1486,11 +1482,10 @@ targetbeta_twofunds <- function(tickers = NULL,
     # If reference funds provided, add to fund.balances matrix
     if (! is.null(reference.gains)) {
       
-      fund.balances <- cbind(fund.balances,
-                             apply(reference.gains, 2, function(x)
-                               balances(ratios = x[(window.units + 1):
-                                                     length(x)] + 1,
-                                        initial = initial)))
+      fund.balances <- 
+        cbind(fund.balances, apply(reference.gains, 2, function(x) 
+          gains_prices(gains = x[(window.units + 1): length(x)], 
+                       initial = initial)))
       
     }
     
@@ -1671,11 +1666,10 @@ targetbeta_twofunds <- function(tickers = NULL,
     # If reference funds provided, add to fund.balances matrix
     if (! is.null(reference.gains)) {
       
-      fund.balances <- cbind(fund.balances,
-                             apply(reference.gains, 2, function(x)
-                               balances(ratios = x[(window.units + 1):
-                                                     length(x)] + 1,
-                                        initial = initial)))
+      fund.balances <- 
+        cbind(fund.balances, apply(reference.gains, 2, function(x) 
+          gains_prices(gains = x[(window.units + 1): length(x)], 
+                       initial = initial)))
       
     }
     

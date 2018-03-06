@@ -31,7 +31,6 @@
 #' @docType package
 #'
 #'
-#' @import curl
 #' @importFrom dvmisc inside list_override mean_n sd_n
 #' @import graphics
 #' @import grDevices

@@ -45,7 +45,7 @@ load_prices <- function(tickers, intercepts = NULL, slopes = NULL,
   
   # Download prices from Yahoo! Finance using 'quantmod' package
   prices <- list()
-  for (ii in 1:length(tickers)) {
+  for (ii in 1: length(tickers)) {
     prices.fund <- try(getSymbols(Symbols = tickers[ii], from = from, to = to,
                                   auto.assign = FALSE), silent = TRUE)
     if (class(prices.fund)[1] == "try-error") {

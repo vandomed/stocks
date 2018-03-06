@@ -3,5 +3,5 @@
 ^LICENSE$
 ^generate_lists.R$
 ^largest100.csv$
-^README\.Rmd$
-^README-.*\.png$
+^README.*$
+^Thumbs.db$

@@ -22,13 +22,7 @@ knitr::opts_chunk$set(
 )
 
 # Load packages
-library("xtable")
 library("knitr")
-
-# Set xtable options
-options("xtable.caption.placement" = "top", 
-        "xtable.include.rownames" = TRUE, 
-        "xtable.comment" = FALSE)
 
 # Other options
 options(digits = 4)
@@ -36,7 +30,7 @@ options(digits = 4)
 
 ## 'stocks' package
 
-The **stocks** package has a variety of functions for analyzing investments and investment strategies. I use it for a lot of my articles on [Seeking Alpha](https://seekingalpha.com/author/dane-van-domelen/articles#regular_articles). The package relies heavily on [Yahoo! Finance](https://finance.yahoo.com/) for historical prices and on the **quantmod** package for downloading that data into R.
+The **stocks** package has a variety of functions for analyzing investments and investment strategies. I use it for a lot of my articles on [Seeking Alpha](https://seekingalpha.com/author/dane-van-domelen/articles#regular_articles/). The package relies heavily on [Yahoo! Finance](https://finance.yahoo.com/) for historical prices and on the **quantmod** package for downloading that data into R.
 
 There are functions for calculating performance metrics, backtesting trading strategies, and visualizing the performance of funds or strategies. I would say it is similar in spirit to the website [Portfolio Visualizer](https://www.portfoliovisualizer.com/) and the R package **PerformanceAnalytics**.
 
@@ -249,6 +243,6 @@ At SPY's SD, the black curve (0% VWEHX) achieves the highest mean. At SPY's mean
 
 ## Conclusions
 
-Hopefully this gives you a good idea of the main functions in **stocks**. There are a lot of options I didn't cover, especially for the graphics functions. You can read about these options by looking at the relevant help files (e.g. run `?twofunds_graph` in R). Please feel free to e-mail me at <vandomed@gmail.com> with questions or suggestions, or, better yet, contribute to the project on [GitHub](https://github.com/vandomed/stocks).
+Hopefully this gives you a good idea of the main functions in **stocks**. There are a lot of options I didn't cover, especially for the graphics functions. You can read about these options by looking at the relevant help files (e.g. run `?twofunds_graph` in R). Please feel free to e-mail me at <vandomed@gmail.com> with questions or suggestions, or, better yet, contribute to the project on [GitHub](https://github.com/vandomed/stocks/).
 
 ## References
