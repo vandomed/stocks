@@ -1,4 +1,4 @@
-# March 2, 2017
+# March 9, 2017
 
 # Dane Van Domelen
 # R file to create various lists for stocks package
@@ -190,9 +190,13 @@ library("stocks")
 # 10 ETFs as of March 2, 2018
 
 # From: http://www.sectorspdr.com/sectorspdr/sectors
-(sector_spdr_etfs <-
-   ticker_dates(tickers = c("XLY", "XLP", "XLE", "XLF", "XLV", "XLI", "XLB",
-                            "XLRE", "XLK", "XLU"))[, 1: 2])
+sector_spdr_etfs <- 
+  ticker_dates(tickers = c("XLY", "XLP", "XLE", "XLF", "XLV", "XLI", "XLB",
+                            "XLRE", "XLK", "XLU"))[, 1: 2]
+sector_spdr_etfs$sector <- 
+  c("Cons. Disc.", "Cons. Staples", "Energy", "Financials", "Health Care", 
+    "Industrials", "Materials", "Real Estate", "Technology", "Utilities")
+(sector_spdr_etfs <- sector_spdr_etfs[, c(1, 3, 2)])
 
 
 
