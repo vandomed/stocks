@@ -1,7 +1,7 @@
 Get Rich with 'stocks'
 ================
 Dane Van Domelen <br> <vandomed@gmail.com>
-2018-03-05
+2018-03-09
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 'stocks' package
