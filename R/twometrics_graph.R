@@ -151,12 +151,12 @@ twometrics_graph <- function(tickers = NULL, ...,
   # Calculate performance metrics
   x1 <- x2 <- y1 <- y2 <- NULL
   if (y.metric == "mean") {
-    y <- apply(gains, 2, mean) * 100
+    y <- apply(gains, 2, mean2) * 100
     plot.title <- paste("Mean of ", capitalize(time.scale), " Gains vs. ",
                         sep = "")
     y.label <- "Mean (%)"
   } else if (y.metric == "sd") {
-    y <- apply(gains, 2, sd) * 100
+    y <- apply(gains, 2, sd2) * 100
     plot.title <- paste("SD of ", capitalize(time.scale), " Gains vs. ",
                         sep = "")
     y.label <- "Standard deviation (%)"
@@ -248,12 +248,12 @@ twometrics_graph <- function(tickers = NULL, ...,
   }
   
   if (x.metric == "mean") {
-    x <- apply(gains, 2, mean) * 100
+    x <- apply(gains, 2, mean2) * 100
     plot.title <- paste(plot.title, "Mean of ", capitalize(time.scale),
                         " Gains", sep = "")
     x.label <- "Mean (%)"
   } else if (x.metric == "sd") {
-    x <- apply(gains, 2, sd) * 100
+    x <- apply(gains, 2, sd2) * 100
     plot.title <- paste(plot.title, "SD of ", capitalize(time.scale),
                         " Gains", sep = "")
     x.label <- "Standard deviation (%)"

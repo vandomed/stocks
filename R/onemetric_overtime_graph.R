@@ -129,12 +129,12 @@ onemetric_overtime_graph <- function(tickers = NULL, ...,
   y1 <- y2 <- NULL
   if (y.metric == "mean") {
     y <- rollapply(gains, width = window.units,
-                   FUN = mean, by.column = TRUE) * 100
+                   FUN = mean2, by.column = TRUE) * 100
     plot.title <- paste("Mean of ", capitalize(time.scale), " Gains", sep = "")
     y.label <- "Mean (%)"
   } else if (y.metric == "sd") {
     y <- rollapply(gains, width = window.units,
-                   FUN = sd, by.column = TRUE) * 100
+                   FUN = sd2, by.column = TRUE) * 100
     plot.title <- paste("SD of ", capitalize(time.scale), " Gains", sep = "")
     y.label <- "Standard deviation (%)"
     y1 <- 0

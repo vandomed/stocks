@@ -110,10 +110,10 @@ metrics <- function(tickers = NULL, ...,
     
     metric.ii <- perf.metrics[ii]
     if (metric.ii == "mean") {
-      p.metrics <- cbind(p.metrics, apply(gains, 2, mean_n))
+      p.metrics <- cbind(p.metrics, apply(gains, 2, mean2))
       labels[ii] <- "Mean"
     } else if (metric.ii == "sd") {
-      p.metrics <- cbind(p.metrics, apply(gains, 2, sd_n))
+      p.metrics <- cbind(p.metrics, apply(gains, 2, sd2))
       labels[ii] <- "SD"
     } else if (metric.ii == "growth") {
       p.metrics <- cbind(p.metrics, gains_rate(gains))
