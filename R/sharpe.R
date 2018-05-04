@@ -34,9 +34,9 @@ sharpe <- function(gains = NULL,
     
   # Calculate and return Sharpe ratio
   if (is.vector(gains)) {
-    sharpe.ratio <- (mean2(gains) - rf) / sd2(gains)
+    sharpe.ratio <- (mean(gains) - rf) / sd2(gains)
   } else {
-    means <- apply(gains, 2, mean2)
+    means <- apply(gains, 2, mean)
     sds <- apply(gains, 2, sd2)
     sharpe.ratio <- (means - rf) / sds
   }

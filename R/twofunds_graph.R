@@ -269,7 +269,7 @@ twofunds_graph <- function(tickers = NULL, intercepts = NULL, slopes = NULL,
     # Calculate x-axis value for each allocation
     if (x.metric == "mean") {
       
-      means <- apply(tickers.gains.sub, 2, mean2)
+      means <- apply(tickers.gains.sub, 2, mean)
       x[[ii]] <- (fund1.all * means[1] + fund2.all * means[2]) * 100
       
     } else if (x.metric == "sd") {
@@ -296,7 +296,7 @@ twofunds_graph <- function(tickers = NULL, intercepts = NULL, slopes = NULL,
       
     } else if (x.metric == "sharpe") {
       
-      means <- apply(tickers.gains.sub, 2, mean2)
+      means <- apply(tickers.gains.sub, 2, mean)
       x1 <- fund.all %*% means
       vars <- var(tickers.gains.sub)
       x2 <- sqrt(fund1.all^2 * vars[1, 1] + fund2.all^2 * vars[2, 2] +
@@ -400,7 +400,7 @@ twofunds_graph <- function(tickers = NULL, intercepts = NULL, slopes = NULL,
     # Calculate y-axis value for each allocation
     if (y.metric == "mean") {
       
-      means <- apply(tickers.gains.sub, 2, mean2)
+      means <- apply(tickers.gains.sub, 2, mean)
       y[[ii]] <- (fund1.all * means[1] + fund2.all * means[2]) * 100
       
     } else if (y.metric == "sd") {
@@ -427,7 +427,7 @@ twofunds_graph <- function(tickers = NULL, intercepts = NULL, slopes = NULL,
       
     } else if (y.metric == "sharpe") {
       
-      means <- apply(tickers.gains.sub, 2, mean2)
+      means <- apply(tickers.gains.sub, 2, mean)
       y1 <- fund1.all * means[1] + fund2.all * means[2]
       vars <- var(tickers.gains.sub)
       y2 <- sqrt(fund1.all^2 * vars[1, 1] + fund2.all^2 * vars[2, 2] +
@@ -542,7 +542,7 @@ twofunds_graph <- function(tickers = NULL, intercepts = NULL, slopes = NULL,
                         sep = "")
     y.label <- paste("Mean of ", time.scale, " gains (%)", sep = "")
     if (!is.null(reference.tickers)) {
-      reference.y <- apply(reference.gains, 2, mean2) * 100
+      reference.y <- apply(reference.gains, 2, mean) * 100
     }
   } else if (y.metric == "sd") {
     plot.title <- paste("SD of ", capitalize(time.scale), " Gains vs. ",
@@ -684,7 +684,7 @@ twofunds_graph <- function(tickers = NULL, intercepts = NULL, slopes = NULL,
                         " Gains", sep = "")
     x.label <- paste("Mean of ", time.scale, " gains (%)", sep = "")
     if (!is.null(reference.tickers)) {
-      reference.x <- apply(reference.gains, 2, mean2) * 100
+      reference.x <- apply(reference.gains, 2, mean) * 100
     }
   } else if (x.metric == "sd") {
     plot.title <- paste(plot.title, "SD of ", capitalize(time.scale),
@@ -1059,7 +1059,7 @@ twofunds_graph <- function(tickers = NULL, intercepts = NULL, slopes = NULL,
   if (! exists("gains")) {
     gains <- cbind(tickers.gains, benchmark.gains, reference.gains)
   }
-  means <- apply(gains, 2, mean2)
+  means <- apply(gains, 2, mean)
   corr.matrix <- cor(gains)
   return.list <- list(portfolio.xy = portfolio.xy, means = means,
                       corr.matrix = corr.matrix)

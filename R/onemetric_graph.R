@@ -133,7 +133,7 @@ onemetric_graph <- function(tickers = NULL, ...,
   
   # Calculate performance metrics
   if (y.metric == "mean") {
-    y <- apply(gains, 2, mean2) * 100
+    y <- apply(gains, 2, mean) * 100
     plot.title <- paste("Mean of ", capitalize(time.scale), " Gains", sep = "")
     y.label <- "Mean (%)"
   } else if (y.metric == "sd") {

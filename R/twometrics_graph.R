@@ -151,7 +151,7 @@ twometrics_graph <- function(tickers = NULL, ...,
   # Calculate performance metrics
   x1 <- x2 <- y1 <- y2 <- NULL
   if (y.metric == "mean") {
-    y <- apply(gains, 2, mean2) * 100
+    y <- apply(gains, 2, mean) * 100
     plot.title <- paste("Mean of ", capitalize(time.scale), " Gains vs. ",
                         sep = "")
     y.label <- "Mean (%)"
@@ -248,7 +248,7 @@ twometrics_graph <- function(tickers = NULL, ...,
   }
   
   if (x.metric == "mean") {
-    x <- apply(gains, 2, mean2) * 100
+    x <- apply(gains, 2, mean) * 100
     plot.title <- paste(plot.title, "Mean of ", capitalize(time.scale),
                         " Gains", sep = "")
     x.label <- "Mean (%)"

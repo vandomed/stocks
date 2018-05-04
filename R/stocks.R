@@ -10,7 +10,7 @@
 #' Package: \tab stocks \cr
 #' Type: \tab Package \cr
 #' Version: \tab 1.1.2 \cr
-#' Date: \tab 2018-03-18 \cr
+#' Date: \tab 2018-05-04 \cr
 #' License: \tab GPL-3 \cr
 #' }
 #'
@@ -42,7 +42,7 @@
 #' @docType package
 #'
 #'
-#' @importFrom crowdopt mean2 sd2
+#' @importFrom crowdopt sd2
 #' @importFrom dvmisc inside list_override
 #' @import graphics
 #' @import grDevices

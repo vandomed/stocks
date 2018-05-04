@@ -176,7 +176,7 @@ threefunds_graph <- function(tickers = NULL, intercepts = NULL, slopes = NULL,
   # Calculate x-axis value for each allocation
   if (x.metric == "mean") {
     
-    means <- apply(tickers.gains, 2, mean2) * 100
+    means <- apply(tickers.gains, 2, mean) * 100
     x <- lapply(fund1.all, function(x)
       x * means[1] + (1 - x) * fund2.all * means[2] +
         (1 - x) * fund3.all * means[3])
@@ -371,7 +371,7 @@ threefunds_graph <- function(tickers = NULL, intercepts = NULL, slopes = NULL,
   # Calculate y-axis value for each allocation
   if (y.metric == "mean") {
     
-    means <- apply(tickers.gains, 2, mean2) * 100
+    means <- apply(tickers.gains, 2, mean) * 100
     y <- lapply(fund1.all, function(x)
       x * means[1] + (1 - x) * fund2.all * means[2] +
         (1 - x) * fund3.all * means[3])
@@ -582,7 +582,7 @@ threefunds_graph <- function(tickers = NULL, intercepts = NULL, slopes = NULL,
                         sep = "")
     y.label <- paste("Mean of ", time.scale, " gains (%)", sep = "")
     if (! is.null(reference.tickers)) {
-      reference.y <- apply(reference.gains, 2, mean2) * 100
+      reference.y <- apply(reference.gains, 2, mean) * 100
     }
   } else if (y.metric == "sd") {
     plot.title <- paste("SD of ", capitalize(time.scale), " Gains vs. ",
@@ -725,7 +725,7 @@ threefunds_graph <- function(tickers = NULL, intercepts = NULL, slopes = NULL,
                         " Gains", sep = "")
     x.label <- paste("Mean of ", time.scale, " gains (%)", sep = "")
     if (! is.null(reference.tickers)) {
-      reference.x <- apply(reference.gains, 2, mean2) * 100
+      reference.x <- apply(reference.gains, 2, mean) * 100
     }
   } else if (x.metric == "sd") {
     plot.title <- paste(plot.title, "SD of ", capitalize(time.scale), " Gains",
@@ -1099,7 +1099,7 @@ threefunds_graph <- function(tickers = NULL, intercepts = NULL, slopes = NULL,
   if (! exists("gains")) {
     gains <- cbind(tickers.gains, benchmark.gains, reference.gains)
   }
-  means <- apply(gains, 2, mean2)
+  means <- apply(gains, 2, mean)
   corr.matrix <- cor(gains)
   return.list <- list(portfolio.xy = portfolio.xy, means = means,
                       corr.matrix = corr.matrix)
