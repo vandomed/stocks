@@ -33,9 +33,11 @@
 #' 
 #' 
 #' @examples
+#' \dontrun{
 #' # Backtest equal-allocation UPRO/VBLTX/VWEHX strategy
 #' port <- targetall(tickers = c("UPRO", "VBLTX", "VWEHX"))
 #' plot(port$fund.balances[, "Portfolio"])
+#' }
 #'
 #' @export
 targetall <- function(tickers = NULL, intercepts = NULL, slopes = NULL, ...,

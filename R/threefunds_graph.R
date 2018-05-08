@@ -28,10 +28,12 @@
 #' 
 #' 
 #' @examples
+#' \dontrun{
 #' # Plot mean vs. SD for UPRO/VBLTX/VWEHX portfolio, and compare to VFINX and 
 #' # BRK-B
 #' fig <- threefunds_graph(tickers = c("VWEHX", "VBLTX", "UPRO"), 
 #'                         reference.tickers = c("VFINX", "BRK-B"))
+#' }
 #'
 #'
 #' @export

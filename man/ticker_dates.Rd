@@ -23,8 +23,10 @@ Typically useful for determining a time period over which to compare several
 funds.
 }
 \examples{
+\dontrun{
 # See what dates are available for Apple and Amazon
 ticker_dates(c("AAPL", "AMZN"))
+}
 
 
 }

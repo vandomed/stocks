@@ -75,9 +75,11 @@ Useful for visualizing the performance of a group of investments. The first
 investment is used as the benchmark if the requested metric requires one.
 }
 \examples{
+\dontrun{
 # Compare annualized growth for VFINX, SSO, and UPRO
 fig <- onemetric_graph(tickers = c("VFINX", "SSO", "UPRO"), 
                        plot.list = list(ylim = c(0, 50)))
+}
 
 }
 \references{

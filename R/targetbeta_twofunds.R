@@ -105,9 +105,11 @@
 #' 
 #' 
 #' @examples
+#' \dontrun{
 #' # Backtest zero-beta UPRO/VBLTX strategy
 #' beta0 <- targetbeta_twofunds(tickers = c("UPRO", "VBLTX"), target.beta = 0)
 #' plot(beta0$fund.balances[, "Portfolio"])
+#' }
 #'
 #' @export
 targetbeta_twofunds <- function(tickers = NULL,

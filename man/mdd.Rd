@@ -30,6 +30,7 @@ Calculates maximum drawdown from vector of closing prices, highs and lows, or
 gains.
 }
 \examples{
+\dontrun{
 # Simulate minute-to-minute stock gains over a 2-year period
 set.seed(123)
 stock.gains <- rnorm(6.5 * 60 * 252 * 2, 0.000005, 0.001)
@@ -45,6 +46,7 @@ mdd(prices = stock.prices)
 
 # Same answer using gains rather than prices
 mdd(gains = stock.gains)
+}
 
 
 }

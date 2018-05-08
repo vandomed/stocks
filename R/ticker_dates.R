@@ -15,8 +15,10 @@
 #' 
 #' 
 #' @examples 
+#' \dontrun{
 #' # See what dates are available for Apple and Amazon
 #' ticker_dates(c("AAPL", "AMZN"))
+#' }
 #' 
 #' 
 #' @references 

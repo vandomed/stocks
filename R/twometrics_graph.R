@@ -46,8 +46,10 @@
 #' 
 #' 
 #' @examples
+#' \dontrun{
 #' # Plot annualized growth vs. maximum drawdown for VFINX, SSO, and UPRO
 #' fig <- twometrics_graph(tickers = c("VFINX", "SSO", "UPRO"))
+#' }
 #'
 #' @export
 twometrics_graph <- function(tickers = NULL, ...,

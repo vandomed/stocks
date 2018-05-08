@@ -18,8 +18,10 @@
 #' 
 #' 
 #' @examples 
+#' \dontrun{
 #' # Load prices for Netflix and Amazon over their mutual lifetimes
 #' prices <- load_prices(c("NFLX", "AMZN"))
+#' }
 #' 
 #' 
 #' @inherit load_gains references

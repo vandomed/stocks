@@ -56,8 +56,10 @@ simply dropped. Messages are printed indicating which dates are dropped for
 which tickers.
 }
 \examples{
+\dontrun{
 # Load gains for Netflix and Amazon over their mutual lifetimes
 gains <- load_gains(c("NFLX", "AMZN"))
+}
 
 
 }

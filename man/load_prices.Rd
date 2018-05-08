@@ -60,8 +60,10 @@ simply dropped. Messages are printed indicating which dates are dropped for
 which tickers.
 }
 \examples{
+\dontrun{
 # Load prices for Netflix and Amazon over their mutual lifetimes
 prices <- load_prices(c("NFLX", "AMZN"))
+}
 
 
 }

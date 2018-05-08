@@ -52,9 +52,11 @@ of several funds, rebalancing when the effective allocations deviate too far
 from the targets.
 }
 \examples{
+\dontrun{
 # Backtest equal-allocation UPRO/VBLTX/VWEHX strategy
 port <- targetall(tickers = c("UPRO", "VBLTX", "VWEHX"))
 plot(port$fund.balances[, "Portfolio"])
+}
 
 }
 \references{

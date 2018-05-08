@@ -17,12 +17,13 @@ code is used to improve processing speed where possible.
 Package: \tab stocks \cr
 Type: \tab Package \cr
 Version: \tab 1.1.2 \cr
-Date: \tab 2018-05-04 \cr
+Date: \tab 2018-05-07 \cr
 License: \tab GPL-3 \cr
 }
 
 See \href{https://cran.r-project.org/package=stocks}{CRAN documentation} for
-full list of functions.
+full list of functions, and \href{https://github.com/vandomed/stocks} for 
+an overview of the package with examples.
 }
 \references{
 Eddelbuettel, D. and Francois, R. (2011) Rcpp: Seamless R and C++ 

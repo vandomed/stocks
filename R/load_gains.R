@@ -42,8 +42,10 @@
 #' 
 #' 
 #' @examples 
+#' \dontrun{
 #' # Load gains for Netflix and Amazon over their mutual lifetimes
 #' gains <- load_gains(c("NFLX", "AMZN"))
+#' }
 #' 
 #' 
 #' @inherit ticker_dates references

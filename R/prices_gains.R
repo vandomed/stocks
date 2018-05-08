@@ -10,11 +10,13 @@
 #' 
 #' 
 #' @examples
+#' \dontrun{
 #' # Load 2017 prices for Netflix and Amazon, and calculate growth of $10k
 #' prices <- load_prices(c("NFLX", "AMZN"), initial = 1000)
 #' 
 #' # Calculate gains
 #' gains <- prices_gains(prices)
+#' }
 #' 
 #' 
 #' @export
