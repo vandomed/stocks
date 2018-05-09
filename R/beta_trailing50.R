@@ -17,8 +17,10 @@
 #' 
 #' 
 #' @examples
+#' \dontrun{
 #' # Calculate TLT's beta based on the previous 50 daily gains
 #' beta_trailing50("TLT")
+#' }
 #' 
 #' 
 #' @export

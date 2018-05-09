@@ -34,10 +34,10 @@ sortino <- function(gains = NULL,
   
   # Calculate and return Sortino ratio
   if (is.vector(gains)) {
-    sortino.ratio <- (mean(gains) - rf) / sd2(gains[gains < 0])
+    sortino.ratio <- (mean(gains) - rf) / sd(gains[gains < 0])
   } else {
     means <- apply(gains, 2, mean)
-    sds <- apply(gains, 2, function(x) sd2(x[x < 0]))
+    sds <- apply(gains, 2, function(x) sd(x[x < 0]))
     sortino.ratio <- (means - rf) / sds
   }
   

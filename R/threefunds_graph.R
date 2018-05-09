@@ -591,7 +591,7 @@ threefunds_graph <- function(tickers = NULL, intercepts = NULL, slopes = NULL,
                         sep = "")
     y.label <- paste("SD of ", time.scale, " gains (%)", sep = "")
     if (! is.null(reference.tickers)) {
-      reference.y <- apply(reference.gains, 2, sd2) * 100
+      reference.y <- apply(reference.gains, 2, sd) * 100
     }
     y1 <- 0
   } else if (y.metric == "growth") {
@@ -734,7 +734,7 @@ threefunds_graph <- function(tickers = NULL, intercepts = NULL, slopes = NULL,
                         sep = "")
     x.label <- paste("SD of ", time.scale, " gains (%)", sep = "")
     if (! is.null(reference.tickers)) {
-      reference.x <- apply(reference.gains, 2, sd2) * 100
+      reference.x <- apply(reference.gains, 2, sd) * 100
     }
     x1 <- 0
   } else if (x.metric == "growth") {

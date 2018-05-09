@@ -9,14 +9,15 @@
 #' \tabular{ll}{
 #' Package: \tab stocks \cr
 #' Type: \tab Package \cr
-#' Version: \tab 1.1.2 \cr
-#' Date: \tab 2018-05-07 \cr
+#' Version: \tab 1.1.3 \cr
+#' Date: \tab 2018-05-09 \cr
 #' License: \tab GPL-3 \cr
 #' }
 #'
 #' See \href{https://cran.r-project.org/package=stocks}{CRAN documentation} for
-#' full list of functions, and \href{https://github.com/vandomed/stocks} for 
-#' an overview of the package with examples.
+#' full list of functions and the
+#' \href{https://github.com/vandomed/stocks}{GitHub page} for an overview of the 
+#' package with some examples.
 #'
 #' @author Dane R. Van Domelen \cr \email{vandomed@@gmail.com}
 #'
@@ -43,7 +44,6 @@
 #' @docType package
 #'
 #'
-#' @importFrom crowdopt sd2
 #' @importFrom dvmisc inside list_override
 #' @import graphics
 #' @import grDevices

@@ -136,7 +136,7 @@ onemetric_overtime_graph <- function(tickers = NULL, ...,
     y.label <- "Mean (%)"
   } else if (y.metric == "sd") {
     y <- rollapply(gains, width = window.units,
-                   FUN = sd2, by.column = TRUE) * 100
+                   FUN = sd, by.column = TRUE) * 100
     plot.title <- paste("SD of ", capitalize(time.scale), " Gains", sep = "")
     y.label <- "Standard deviation (%)"
     y1 <- 0
