@@ -4,6 +4,8 @@ Dane Van Domelen <br> <vandomed@gmail.com>
 2018-08-22
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
+[![Build Status](https://travis-ci.org/vandomed/stocks.svg?branch=master)](https://travis-ci.org/vandomed/stocks)
+
 'stocks' package
 ----------------
 
