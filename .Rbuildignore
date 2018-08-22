@@ -6,3 +6,4 @@
 ^README.*$
 ^Thumbs.db$
 ^notes.docx$
+^.travis.yml$
