@@ -9,7 +9,7 @@
 #' \tabular{ll}{
 #' Package: \tab stocks \cr
 #' Type: \tab Package \cr
-#' Version: \tab 1.1.3 \cr
+#' Version: \tab 1.1.4 \cr
 #' Date: \tab 2018-08-22 \cr
 #' License: \tab GPL-3 \cr
 #' }
@@ -55,6 +55,7 @@
 #' @importFrom Rcpp evalCpp
 #' @importFrom rbenchmark benchmark
 #' @import stats
+#' @importFrom TTR ROC
 #' @importFrom zoo rollapply
 #' @useDynLib stocks, .registration=TRUE
 #' @name stocks
