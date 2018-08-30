@@ -3,7 +3,7 @@ output: github_document
 title: "Get Rich with 'stocks'"
 author: "Dane Van Domelen <br> vandomed@gmail.com"
 date: "`r Sys.Date()`"
-bibliography: vignettes/bibliography.bib
+bibliography: bibliography.bib
 nocite: | 
   @quantmod,
   @PerformanceAnalytics,

@@ -3,7 +3,7 @@ Type: Package
 Title: Stock Market Analysis
 Version: 1.1.4
 License: GPL-3
-Date: 2018-08-22
+Date: 2018-08-30
 Author: Dane R. Van Domelen
 Maintainer: Dane R. Van Domelen <vandomed@gmail.com>
 Description: Functions for analyzing stocks or other investments. Main features are loading and aligning historical data for ticker symbols, calculating performance metrics for individual funds or portfolios (e.g. annualized growth, maximum drawdown, Sharpe/Sortino ratio), and creating graphs. C++ code is used to improve processing speed where possible.
@@ -15,4 +15,3 @@ Suggests: knitr,
     printr
 LinkingTo: Rcpp
 RoxygenNote: 6.0.1
-VignetteBuilder: knitr
