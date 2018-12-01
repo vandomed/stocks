@@ -49,22 +49,22 @@ frame rather than open a new one.}
 \item{sort.tickers}{Logical value for whether to sort investments in 
 decreasing order of the performance metric.}
 
-\item{plot.list}{List of arguments to pass to \code{\link[graphics]{plot}}.}
+\item{plot.list}{List of arguments to pass to \code{\link[graphics:plot]{plot}}.}
 
 \item{points.list}{List of arguments to pass to 
 \code{\link[graphics]{points}}.}
 
 \item{axis.list}{List of arguments to pass to \code{\link[graphics]{axis}}.}
 
-\item{pdf.list}{List of arguments to pass to \code{\link[grDevices]{pdf}}.}
+\item{pdf.list}{List of arguments to pass to \code{\link[grDevices:pdf]{pdf}}.}
 
-\item{bmp.list}{List of arguments to pass to \code{\link[grDevices]{bmp}}.}
+\item{bmp.list}{List of arguments to pass to \code{\link[grDevices:png]{bmp}}.}
 
-\item{jpeg.list}{List of arguments to pass to \code{\link[grDevices]{jpeg}}.}
+\item{jpeg.list}{List of arguments to pass to \code{\link[grDevices:png]{jpeg}}.}
 
-\item{png.list}{List of arguments to pass to \code{\link[grDevices]{png}}.}
+\item{png.list}{List of arguments to pass to \code{\link[grDevices:png]{png}}.}
 
-\item{tiff.list}{List of arguments to pass to \code{\link[grDevices]{tiff}}.}
+\item{tiff.list}{List of arguments to pass to \code{\link[grDevices:png]{tiff}}.}
 }
 \value{
 In addition to the graph, a data frame containing the performance metric for 

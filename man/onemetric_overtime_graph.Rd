@@ -52,7 +52,7 @@ frame rather than open a new one.}
 
 \item{lty}{Numeric vector specifying line types for each curve.}
 
-\item{plot.list}{List of arguments to pass to \code{\link[graphics]{plot}}.}
+\item{plot.list}{List of arguments to pass to \code{\link[graphics:plot]{plot}}.}
 
 \item{points.list}{List of arguments to pass to 
 \code{\link[graphics]{points}}.}
@@ -60,15 +60,15 @@ frame rather than open a new one.}
 \item{legend.list}{List of arguments to pass to 
 \code{\link[graphics]{legend}}.}
 
-\item{pdf.list}{List of arguments to pass to \code{\link[grDevices]{pdf}}.}
+\item{pdf.list}{List of arguments to pass to \code{\link[grDevices:pdf]{pdf}}.}
 
-\item{bmp.list}{List of arguments to pass to \code{\link[grDevices]{bmp}}.}
+\item{bmp.list}{List of arguments to pass to \code{\link[grDevices:png]{bmp}}.}
 
-\item{jpeg.list}{List of arguments to pass to \code{\link[grDevices]{jpeg}}.}
+\item{jpeg.list}{List of arguments to pass to \code{\link[grDevices:png]{jpeg}}.}
 
-\item{png.list}{List of arguments to pass to \code{\link[grDevices]{png}}.}
+\item{png.list}{List of arguments to pass to \code{\link[grDevices:png]{png}}.}
 
-\item{tiff.list}{List of arguments to pass to \code{\link[grDevices]{tiff}}.}
+\item{tiff.list}{List of arguments to pass to \code{\link[grDevices:png]{tiff}}.}
 }
 \value{
 In addition to the graph, a numeric matrix containing the performance metric 

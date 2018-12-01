@@ -119,7 +119,7 @@ load_prices <- function(tickers, intercepts = NULL, slopes = NULL,
             prices.fund <- prices[[ii]]
             dates.fund <- as.Date(rownames(prices.fund))
             loc.end <- which(dates.fund == earliest.enddate)
-            prices.fund <- prices.fund[1: loc.end, ]
+            prices.fund <- prices.fund[1: loc.end, , drop = FALSE]
             prices[[ii]] <- prices.fund
           }
         }
@@ -144,13 +144,13 @@ load_prices <- function(tickers, intercepts = NULL, slopes = NULL,
         if (dates.fund1[loc] < dates.fund2[loc]) {
           message(paste("Dropped", dates.fund1[loc], "from", tickers[1],
                         sep = " "))
-          prices.fund1 <- prices.fund1[-loc, ]
+          prices.fund1 <- prices.fund1[-loc, , drop = FALSE]
           dates.fund1 <- dates.fund1[-loc]
           prices[[1]] <- prices.fund1
         } else {
           message(paste("Dropped", dates.fund2[loc], "from", tickers[ii],
                         sep = " "))
-          prices.fund2 <- prices.fund2[-loc, ]
+          prices.fund2 <- prices.fund2[-loc, , drop = FALSE]
           dates.fund2 <- dates.fund2[-loc]
           prices[[ii]] <- prices.fund2
         }

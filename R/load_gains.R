@@ -91,7 +91,7 @@ load_gains <- function(tickers, intercepts = NULL, slopes = NULL,
   
   # Drop tickers that could not be loaded
   locs <- sapply(prices, function(x) ! is.null(x))
-  if (!all(locs)) {
+  if (! all(locs)) {
     tickers <- tickers[locs]
     prices <- prices[locs]
     intercepts <- intercepts[locs]
@@ -142,7 +142,7 @@ load_gains <- function(tickers, intercepts = NULL, slopes = NULL,
             prices.fund <- prices[[ii]]
             dates.fund <- as.Date(rownames(prices.fund))
             loc.end <- which(dates.fund == earliest.enddate)
-            prices.fund <- prices.fund[1: loc.end, ]
+            prices.fund <- prices.fund[1: loc.end, , drop = FALSE]
             prices[[ii]] <- prices.fund
           }
         }
@@ -246,8 +246,13 @@ load_gains <- function(tickers, intercepts = NULL, slopes = NULL,
   }
   
   # Output message indicating date range
-  message(paste("Results are for ", dates[1], " to " , dates[length(dates)],
-                sep = ""))
+  if (nrow(prices) > 1) {
+    message(paste("Results are for ", dates[1], " to " , dates[length(dates)],
+                  sep = ""))
+  } else {
+    message(paste("Only have price data for ", dates[1], 
+                  ", so there are no gains to calculate.", sep = ""))
+  }
   
   # Create gains matrix
   gains.mat <- matrix(unlist(lapply(prices, function(x)

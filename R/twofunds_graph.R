@@ -83,16 +83,16 @@
 #' 
 #' @param lty Numeric vector specifying line types for each curve.
 #' 
-#' @param plot.list List of arguments to pass to \code{\link[graphics]{plot}}.
+#' @param plot.list List of arguments to pass to \code{\link[graphics:plot]{plot}}.
 #' @param points.list List of arguments to pass to 
 #' \code{\link[graphics]{points}}.
-#' @param text.list List of arguments to pass to \code{\link[graphics]{text}}.
+#' @param text.list List of arguments to pass to \code{\link[graphics:text]{text}}.
 #' 
-#' @param pdf.list List of arguments to pass to \code{\link[grDevices]{pdf}}.
-#' @param bmp.list List of arguments to pass to \code{\link[grDevices]{bmp}}.
-#' @param jpeg.list List of arguments to pass to \code{\link[grDevices]{jpeg}}.
-#' @param png.list List of arguments to pass to \code{\link[grDevices]{png}}.
-#' @param tiff.list List of arguments to pass to \code{\link[grDevices]{tiff}}.
+#' @param pdf.list List of arguments to pass to \code{\link[grDevices:pdf]{pdf}}.
+#' @param bmp.list List of arguments to pass to \code{\link[grDevices:png]{bmp}}.
+#' @param jpeg.list List of arguments to pass to \code{\link[grDevices:png]{jpeg}}.
+#' @param png.list List of arguments to pass to \code{\link[grDevices:png]{png}}.
+#' @param tiff.list List of arguments to pass to \code{\link[grDevices:png]{tiff}}.
 #' 
 #' 
 #' @return
