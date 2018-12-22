@@ -246,7 +246,7 @@ load_gains <- function(tickers, intercepts = NULL, slopes = NULL,
   }
   
   # Output message indicating date range
-  if (nrow(prices) > 1) {
+  if (nrow(prices[[1]]) > 1) {
     message(paste("Results are for ", dates[1], " to " , dates[length(dates)],
                   sep = ""))
   } else {
