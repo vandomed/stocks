@@ -86,6 +86,12 @@ targetall <- function(tickers = NULL, intercepts = NULL, slopes = NULL, ...,
     
   }
   
+  # If unspecified, use equal target allocations
+  if (is.null(target.alls)) {
+    n.tickers <- ncol(tickers.gains)
+    target.alls <- rep(1 / n.tickers, n.tickers)
+  }
+  
   # Create tickers.ratios matrix
   tickers.ratios <- tickers.gains + 1
   

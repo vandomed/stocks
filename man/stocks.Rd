@@ -16,8 +16,8 @@ code is used to improve processing speed where possible.
 \tabular{ll}{
 Package: \tab stocks \cr
 Type: \tab Package \cr
-Version: \tab 1.1.4 \cr
-Date: \tab 2018-12-21 \cr
+Version: \tab 1.1.5 \cr
+Date: \tab 2019-01-07 \cr
 License: \tab GPL-3 \cr
 }
 
