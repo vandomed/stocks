@@ -5,10 +5,10 @@
 \title{Scatterplot of Investment Gains}
 \usage{
 gains_graph(tickers = NULL, ..., gains = NULL, prices = NULL,
-  orders = 1, add.plot = FALSE, include.legend = TRUE, colors = NULL,
-  lty = NULL, plot.list = NULL, points.list = NULL, legend.list = NULL,
-  pdf.list = NULL, bmp.list = NULL, jpeg.list = NULL, png.list = NULL,
-  tiff.list = NULL)
+  orders = 1, add.plot = FALSE, include.legend = TRUE,
+  colors = NULL, lty = NULL, plot.list = NULL, points.list = NULL,
+  legend.list = NULL, pdf.list = NULL, bmp.list = NULL,
+  jpeg.list = NULL, png.list = NULL, tiff.list = NULL)
 }
 \arguments{
 \item{tickers}{Character vector of ticker symbols that Yahoo! Finance 

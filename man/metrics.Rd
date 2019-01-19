@@ -5,9 +5,9 @@
 \title{Calculate Various Performance Metrics}
 \usage{
 metrics(tickers = NULL, ..., gains = NULL, prices = NULL,
-  perf.metrics = c("mean", "sd", "growth", "cagr", "mdd", "sharpe", "sortino",
-  "alpha", "beta", "r.squared", "pearson", "spearman", "auto.pearson",
-  "auto.spearman"))
+  perf.metrics = c("mean", "sd", "growth", "cagr", "mdd", "sharpe",
+  "sortino", "alpha", "beta", "r.squared", "pearson", "spearman",
+  "auto.pearson", "auto.spearman"))
 }
 \arguments{
 \item{tickers}{Character vector of ticker symbols that Yahoo! Finance 

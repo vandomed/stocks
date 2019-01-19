@@ -7,12 +7,13 @@ Allocation Varies}
 \usage{
 twofunds_graph(tickers = NULL, intercepts = NULL, slopes = NULL, ...,
   benchmark.tickers = NULL, reference.tickers = NULL,
-  tickers.gains = NULL, benchmark.gains = NULL, reference.gains = NULL,
-  step.data = 0.0025, step.points = 0.1, x.metric = "sd",
-  y.metric = "mean", tickerlabel.offsets = NULL, reflabel.offsets = NULL,
-  add.plot = FALSE, colors = NULL, lty = NULL, plot.list = NULL,
-  points.list = NULL, text.list = NULL, pdf.list = NULL,
-  bmp.list = NULL, jpeg.list = NULL, png.list = NULL, tiff.list = NULL)
+  tickers.gains = NULL, benchmark.gains = NULL,
+  reference.gains = NULL, step.data = 0.0025, step.points = 0.1,
+  x.metric = "sd", y.metric = "mean", tickerlabel.offsets = NULL,
+  reflabel.offsets = NULL, add.plot = FALSE, colors = NULL,
+  lty = NULL, plot.list = NULL, points.list = NULL,
+  text.list = NULL, pdf.list = NULL, bmp.list = NULL,
+  jpeg.list = NULL, png.list = NULL, tiff.list = NULL)
 }
 \arguments{
 \item{tickers}{Character vector of ticker symbols that Yahoo! Finance 

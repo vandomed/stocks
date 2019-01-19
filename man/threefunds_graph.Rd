@@ -5,14 +5,15 @@
 \title{Graph One Performance Metric vs. Another for Three-Fund Portfolio as 
 Allocation Varies}
 \usage{
-threefunds_graph(tickers = NULL, intercepts = NULL, slopes = NULL, ...,
-  benchmark.tickers = NULL, reference.tickers = NULL,
-  tickers.gains = NULL, benchmark.gains = NULL, reference.gains = NULL,
-  step.data = 0.0025, step.points = 0.1, step.curves = 0.2,
-  x.metric = "sd", y.metric = "mean", tickerlabel.offsets = NULL,
-  reflabel.offsets = NULL, add.plot = FALSE, colors = NULL, lty = NULL,
-  plot.list = NULL, points.list = NULL, text.list = NULL,
-  pdf.list = NULL, bmp.list = NULL, jpeg.list = NULL, png.list = NULL,
+threefunds_graph(tickers = NULL, intercepts = NULL, slopes = NULL,
+  ..., benchmark.tickers = NULL, reference.tickers = NULL,
+  tickers.gains = NULL, benchmark.gains = NULL,
+  reference.gains = NULL, step.data = 0.0025, step.points = 0.1,
+  step.curves = 0.2, x.metric = "sd", y.metric = "mean",
+  tickerlabel.offsets = NULL, reflabel.offsets = NULL,
+  add.plot = FALSE, colors = NULL, lty = NULL, plot.list = NULL,
+  points.list = NULL, text.list = NULL, pdf.list = NULL,
+  bmp.list = NULL, jpeg.list = NULL, png.list = NULL,
   tiff.list = NULL)
 }
 \arguments{

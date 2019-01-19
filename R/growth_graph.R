@@ -75,6 +75,16 @@ growth_graph <- function(tickers = NULL, ...,
     
   } else if (! is.null(prices)) {
     
+    # Convert to matrix if necessary
+    if (! is.matrix(prices)) {
+      prices <- as.matrix(prices)
+    }
+    
+    # Convert prices to matrix if necessary
+    if (! is.matrix(prices)) {
+      prices <- as.matrix(prices)
+    }
+    
     # If different starting values, reset to initial
     if (length(unique(prices[1, ])) > 1) {
       for (ii in 1: ncol(prices)) {

@@ -6,9 +6,10 @@
 \usage{
 twometrics_graph(tickers = NULL, ..., gains = NULL, prices = NULL,
   x.metric = "mdd", y.metric = "cagr", tickerlabel.offsets = NULL,
-  add.plot = FALSE, colors = NULL, plot.list = NULL, points.list = NULL,
-  text.list = NULL, pdf.list = NULL, bmp.list = NULL, jpeg.list = NULL,
-  png.list = NULL, tiff.list = NULL)
+  add.plot = FALSE, colors = NULL, plot.list = NULL,
+  points.list = NULL, text.list = NULL, pdf.list = NULL,
+  bmp.list = NULL, jpeg.list = NULL, png.list = NULL,
+  tiff.list = NULL)
 }
 \arguments{
 \item{tickers}{Character vector of ticker symbols that Yahoo! Finance 

@@ -23,15 +23,20 @@
 #' 
 #' @export
 gains_prices <- function(gains, initial = 10000) {
-  
   if (is.vector(gains)) {
     prices <- c(initial, initial * cumprod(1 + gains))
+    date1 <- names(gains[1])
+    if (! is.null(date1)) {
+      names(prices)[1] <- as.character(as.Date(date1) - 1)
+    }
   } else {
     prices <- apply(gains, 2, function(x) {
       c(initial, initial * cumprod(1 + x))
     })
-    rownames(prices)[1] <- as.Date(rownames(gains[1, , drop = FALSE])) - 1
+    date1 <- rownames(gains)[1]
+    if (! is.null(date1)) {
+      rownames(prices)[1] <- as.character(as.Date(date1) - 1)
+    }
   }
   return(prices)
-
 }

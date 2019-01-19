@@ -7,8 +7,8 @@
 onemetric_graph(tickers = NULL, ..., gains = NULL, prices = NULL,
   y.metric = "cagr", add.plot = FALSE, sort.tickers = TRUE,
   plot.list = NULL, points.list = NULL, axis.list = NULL,
-  pdf.list = NULL, bmp.list = NULL, jpeg.list = NULL, png.list = NULL,
-  tiff.list = NULL)
+  pdf.list = NULL, bmp.list = NULL, jpeg.list = NULL,
+  png.list = NULL, tiff.list = NULL)
 }
 \arguments{
 \item{tickers}{Character vector of ticker symbols that Yahoo! Finance 

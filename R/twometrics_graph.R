@@ -131,9 +131,12 @@ twometrics_graph <- function(tickers = NULL, ...,
                          ifelse(time.scale == "monthly", 12,
                                 1))
   } else {
-    min.diffdates <- min(diff(as.Date(rownames(gains)
-                                      [1: min(10, nrow(gains))])))
-    if (! is.null(min.diffdates)) {
+    if (is.null(rownames(gains))) {
+      time.scale <- "daily"
+      units.year <- 252
+    } else {
+      min.diffdates <- min(diff(as.Date(rownames(gains)
+                                        [1: min(10, nrow(gains))])))
       if (min.diffdates == 1) {
         time.scale <- "daily"
         units.year <- 252
@@ -144,9 +147,6 @@ twometrics_graph <- function(tickers = NULL, ...,
         time.scale <- "yearly"
         units.year <- 1
       }
-    } else {
-      time.scale <- "daily"
-      units.year <- 252
     }
   }
   

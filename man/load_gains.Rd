@@ -4,9 +4,10 @@
 \alias{load_gains}
 \title{Download and Align Gains for a Set of Tickers}
 \usage{
-load_gains(tickers, intercepts = NULL, slopes = NULL, from = "1950-01-01",
-  to = Sys.Date(), time.scale = "daily", preto.days = NULL,
-  prefrom.days = NULL, earliest = FALSE, latest = FALSE)
+load_gains(tickers, intercepts = NULL, slopes = NULL,
+  from = "1950-01-01", to = Sys.Date(), time.scale = "daily",
+  preto.days = NULL, prefrom.days = NULL, earliest = FALSE,
+  latest = FALSE)
 }
 \arguments{
 \item{tickers}{Character vector with ticker symbols that Yahoo! Finance 

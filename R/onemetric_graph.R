@@ -71,7 +71,7 @@ onemetric_graph <- function(tickers = NULL, ...,
     # Obtain matrix of gains for each fund
     gains <- load_gains(tickers = tickers, ...)
     
-  } else if (!is.null(prices)) {
+  } else if (! is.null(prices)) {
     
     # Calculate gains based on price data
     gains <- prices_gains(prices = prices)
@@ -114,9 +114,12 @@ onemetric_graph <- function(tickers = NULL, ...,
     units.year <- ifelse(time.scale == "daily", 252,
                          ifelse(time.scale == "monthly", 12, 1))
   } else {
-    min.diffdates <- min(diff(as.Date(rownames(gains)
-                                      [1: min(10, nrow(gains))])))
-    if (! is.null(min.diffdates)) {
+    if (is.null(rownames(gains))) {
+      time.scale <- "daily"
+      units.year <- 252
+    } else {
+      min.diffdates <- min(diff(as.Date(rownames(gains)
+                                        [1: min(10, nrow(gains))])))
       if (min.diffdates == 1) {
         time.scale <- "daily"
         units.year <- 252
@@ -127,9 +130,6 @@ onemetric_graph <- function(tickers = NULL, ...,
         time.scale <- "yearly"
         units.year <- 1
       }
-    } else {
-      time.scale <- "daily"
-      units.year <- 252
     }
   }
   

@@ -125,8 +125,12 @@ targetall <- function(tickers = NULL, intercepts = NULL, slopes = NULL, ...,
     
   }
   
-  # Add column names to fund.balances
+  # Add column names and dates to fund.balances
   colnames(fund.balances) <- c(tickers, "Portfolio")
+  dates <- as.Date(rownames(tickers.gains))
+  if (! is.null(dates)) {
+    rownames(fund.balances) <- as.character(c(dates[1] - 1, dates))
+  }
   
   # Return list containing fund.balances and rebalance.count
   results.list <- list(fund.balances = fund.balances,

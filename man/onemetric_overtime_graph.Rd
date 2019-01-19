@@ -4,10 +4,11 @@
 \alias{onemetric_overtime_graph}
 \title{Graph Performance Metric Over Time for Various Investments}
 \usage{
-onemetric_overtime_graph(tickers = NULL, ..., gains = NULL, prices = NULL,
-  y.metric = "cagr", window.units = 50, add.plot = FALSE, colors = NULL,
-  lty = NULL, plot.list = NULL, points.list = NULL, legend.list = NULL,
-  pdf.list = NULL, bmp.list = NULL, jpeg.list = NULL, png.list = NULL,
+onemetric_overtime_graph(tickers = NULL, ..., gains = NULL,
+  prices = NULL, y.metric = "cagr", window.units = 50,
+  add.plot = FALSE, colors = NULL, lty = NULL, plot.list = NULL,
+  points.list = NULL, legend.list = NULL, pdf.list = NULL,
+  bmp.list = NULL, jpeg.list = NULL, png.list = NULL,
   tiff.list = NULL)
 }
 \arguments{

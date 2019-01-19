@@ -4,11 +4,12 @@
 \alias{targetbeta_twofunds}
 \title{Backtest a Two-Fund Strategy that Targets a Certain Beta}
 \usage{
-targetbeta_twofunds(tickers = NULL, intercepts = NULL, slopes = NULL, ...,
-  benchmark.ticker = NULL, reference.tickers = NULL, tickers.gains = NULL,
-  benchmark.gains = NULL, reference.gains = NULL, target.beta = 0,
-  tol = 0.15, window.units = 50, failure.method = "closer",
-  maxall.tol = tol - 0.05, initial = 10000)
+targetbeta_twofunds(tickers = NULL, intercepts = NULL, slopes = NULL,
+  ..., benchmark.ticker = NULL, reference.tickers = NULL,
+  tickers.gains = NULL, benchmark.gains = NULL,
+  reference.gains = NULL, target.beta = 0, tol = 0.15,
+  window.units = 50, failure.method = "closer", maxall.tol = tol -
+  0.05, initial = 10000)
 }
 \arguments{
 \item{tickers}{Character vector specifying 2 ticker symbols that Yahoo! 
