@@ -10,6 +10,7 @@
 #' @param initial Numeric value specifying what value to scale initial prices 
 #' to. Can also be character string ending in "k", e.g. \code{"10k"} to graph 
 #' growth of $10k without all the 0's.
+#' @param axis.list List of arguments to pass to \code{\link[graphics]{axis}}.
 #' @param grid.list List of arguments to pass to \code{\link[graphics]{grid}}.
 #' @param legend.list List of arguments to pass to 
 #' \code{\link[graphics]{legend}}.
@@ -39,12 +40,13 @@
 growth_graph <- function(tickers = NULL, ...,
                          gains = NULL, 
                          prices = NULL,
-                         initial = "10k",
+                         initial = NULL,
                          add.plot = FALSE,
                          colors = NULL,
                          lty = NULL,
                          plot.list = NULL,
                          points.list = NULL,
+                         axis.list = NULL, 
                          grid.list = NULL,
                          legend.list = NULL,
                          pdf.list = NULL,
@@ -53,36 +55,40 @@ growth_graph <- function(tickers = NULL, ...,
                          png.list = NULL,
                          tiff.list = NULL) {
   
-  # If initial ends with "k", extract number before it and prep labels
-  initial.text <- initial
-  if (length(grep("k$", x = initial)) == 1) {
-    initial <- as.numeric(sub("k", replacement = "", x = initial))
-    ylab.text <- "Balance ($1,000)"
-  } else {
-    ylab.text <- "Balance ($)"
-  }
+  # # If initial ends with "k", extract number before it and prep labels
+  # initial.text <- initial
+  # if (length(grep("k$", x = initial)) == 1) {
+  #   initial <- as.numeric(sub("k", replacement = "", x = initial))
+  #   ylab.text <- "Balance ($1,000's)"
+  # } else {
+  #   ylab.text <- "Balance ($)"
+  # }
   
   # If tickers specified, load various historical prices from Yahoo! Finance
   if (! is.null(tickers)) {
     
     # Obtain matrix of prices for each fund
+    if (is.null(initial)) {
+      initial <- 10000
+    }
     prices <- load_prices(tickers = tickers, initial = initial, ...)
     
   } else if (! is.null(gains)) {
     
     # Create matrix of prices for each fund
+    if (is.null(initial)) {
+      initial <- 10000
+    }
     prices <- gains_prices(gains = gains, initial = initial)
     
   } else if (! is.null(prices)) {
     
-    # Convert to matrix if necessary
-    if (! is.matrix(prices)) {
-      prices <- as.matrix(prices)
-    }
-    
     # Convert prices to matrix if necessary
     if (! is.matrix(prices)) {
       prices <- as.matrix(prices)
+    }
+    if (is.null(initial)) {
+      initial <- prices[1, 1]
     }
     
     # If different starting values, reset to initial
@@ -131,16 +137,17 @@ growth_graph <- function(tickers = NULL, ...,
   }
   
   # Figure out features of graph, based on user inputs where available
-  plot.list <- 
-    list_override(list1 = list(x = dates, y = prices[, 1], 
-                               type = "n",
-                               main = paste("Growth of $", initial.text, 
-                                            sep = ""),
-                               cex.main = 1.25,
-                               xlab = "Date", ylab = ylab.text,
-                               xlim = range(dates),
-                               ylim = c(0, max(prices) * 1.05)),
-                             list2 = plot.list)
+  plot.list <- list_override(
+    list1 = list(x = dates, y = prices[, 1], type = "n",
+                 main = paste("Growth of $", format(initial, big.mark = ","), sep = ""),
+                 cex.main = 1.25,
+                 yaxt = "n", 
+                 xlab = "Date",
+                 ylab = "Balance", 
+                 xlim = range(dates),
+                 ylim = c(0, max(prices) * 1.05)),
+    list2 = plot.list
+  )
   legend.list <- list_override(list1 = list(x = "topleft", col = colors,
                                             lty = lty, legend = tickers),
                                list2 = legend.list)
@@ -198,6 +205,11 @@ growth_graph <- function(tickers = NULL, ...,
     do.call(points, c(list(x = dates, y = prices[, ii], type = "l",
                            col = colors[ii], lty = lty[ii]), points.list))
   }
+  
+  # Add y-axis
+  yticklocs <- axTicks(side = 2)
+  yticklabs <- paste("$", format(yticklocs, big.mark = ",", trim = TRUE), sep = "")
+  do.call(axis, c(list(side = 2, at = yticklocs, labels = yticklabs), axis.list))
   
   # Add grid lines
   do.call(grid, grid.list)

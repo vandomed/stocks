@@ -5,10 +5,11 @@
 \title{Graph Investment Growth}
 \usage{
 growth_graph(tickers = NULL, ..., gains = NULL, prices = NULL,
-  initial = "10k", add.plot = FALSE, colors = NULL, lty = NULL,
-  plot.list = NULL, points.list = NULL, grid.list = NULL,
-  legend.list = NULL, pdf.list = NULL, bmp.list = NULL,
-  jpeg.list = NULL, png.list = NULL, tiff.list = NULL)
+  initial = NULL, add.plot = FALSE, colors = NULL, lty = NULL,
+  plot.list = NULL, points.list = NULL, axis.list = NULL,
+  grid.list = NULL, legend.list = NULL, pdf.list = NULL,
+  bmp.list = NULL, jpeg.list = NULL, png.list = NULL,
+  tiff.list = NULL)
 }
 \arguments{
 \item{tickers}{Character vector of ticker symbols that Yahoo! Finance 
@@ -38,6 +39,8 @@ frame rather than open a new one.}
 
 \item{points.list}{List of arguments to pass to 
 \code{\link[graphics]{points}}.}
+
+\item{axis.list}{List of arguments to pass to \code{\link[graphics]{axis}}.}
 
 \item{grid.list}{List of arguments to pass to \code{\link[graphics]{grid}}.}
 

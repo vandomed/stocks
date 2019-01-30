@@ -17,7 +17,7 @@ code is used to improve processing speed where possible.
 Package: \tab stocks \cr
 Type: \tab Package \cr
 Version: \tab 1.1.5 \cr
-Date: \tab 2019-01-18 \cr
+Date: \tab 2019-01-20 \cr
 License: \tab GPL-3 \cr
 }
 

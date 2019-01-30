@@ -63,7 +63,12 @@ gains_graph <- function(tickers = NULL, ...,
     gains <- apply(prices, 2, pchanges) * 100
     rownames(gains) <- rownames(prices)[-1]
     
-  } else if (is.null(gains)) {
+  } else if (! is.null(gains)) {
+    
+    # Convert to %
+    gains <- gains * 100
+    
+  } else {
     
     stop("You must specify 'tickers', 'gains', or 'prices'")
     
