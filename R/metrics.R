@@ -65,7 +65,7 @@ metrics <- function(tickers = NULL, ...,
     
     # Convert to matrix if necessary
     if (! is.matrix(gains)) {
-      gains <- matrix(gains, ncol = 1)
+      gains <- matrix(gains, ncol = 1, dimnames = list(names(gains)))
     }
     
   }

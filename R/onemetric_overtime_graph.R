@@ -66,7 +66,7 @@ onemetric_overtime_graph <- function(tickers = NULL, ...,
   
   # Convert gains to matrix if not already
   if (! is.matrix(gains)) {
-    gains <- matrix(gains, ncol = 1)
+    gains <- matrix(gains, ncol = 1, dimnames = list(names(gains)))
   }
   
   # If y.metric requires a benchmark, split gains matrix into ticker gains and
@@ -83,7 +83,7 @@ onemetric_overtime_graph <- function(tickers = NULL, ...,
   # Set tickers to column names of gains matrix; if NULL, use Fund 1, Fund 2,
   # ...
   tickers <- colnames(gains)
-  n.tickers <- length(tickers)
+  n.tickers <- ncol(gains)
   if (is.null(tickers)) {
     tickers <- paste("Fund", 1: n.tickers)
   }
