@@ -7,9 +7,9 @@
 onemetric_overtime_graph(tickers = NULL, ..., gains = NULL,
   prices = NULL, y.metric = "cagr", window.units = 50,
   add.plot = FALSE, colors = NULL, lty = NULL, plot.list = NULL,
-  points.list = NULL, legend.list = NULL, pdf.list = NULL,
-  bmp.list = NULL, jpeg.list = NULL, png.list = NULL,
-  tiff.list = NULL)
+  points.list = NULL, abline.list = NULL, legend.list = NULL,
+  pdf.list = NULL, bmp.list = NULL, jpeg.list = NULL,
+  png.list = NULL, tiff.list = NULL)
 }
 \arguments{
 \item{tickers}{Character vector of ticker symbols that Yahoo! Finance 
@@ -57,6 +57,9 @@ frame rather than open a new one.}
 
 \item{points.list}{List of arguments to pass to 
 \code{\link[graphics]{points}}.}
+
+\item{abline.list}{List of arguments to pass to 
+\code{\link[graphics]{abline}}.}
 
 \item{legend.list}{List of arguments to pass to 
 \code{\link[graphics]{legend}}.}

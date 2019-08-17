@@ -19,8 +19,8 @@ achieved.}
 Numeric value or vector.
 }
 \description{
-For example, you can use this function to figure out that an 8% gain over 70 
-trading days is 31.9% annualized.
+For example, you can use this function to figure out that an 8\% gain over 70 
+trading days is 31.9\% annualized.
 }
 \examples{
 # Calculate annualized gain for an 8\% gain over a 70-day period

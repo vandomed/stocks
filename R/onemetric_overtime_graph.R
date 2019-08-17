@@ -10,6 +10,8 @@
 #' @inheritParams twofunds_graph
 #' 
 #' @param window.units Numeric value specifying the width of the moving window.
+#' @param abline.list List of arguments to pass to 
+#' \code{\link[graphics]{abline}}.
 #' @param legend.list List of arguments to pass to 
 #' \code{\link[graphics]{legend}}.
 #' 
@@ -40,6 +42,7 @@ onemetric_overtime_graph <- function(tickers = NULL, ...,
                                      lty = NULL, 
                                      plot.list = NULL,
                                      points.list = NULL,
+                                     abline.list = NULL, 
                                      legend.list = NULL,
                                      pdf.list = NULL,
                                      bmp.list = NULL,
@@ -71,7 +74,7 @@ onemetric_overtime_graph <- function(tickers = NULL, ...,
   
   # If y.metric requires a benchmark, split gains matrix into ticker gains and
   # benchmark gains
-  if (y.metric %in% c("alpha", "beta", "r.squared", "pearson", "spearman")) {
+  if (y.metric %in% c("alpha", "alpha.annualized", "beta", "r.squared", "pearson", "spearman")) {
     benchmark.gains <- gains[, 1, drop = F]
     benchmark.ticker <- colnames(benchmark.gains)
     if (is.null(benchmark.ticker)) {
@@ -178,6 +181,17 @@ onemetric_overtime_graph <- function(tickers = NULL, ...,
     }
     plot.title <- paste("Alpha w/ ", benchmark.ticker, sep = "")
     y.label <- "Alpha (%)"
+  } else if (y.metric == "alpha.annualized") {
+    y <- matrix(NA, ncol = n.tickers, nrow = nrow(gains) - window.units + 1)
+    for (ii in (window.units: nrow(gains))) {
+      locs <- (ii - window.units + 1): ii
+      for (jj in 1: n.tickers) {
+        y[(ii - window.units + 1), jj] <-
+          convert_gain(lm(gains[locs, jj] ~ benchmark.gains[locs])$coef[1], units.in = 1, units.out = 252) * 100
+      }
+    }
+    plot.title <- paste("Alpha w/ ", benchmark.ticker, sep = "")
+    y.label <- "Alpha, annualized (%)"
   } else if (y.metric == "beta") {
     y <- matrix(NA, ncol = n.tickers, nrow = nrow(gains) - window.units + 1)
     for (ii in (window.units: nrow(gains))) {
@@ -328,11 +342,13 @@ onemetric_overtime_graph <- function(tickers = NULL, ...,
   
   # Add horizontal/vertical lines if useful for requested metrics
   if (y.metric %in% c("mean", "sd", "growth", "cagr", "sharpe", "sortino",
-                      "alpha", "beta", "pearson", "spearman", "auto.pearson",
+                      "alpha", "alpha.annualized", "beta", "pearson", "spearman", "auto.pearson",
                       "auto.spearman")) {
-    abline(h = 0, lty = 2)
+    do.call(abline, list_override(list1 = list(h = 0, lty = 2), 
+                                  list2 = abline.list))
   } else if (y.metric == "r.squared") {
-    abline(h = 1, lty = 2)
+    do.call(abline, list_override(list1 = list(h = 1, lty = 2), 
+                                  list2 = abline.list))
   }
   
   # Add curves for each fund
