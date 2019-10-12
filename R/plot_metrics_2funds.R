@@ -63,7 +63,7 @@ plot_metrics_2funds <- function(metrics = NULL,
   all.metrics <- all.vars(formula, functions = FALSE)
   if (! is.null(metrics) & ! all(metric.info$label[all.metrics] %in% names(metrics))) {
     all.metrics <- names(metric.info$label[metric.info$label %in% intersect(names(metrics), metric.info$label)])
-    if (length(metric.labels) >= 2) {
+    if (length(all.metrics) >= 2) {
       all.metrics <- all.metrics[1: 2]
     } else {
       stop("The input 'metrics' must have at least two columns with performance metrics")

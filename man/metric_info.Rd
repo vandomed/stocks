@@ -3,6 +3,7 @@
 \docType{data}
 \name{metric_info}
 \alias{metric_info}
+\alias{metric.info}
 \title{Labels for Performance Metrics}
 \source{
 Original

@@ -171,6 +171,7 @@ NULL
 #'
 #' Labels for Performance Metrics
 #' @name metric_info
+#' @aliases metric.info
 #' @docType data
 #' @source Original
 NULL

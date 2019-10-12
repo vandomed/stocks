@@ -62,7 +62,8 @@
 #' @name stocks
 NULL
 utils::globalVariables(
-  c(".", "Allocation (%)", "Allocation 1 (%)", "Allocation 2 (%)", "Balance", 
-    "Date", "Fund", "Gain", "Label", "metric.info", "n", ".N", "Pair", "Period", 
+  c(".", "Allocation (%)", "Allocation 1 (%)", "Allocation 2 (%)", 
+    "Allocation 3 (%)", "Balance", "Date", "Fund", "Gain", "Label", 
+    "metric.info", "n", ".N", "Pair", "Period", 
     ".SD", "Trio")
 )

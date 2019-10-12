@@ -12,6 +12,10 @@
 #' are a three-fund set, the next three are another, and so on.
 #' @param ... Arguments to pass along with \code{tickers} to 
 #' \code{\link{load_gains}}.
+#' @param step1 Numeric value controlling allocation increments for first fund 
+#' of each set.
+#' @param step2 Numeric value controlling allocation increments for the second 
+#' and third fund in each set.
 #' @param prices Data frame with a date variable named Date and one column of 
 #' prices for each investment.
 #' @param benchmark Character string specifying which fund to use as a 
@@ -147,7 +151,7 @@ calc_metrics_3funds <- function(gains = NULL,
     df.ref <- tibble(Trio = ref.tickers, Label = ref.tickers, `Allocation (%)` = 50.1)
     for (x in metrics) {
       df.ref[[x]] <- sapply(gains[ref.tickers], function(x) {
-        calc_metric(gains = x, metric = y.metric, units.year = units.year, benchmark.gains = y.benchmark.gains)
+        calc_metric(gains = y, metric = x, units.year = units.year, benchmark.gains = benchmark.gains)
       })
     }
     df <- bind_rows(df.ref, df)

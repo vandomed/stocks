@@ -17,6 +17,10 @@
 #' are a three-fund set, the next three are another, and so on.
 #' @param ... Arguments to pass along with \code{tickers} to 
 #' \code{\link{load_gains}}.
+#' @param step1 Numeric value controlling allocation increments for first fund 
+#' of each set.
+#' @param step2 Numeric value controlling allocation increments for the second 
+#' and third fund in each set.
 #' @param gains Data frame with a date variable named Date and one column of 
 #' gains for each investment.
 #' @param prices Data frame with a date variable named Date and one column of 
