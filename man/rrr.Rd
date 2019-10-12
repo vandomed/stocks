@@ -10,8 +10,6 @@ rrr(prices = NULL, gains = NULL)
 \item{prices}{Numeric vector of prices.}
 
 \item{gains}{Numeric vector of gains.}
-
-\item{rf}{Numeric value.}
 }
 \value{
 Numeric value.

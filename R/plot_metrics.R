@@ -63,6 +63,16 @@ plot_metrics <- function(metrics = NULL,
   
   # Extract info from formula
   all.metrics <- all.vars(formula, functions = FALSE)
+  if (! is.null(metrics) & ! all(metric.info$label[all.metrics] %in% names(metrics))) {
+    all.metrics <- names(metric.info$label[metric.info$label %in% intersect(names(metrics), metric.info$label)])
+    if (length(all.metrics) == 1) {
+      all.metrics <- c(all.metrics, ".")
+    } else if (length(all.metrics) >= 2) {
+      all.metrics <- all.metrics[1: 2]
+    } else {
+      stop("The input 'metrics' must have at least one column with a performance metric")
+    }
+  }
   y.metric <- x.metric <- NULL
   if (all.metrics[1] != ".") y.metric <- all.metrics[1]
   if (all.metrics[2] != ".") x.metric <- all.metrics[2]

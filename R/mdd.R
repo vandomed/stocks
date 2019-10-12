@@ -4,7 +4,7 @@
 #' gains. Missing values should be removed prior to calling this function.
 #' 
 #' 
-#' @param prices 
+#' @param prices Numeric vector of daily closing prices.
 #' @param highs Numeric vector of daily high prices.
 #' @param lows Numeric vector of daily low prices.
 #' @param gains Data frame with one column of gains for each investment (extra 
@@ -21,7 +21,8 @@
 #' @examples
 #' \dontrun{
 #' # Calculate MDD's for FANG stocks in 2018
-#' prices <- load_prices(c("FB", "AAPL", "NFLX", "GOOG"), from = "2018-01-01", to = "2018-12-31")
+#' prices <- load_prices(c("FB", "AAPL", "NFLX", "GOOG"), from = "2018-01-01", 
+#'                       to = "2018-12-31")
 #' sapply(prices[-1], mdd)
 #' }
 #' 

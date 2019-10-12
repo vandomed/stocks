@@ -6,7 +6,6 @@
 #' 
 #' @param gains Numeric vector of gains.
 #' @param prices Numeric vector of prices.
-#' @param rf Numeric value.
 #' 
 #' 
 #' @return

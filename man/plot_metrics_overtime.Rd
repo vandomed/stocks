@@ -34,7 +34,7 @@ gains for each investment.}
 \item{prices}{Data frame with a date variable named Date and one column of 
 prices for each investment.}
 
-\item{benchmark, y.benchmark.x.benchmark}{Character string specifying which 
+\item{benchmark, y.benchmark, x.benchmark}{Character string specifying which 
 fund to use as benchmark for metrics (if you request \code{alpha}, 
 \code{alpha.annualized}, \code{beta}, or \code{r.squared}).}
 
@@ -49,22 +49,6 @@ with the source data, or a list containing both.
 Useful for assessing how one or two performance metrics vary over time, for 
 one or several funds. Supports fixed-width rolling windows, fixed-width 
 disjoint windows, and disjoint windows on per-month or per-year basis.
-}
-\details{
-Much like \code{\link{plot_metrics}}, there are three ways to use the 
-function:
-
-\enumerate{
-  \item Specify \code{tickers}. Function downloads data, calculates 
-  performance metrics, and generates plot.
-  \item Specify \code{gains} or \code{prices}. Function calculates 
-  performance metrics and generates plot.
-  \item Specify \code{metrics}. Function generates plot.
-}
-
-(1) is easiest, while (2) and (3) skip downloading data, which saves time 
-when you're making multiple plots. Approaches (2) and (3) are good for 
-piping.
 }
 \examples{
 \dontrun{

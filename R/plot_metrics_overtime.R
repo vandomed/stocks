@@ -4,21 +4,6 @@
 #' one or several funds. Supports fixed-width rolling windows, fixed-width 
 #' disjoint windows, and disjoint windows on per-month or per-year basis.
 #' 
-#' Much like \code{\link{plot_metrics}}, there are three ways to use the 
-#' function:
-#' 
-#' \enumerate{
-#'   \item Specify \code{tickers}. Function downloads data, calculates 
-#'   performance metrics, and generates plot.
-#'   \item Specify \code{gains} or \code{prices}. Function calculates 
-#'   performance metrics and generates plot.
-#'   \item Specify \code{metrics}. Function generates plot.
-#' }
-#' 
-#' (1) is easiest, while (2) and (3) skip downloading data, which saves time 
-#' when you're making multiple plots. Approaches (2) and (3) are good for 
-#' piping.
-#' 
 #' 
 #' @param metrics "Long" data frame with Fund column, Date column, and column 
 #' for each metric you want to plot. Typically the result of a prior call to 
@@ -37,7 +22,7 @@
 #' gains for each investment.
 #' @param prices Data frame with a date variable named Date and one column of 
 #' prices for each investment.
-#' @param benchmark,y.benchmark.x.benchmark Character string specifying which 
+#' @param benchmark,y.benchmark,x.benchmark Character string specifying which 
 #' fund to use as benchmark for metrics (if you request \code{alpha}, 
 #' \code{alpha.annualized}, \code{beta}, or \code{r.squared}).
 #' @param return Character string specifying what to return. Choices are 
@@ -80,6 +65,16 @@ plot_metrics_overtime <- function(metrics = NULL,
   
   # Extract info from formula
   all.metrics <- all.vars(formula, functions = FALSE)
+  if (! is.null(metrics) & ! all(metric.info$label[all.metrics] %in% names(metrics))) {
+    all.metrics <- names(metric.info$label[metric.info$label %in% intersect(names(metrics), metric.info$label)])
+    if (length(all.metrics) == 1) {
+      all.metrics <- c(all.metrics, ".")
+    } else if (length(all.metrics) >= 2) {
+      all.metrics <- all.metrics[1: 2]
+    } else {
+      stop("The input 'metrics' must have at least one column with a performance metric")
+    }
+  }
   y.metric <- x.metric <- NULL
   if (all.metrics[1] != ".") y.metric <- all.metrics[1]
   if (all.metrics[2] != ".") x.metric <- all.metrics[2]
