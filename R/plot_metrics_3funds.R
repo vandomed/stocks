@@ -25,7 +25,7 @@
 #' gains for each investment.
 #' @param prices Data frame with a date variable named Date and one column of 
 #' prices for each investment.
-#' @param benchmark,y.benchmark.x.benchmark Character string specifying which 
+#' @param benchmark,y.benchmark,x.benchmark Character string specifying which 
 #' fund to use as benchmark for metrics (if you request \code{alpha}, 
 #' \code{alpha.annualized}, \code{beta}, or \code{r.squared}).
 #' @param ref.tickers Character vector of ticker symbols to include on the 
@@ -70,7 +70,7 @@ plot_metrics_3funds <- function(metrics = NULL,
   all.metrics <- all.vars(formula, functions = FALSE)
   if (! is.null(metrics) & ! all(metric.info$label[all.metrics] %in% names(metrics))) {
     all.metrics <- names(metric.info$label[metric.info$label %in% intersect(names(metrics), metric.info$label)])
-    if (length(metric.labels) >= 2) {
+    if (length(all.metrics) >= 2) {
       all.metrics <- all.metrics[1: 2]
     } else {
       stop("The input 'metrics' must have at least two columns with performance metrics")

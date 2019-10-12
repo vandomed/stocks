@@ -39,7 +39,7 @@ gains for each investment.}
 \item{prices}{Data frame with a date variable named Date and one column of 
 prices for each investment.}
 
-\item{benchmark, y.benchmark.x.benchmark}{Character string specifying which 
+\item{benchmark, y.benchmark, x.benchmark}{Character string specifying which 
 fund to use as benchmark for metrics (if you request \code{alpha}, 
 \code{alpha.annualized}, \code{beta}, or \code{r.squared}).}
 

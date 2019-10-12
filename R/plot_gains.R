@@ -10,7 +10,9 @@
 #' \code{\link{load_gains}}.
 #' @param gains Data frame with one column of gains for each investment 
 #' mentioned in \code{formula}. If unspecified, function downloads historical 
-#' gains internally. 
+#' gains internally.
+#' @param prices Data frame with one column of prices for each investment 
+#' mentionedin \code{formula}.
 #' @param poly_order Numeric value specifying the polynomial order for linear 
 #' regression, e.g. \code{1} for simple linear regression or \code{2} for 
 #' linear regression with first- and second-order terms.

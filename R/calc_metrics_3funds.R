@@ -150,7 +150,7 @@ calc_metrics_3funds <- function(gains = NULL,
     
     df.ref <- tibble(Trio = ref.tickers, Label = ref.tickers, `Allocation (%)` = 50.1)
     for (x in metrics) {
-      df.ref[[x]] <- sapply(gains[ref.tickers], function(x) {
+      df.ref[[x]] <- sapply(gains[ref.tickers], function(y) {
         calc_metric(gains = y, metric = x, units.year = units.year, benchmark.gains = benchmark.gains)
       })
     }

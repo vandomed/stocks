@@ -18,6 +18,9 @@ and UPRO vs. SPY.}
 mentioned in \code{formula}. If unspecified, function downloads historical 
 gains internally.}
 
+\item{prices}{Data frame with one column of prices for each investment 
+mentionedin \code{formula}.}
+
 \item{poly_order}{Numeric value specifying the polynomial order for linear 
 regression, e.g. \code{1} for simple linear regression or \code{2} for 
 linear regression with first- and second-order terms.}
