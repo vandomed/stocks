@@ -2,19 +2,19 @@
 % Please edit documentation in R/prices_gains.R
 \name{prices_gains}
 \alias{prices_gains}
-\title{Convert Prices to Gains}
+\title{Convert Sequence of Prices to Sequence of Gains}
 \usage{
 prices_gains(prices)
 }
 \arguments{
-\item{prices}{Numeric matrix with 1 column of prices for each investment (can 
-be a vector if there is only one).}
+\item{prices}{Numeric vector of prices for one investment or data frame with 
+one column for each investment and an optional Date variable.}
 }
 \value{
-Numeric vector or matrix.
+Numeric vector or data frame.
 }
 \description{
-Calculates gains based on vector or matrix of prices.
+Converts sequence of prices to sequence of gains for one or more investments.
 }
 \examples{
 \dontrun{

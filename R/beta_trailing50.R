@@ -1,11 +1,11 @@
-#' Beta for Last 50 Daily Gains
+#' Calculate Beta Using Last 50 Daily Gains
 #' 
 #' Calculates beta for a ticker symbol based on the previous 50 daily gains.
 #' 
 #' 
-#' @param ticker Character string with ticker symbols that Yahoo! Finance 
+#' @param ticker Character string with ticker symbol that Yahoo! Finance 
 #' recognizes.
-#' @param bench Character string with ticker symbol for benchmark.
+#' @param benchmark Character string specifying which fund to use as benchmark.
 #' @param ... Arguments to pass to \code{\link{load_gains}}.
 #' 
 #' 
@@ -13,7 +13,10 @@
 #' Numeric value.
 #' 
 #' 
-#' @inherit ticker_dates references
+#' @references 
+#' Jeffrey A. Ryan and Joshua M. Ulrich (2019). quantmod: Quantitative Financial 
+#' Modelling Framework. R package version 0.4-15. 
+#' \url{https://CRAN.R-project.org/package=quantmod}
 #' 
 #' 
 #' @examples
@@ -24,17 +27,11 @@
 #' 
 #' 
 #' @export
-beta_trailing50 <- function(ticker, bench = "SPY", ...) {
+beta_trailing50 <- function(ticker, benchmark = "SPY", ...) {
   
-  # Load gains for last 90 calendar days
-  gains <- load_gains(tickers = c(bench, ticker),
-                      from = Sys.Date() - 90, ...)
-  
-  # Get subset of most recent 50 gains
-  gains.last50 <- gains[(nrow(gains) - 49): nrow(gains), ]
-  
-  # Calculate and return beta
-  ticker.beta <- as.numeric(lm(gains.last50[, 2] ~ gains.last50[, 1])$coef[2])
-  return(ticker.beta)
+  gains <- load_gains(tickers = c(benchmark, ticker), from = Sys.Date() - 90, ...)
+  nrow_gains <- nrow(gains)
+  gains <- gains[(nrow_gains - 49): nrow_gains, , drop = FALSE]
+  as.numeric(lm(gains[[3]] ~ gains[[2]])$coef[2])
   
 }

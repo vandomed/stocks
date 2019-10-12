@@ -4,11 +4,13 @@
 #' drawdown.
 #' 
 #' 
-#' @inheritParams sharpe
+#' @param gains Numeric vector of gains.
+#' @param prices Numeric vector of prices.
+#' @param rf Numeric value.
 #' 
 #' 
 #' @return
-#' Numeric value or vector.
+#' Numeric value.
 #' 
 #' 
 #' @examples
@@ -29,7 +31,7 @@
 #' (daily.balances[length(daily.balances)] / daily.balances[1] - 1) / 
 #' mdd(daily.balances)
 #' 
-#' # Easier to calculate using rrr function
+#' # Easier to calculate using rrr
 #' rrr(daily.balances)
 #' 
 #' 
@@ -37,16 +39,9 @@
 rrr <- function(prices = NULL,
                 gains = NULL) {
   
-  # Calculate overall growth rate
   if (! is.null(prices)) {
-    ret <- prices_rate(prices)
-    max.dd <- mdd(prices = prices)
-  } else {
-    ret <- gains_rate(gains)
-    max.dd <- mdd(gains = gains)
+    return(prices_rate(prices) / mdd(prices = prices))
   }
-  
-  # Calculate and return risk-return ratio
-  return(ret / max.dd)
+  gains_rate(gains) / mdd(gains = gains)
   
 }

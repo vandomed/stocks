@@ -7,8 +7,8 @@
 daily_yearly(gain, years = 1)
 }
 \arguments{
-\item{gain}{Numeric value specifying a gain, e.g. 0.005 for 0.5%. Can also be 
-a vector of gains.}
+\item{gain}{Numeric vector specifying each gain to convert, e.g. 0.001 for 
+0.1\%.}
 
 \item{years}{Numeric value.}
 }
@@ -17,7 +17,7 @@ Numeric value or vector.
 }
 \description{
 For example, you can use this function to calculate that an investment that 
-gains 0.1% per day would gain approximately 28.5% in a year (252 trading 
+gains 0.1\% each day would gain approximately 28.5\% in a year (252 trading 
 days).
 }
 \examples{

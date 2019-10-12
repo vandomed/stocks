@@ -5,18 +5,25 @@
 #' from the targets.
 #' 
 #' 
-#' @inheritParams twofunds_graph
-#' @inheritParams load_prices
-#' 
+#' @param tickers Character vector specifying 2 ticker symbols that Yahoo! 
+#' Finance recognizes, if you want to download data on the fly.
+#' @param intercepts Numeric vector of values to add to daily gains for each 
+#' fund.
+#' @param slopes Numeric vector of values to multiply daily gains for each fund 
+#' by. Slopes are multiplied prior to adding intercepts.
+#' @param ... Arguments to pass along with \code{tickers} to 
+#' \code{\link{load_gains}}.
+#' @param tickers.gains Data frame with one column of gains for each investment 
+#' and a date variable named Date.
 #' @param target.alls Numeric vector specifying target allocations to each fund. 
 #' If unspecified, equal allocations are used (e.g. 1/3, 1/3, 1/3 if there are 
 #' 3 funds).
-#' 
 #' @param tol Numeric value indicating how far the effective allocations can 
 #' drift away from the targets before rebalancing.
-#' 
 #' @param rebalance.cost Numeric value specifying total cost of each rebalancing 
 #' trade.
+#' @param initial Numeric value specifying what value to scale initial prices 
+#' to.
 #'
 #' 
 #' @return
@@ -27,9 +34,6 @@
 #' \item Numeric value named \code{rebalance.count} giving the number of 
 #' rebalancing trades executed.
 #' }
-#' 
-#' 
-#' @inherit ticker_dates references
 #' 
 #' 
 #' @examples
@@ -68,10 +72,10 @@ targetall <- function(tickers = NULL, intercepts = NULL, slopes = NULL, ...,
     
     # Calculate tickers.gains matrix
     tickers.gains <- load_gains(tickers = tickers, intercepts = intercepts,
-                                slopes = slopes, ...)
+                                slopes = slopes, mutual.start = TRUE, mutual.end = TRUE, ...)
     
     # Update ticker names to show intercept/slope
-    tickers <- colnames(tickers.gains)[1: n.tickers]
+    tickers <- names(tickers.gains)[1: n.tickers]
     
   } else {
     
@@ -79,7 +83,7 @@ targetall <- function(tickers = NULL, intercepts = NULL, slopes = NULL, ...,
     n.tickers <- ncol(tickers.gains)
     
     # Figure out tickers from tickers.gains
-    tickers <- colnames(tickers.gains)
+    tickers <- names(tickers.gains)
     if (is.null(tickers)) {
       tickers <- paste("FUND", 1: n.tickers, sep = "")
     }
@@ -93,7 +97,7 @@ targetall <- function(tickers = NULL, intercepts = NULL, slopes = NULL, ...,
   }
   
   # Create tickers.ratios matrix
-  tickers.ratios <- tickers.gains + 1
+  tickers.ratios <- as.matrix(tickers.gains[-1]) + 1
   
   # Initialize variables used in looping through daily gains
   fund.balances <- matrix(NA, ncol = n.tickers + 1, 
@@ -127,7 +131,7 @@ targetall <- function(tickers = NULL, intercepts = NULL, slopes = NULL, ...,
   
   # Add column names and dates to fund.balances
   colnames(fund.balances) <- c(tickers, "Portfolio")
-  dates <- as.Date(rownames(tickers.gains))
+  dates <- tickers.gains$Date
   if (! is.null(dates)) {
     rownames(fund.balances) <- as.character(c(dates[1] - 1, dates))
   }

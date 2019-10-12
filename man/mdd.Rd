@@ -8,15 +8,14 @@ mdd(prices = NULL, highs = NULL, lows = NULL, gains = NULL,
   indices = FALSE)
 }
 \arguments{
-\item{prices}{Numeric matrix with 1 column of prices for each investment (can 
-be a vector if there is only one).}
+\item{prices}{}
 
 \item{highs}{Numeric vector of daily high prices.}
 
 \item{lows}{Numeric vector of daily low prices.}
 
-\item{gains}{Numeric matrix with 1 column of gains for each investment (can 
-be a vector if there is only one).}
+\item{gains}{Data frame with one column of gains for each investment (extra 
+non-numeric columns are ignored), or numeric vector for one investment.}
 
 \item{indices}{Logical value for whether to include indices for when the 
 maximum drawdown occurred.}
@@ -27,25 +26,13 @@ there is 1 fund or several.
 }
 \description{
 Calculates maximum drawdown from vector of closing prices, highs and lows, or 
-gains.
+gains. Missing values should be removed prior to calling this function.
 }
 \examples{
 \dontrun{
-# Simulate minute-to-minute stock gains over a 2-year period
-set.seed(123)
-stock.gains <- rnorm(6.5 * 60 * 252 * 2, 0.000005, 0.001)
-
-# Convert to stock prices assuming an initial price of $9.50 per share
-stock.prices <- gains_prices(gains = stock.gains, initial = 9.50)
-
-# Plot minute-to-minute stock prices (200k data point, may be slow)
-plot(stock.prices)
-
-# Maximum drawdown based on stock prices
-mdd(prices = stock.prices)
-
-# Same answer using gains rather than prices
-mdd(gains = stock.gains)
+# Calculate MDD's for FANG stocks in 2018
+prices <- load_prices(c("FB", "AAPL", "NFLX", "GOOG"), from = "2018-01-01", to = "2018-12-31")
+sapply(prices[-1], mdd)
 }
 
 

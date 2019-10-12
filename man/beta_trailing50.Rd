@@ -2,15 +2,15 @@
 % Please edit documentation in R/beta_trailing50.R
 \name{beta_trailing50}
 \alias{beta_trailing50}
-\title{Beta for Last 50 Daily Gains}
+\title{Calculate Beta Using Last 50 Daily Gains}
 \usage{
-beta_trailing50(ticker, bench = "SPY", ...)
+beta_trailing50(ticker, benchmark = "SPY", ...)
 }
 \arguments{
-\item{ticker}{Character string with ticker symbols that Yahoo! Finance 
+\item{ticker}{Character string with ticker symbol that Yahoo! Finance 
 recognizes.}
 
-\item{bench}{Character string with ticker symbol for benchmark.}
+\item{benchmark}{Character string specifying which fund to use as benchmark.}
 
 \item{...}{Arguments to pass to \code{\link{load_gains}}.}
 }
@@ -29,7 +29,7 @@ beta_trailing50("TLT")
 
 }
 \references{
-Ryan, J.A. and Ulrich, J.M. (2017) quantmod: Quantitative Financial Modelling 
-Framework. R package version 0.4-12, 
-\url{https://CRAN.R-project.org/package=quantmod}.
+Jeffrey A. Ryan and Joshua M. Ulrich (2019). quantmod: Quantitative Financial 
+Modelling Framework. R package version 0.4-15. 
+\url{https://CRAN.R-project.org/package=quantmod}
 }

@@ -20,29 +20,24 @@
 #' XIV-only, VXX-only, or XIV and VXX strategy with this function.
 #' 
 #' To load daily gains for XIV and/or VXX, you can use \code{\link{load_gains}}, 
-#' which uses the \pkg{quantmod} package [1] to load data from Yahoo! Finance. 
-#' You will have to specify the \code{from} and \code{to} inputs to match the 
-#' date range for your contango values.
+#' which uses the \pkg{quantmod} package to load data from Yahoo! Finance. You 
+#' will have to specify the \code{from} and \code{to} inputs to match the date 
+#' range for your contango values.
 #' 
 #' @param contango Numeric vector of contango values at the end of each trading 
 #' day.
-#' 
 #' @param xiv.gains Numeric vector of gains for XIV. Should be same length as 
 #' \code{contango} and date-shifted one value to the right. For example, the 
 #' first value of \code{xiv.gains} should be the XIV gain for the day AFTER the 
 #' first contango value.
-#' 
 #' @param vxx.gains Numeric vector of gains for VXX. Should be same length as 
 #' \code{contango} and date-shifted one value to the right. For example, the 
 #' first value of \code{vxx.gains} should be the VXX gain for the day AFTER the 
 #' first contango value.
-#' 
 #' @param xiv.cutpoint Numeric value giving the contango cutpoint for XIV, in 
 #' percent. 
-#' 
 #' @param vxx.cutpoint Numeric value giving the contango cutpoint for VXX, in 
 #' percent.
-#' 
 #' @param initial Numeric value giving the initial value of the portfolio.
 #'
 #' 
@@ -59,9 +54,6 @@
 #' \item Numeric value named \code{trades} giving the total number of trades 
 #' executed.
 #' }
-#' 
-#' 
-#' @inherit ticker_dates references
 #' 
 #'
 #' @export

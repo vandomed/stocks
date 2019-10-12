@@ -7,16 +7,14 @@
 sortino(gains = NULL, prices = NULL, rf = 0)
 }
 \arguments{
-\item{gains}{Numeric matrix with 1 column of gains for each investment (can 
-be a vector if there is only one).}
+\item{gains}{Numeric vector of gains.}
 
-\item{prices}{Numeric matrix with 1 column of prices for each investment (can 
-be a vector if there is only one).}
+\item{prices}{Numeric vector of prices.}
 
 \item{rf}{Numeric value.}
 }
 \value{
-Numeric value or vector.
+Numeric value.
 }
 \description{
 Calculates Sortino ratio from vector of gains or prices. The formula is: 

@@ -2,22 +2,24 @@
 % Please edit documentation in R/gains_prices.R
 \name{gains_prices}
 \alias{gains_prices}
-\title{Convert Gains to Prices}
+\title{Convert Sequence of Gains to Sequence of Prices}
 \usage{
-gains_prices(gains, initial = 10000)
+gains_prices(gains, initial = 10000, date1 = NULL)
 }
 \arguments{
-\item{gains}{Numeric matrix with 1 column of gains for each investment (can 
-be a vector if there is only one).}
+\item{gains}{Numeric vector of gains for one investment, or data frame with 
+one column for each investment and an optional Date variable.}
 
 \item{initial}{Numeric value.}
+
+\item{date1}{Date to use for initial price.}
 }
 \value{
-Numeric value if \code{gains} is a vector, numeric matrix if 
-\code{gains} is a matrix.
+Numeric vector or data frame.
 }
 \description{
-Calculates prices based on initial balance and vector of gains.
+Converts sequence of gains and initial balance to sequence of prices for one 
+or more investments.
 }
 \examples{
 # Simulate daily gains over a 5-year period

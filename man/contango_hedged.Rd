@@ -86,8 +86,3 @@ To load daily gains for XIV, SPXU, VXX, and UPRO, you can use
 data from Yahoo! Finance. You will have to specify the \code{from} and 
 \code{to} inputs to match the date range for your contango values.
 }
-\references{
-Ryan, J.A. and Ulrich, J.M. (2017) quantmod: Quantitative Financial Modelling 
-Framework. R package version 0.4-12, 
-\url{https://CRAN.R-project.org/package=quantmod}.
-}

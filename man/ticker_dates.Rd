@@ -15,23 +15,16 @@ recognizes.}
 \item{to}{Date or character string (e.g. \code{"2016-01-30"}).}
 }
 \value{
-Data frame with ticker symbol, start date, end date, and number of 
-trading days for each ticker.
+Data frame with start and end dates for each fund.
 }
 \description{
-Typically useful for determining a time period over which to compare several 
-funds.
+Useful for figuring out a time period over which to compare several funds.
 }
 \examples{
 \dontrun{
-# See what dates are available for Apple and Amazon
+# See what dates are available for AAPL and AMZN
 ticker_dates(c("AAPL", "AMZN"))
 }
 
 
-}
-\references{
-Ryan, J.A. and Ulrich, J.M. (2017) quantmod: Quantitative Financial Modelling 
-Framework. R package version 0.4-12, 
-\url{https://CRAN.R-project.org/package=quantmod}.
 }

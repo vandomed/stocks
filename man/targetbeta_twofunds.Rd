@@ -16,9 +16,9 @@ targetbeta_twofunds(tickers = NULL, intercepts = NULL, slopes = NULL,
 Finance recognizes, if you want to download data on the fly.}
 
 \item{intercepts}{Numeric vector of values to add to daily gains for each 
-ticker.}
+fund.}
 
-\item{slopes}{Numeric vector of values to multiply daily gains for each ticker 
+\item{slopes}{Numeric vector of values to multiply daily gains for each fund 
 by. Slopes are multiplied prior to adding intercepts.}
 
 \item{...}{Arguments to pass along with \code{tickers} to 
@@ -31,8 +31,8 @@ benchmark index for calculating beta. If unspecified, the first fund in
 \item{reference.tickers}{Character vector of ticker symbols to include on
 graph as data points for comparative purposes.}
 
-\item{tickers.gains}{Numeric matrix of gains, where each column has gains for 
-a particular fund.}
+\item{tickers.gains}{Data frame with one column of gains for each investment 
+and a date variable named Date.}
 
 \item{benchmark.gains}{Numeric vector of gains for the benchmark index for 
 calculating beta. If unspecified, the first fund in \code{tickers.gains} is 
@@ -132,12 +132,7 @@ allocated to whichever fund has a beta closer to \code{target.beta}.
 \dontrun{
 # Backtest zero-beta UPRO/VBLTX strategy
 beta0 <- targetbeta_twofunds(tickers = c("UPRO", "VBLTX"), target.beta = 0)
-plot(beta0$fund.balances[, "Portfolio"])
+plot(beta0$fund.balances$Portfolio)
 }
 
-}
-\references{
-Ryan, J.A. and Ulrich, J.M. (2017) quantmod: Quantitative Financial Modelling 
-Framework. R package version 0.4-12, 
-\url{https://CRAN.R-project.org/package=quantmod}.
 }

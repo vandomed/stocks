@@ -65,12 +65,7 @@ hold VXX (volatility) when contango is below some value
 XIV-only, VXX-only, or XIV and VXX strategy with this function.
 
 To load daily gains for XIV and/or VXX, you can use \code{\link{load_gains}}, 
-which uses the \pkg{quantmod} package [1] to load data from Yahoo! Finance. 
-You will have to specify the \code{from} and \code{to} inputs to match the 
-date range for your contango values.
-}
-\references{
-Ryan, J.A. and Ulrich, J.M. (2017) quantmod: Quantitative Financial Modelling 
-Framework. R package version 0.4-12, 
-\url{https://CRAN.R-project.org/package=quantmod}.
+which uses the \pkg{quantmod} package to load data from Yahoo! Finance. You 
+will have to specify the \code{from} and \code{to} inputs to match the date 
+range for your contango values.
 }

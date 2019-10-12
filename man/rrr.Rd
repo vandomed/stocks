@@ -7,14 +7,14 @@
 rrr(prices = NULL, gains = NULL)
 }
 \arguments{
-\item{prices}{Numeric matrix with 1 column of prices for each investment (can 
-be a vector if there is only one).}
+\item{prices}{Numeric vector of prices.}
 
-\item{gains}{Numeric matrix with 1 column of gains for each investment (can 
-be a vector if there is only one).}
+\item{gains}{Numeric vector of gains.}
+
+\item{rf}{Numeric value.}
 }
 \value{
-Numeric value or vector.
+Numeric value.
 }
 \description{
 Calculates risk-return ratio, defined as growth rate divided by maximum 
@@ -38,7 +38,7 @@ mdd(prices = daily.balances)
 (daily.balances[length(daily.balances)] / daily.balances[1] - 1) / 
 mdd(daily.balances)
 
-# Easier to calculate using rrr function
+# Easier to calculate using rrr
 rrr(daily.balances)
 
 

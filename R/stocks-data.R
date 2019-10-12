@@ -168,5 +168,9 @@ NULL
 #' @docType data
 #' @source \url{https://investor.vanguard.com/etf/list?assetclass=bond#/etf/asset-class/month-end-returns}
 NULL
-
-
+#'
+#' Labels for Performance Metrics
+#' @name metric_info
+#' @docType data
+#' @source Original
+NULL

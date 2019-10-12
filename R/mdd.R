@@ -1,12 +1,14 @@
 #' Maximum Drawdown
 #' 
 #' Calculates maximum drawdown from vector of closing prices, highs and lows, or 
-#' gains. 
+#' gains. Missing values should be removed prior to calling this function.
 #' 
 #' 
-#' @inheritParams metrics
+#' @param prices 
 #' @param highs Numeric vector of daily high prices.
 #' @param lows Numeric vector of daily low prices.
+#' @param gains Data frame with one column of gains for each investment (extra 
+#' non-numeric columns are ignored), or numeric vector for one investment.
 #' @param indices Logical value for whether to include indices for when the 
 #' maximum drawdown occurred.
 #' 
@@ -18,21 +20,9 @@
 #' 
 #' @examples
 #' \dontrun{
-#' # Simulate minute-to-minute stock gains over a 2-year period
-#' set.seed(123)
-#' stock.gains <- rnorm(6.5 * 60 * 252 * 2, 0.000005, 0.001)
-#' 
-#' # Convert to stock prices assuming an initial price of $9.50 per share
-#' stock.prices <- gains_prices(gains = stock.gains, initial = 9.50)
-#' 
-#' # Plot minute-to-minute stock prices (200k data point, may be slow)
-#' plot(stock.prices)
-#' 
-#' # Maximum drawdown based on stock prices
-#' mdd(prices = stock.prices)
-#' 
-#' # Same answer using gains rather than prices
-#' mdd(gains = stock.gains)
+#' # Calculate MDD's for FANG stocks in 2018
+#' prices <- load_prices(c("FB", "AAPL", "NFLX", "GOOG"), from = "2018-01-01", to = "2018-12-31")
+#' sapply(prices[-1], mdd)
 #' }
 #' 
 #' 
@@ -42,44 +32,27 @@ mdd <- function(prices = NULL,
                 gains = NULL,
                 indices = FALSE) {
   
-  # If gains specified rather than prices, convert to prices
   if (! is.null(gains)) {
     prices <- gains_prices(gains = gains, initial = 1)
   }
   
   if (! is.null(prices)) {
     
-    if (is.vector(prices)) {
-      
-      # Vector of prices input
-      if (indices) {
-        mdd.out <- .Call(`_stocks_mdd_p_indices`, prices)
-        names(mdd.out) <- c("mdd", "start.index", "end.index")
-      } else {
-        mdd.out <- .Call(`_stocks_mdd_p`, prices)
-      }
-      
-    } else {
-      
-      # Matrix of prices input
-      mdd.out <- apply(prices, 2, function(x) 
-        mdd(prices = x, indices = indices))
-      
-    }
-    
-  } else {
-    
-    # Vector of highs and lows input
     if (indices) {
-      mdd.out <- .Call(`_stocks_mdd_hl_indices`, highs, lows)
+      mdd.out <- .Call(`_stocks_mdd_p_indices`, prices)
       names(mdd.out) <- c("mdd", "start.index", "end.index")
-    } else {
-      mdd.out <- .Call(`_stocks_mdd_hl`, highs, lows)
+      return(mdd.out)
     }
+    return(.Call(`_stocks_mdd_p`, prices))
     
   }
   
-  # Return mdd.out
-  return(mdd.out)
+  if (indices) {
+    mdd.out <- .Call(`_stocks_mdd_hl_indices`, highs, lows)
+    names(mdd.out) <- c("mdd", "start.index", "end.index")
+    return(mdd.out)
+  } 
+  
+  return(.Call(`_stocks_mdd_hl`, highs, lows))
   
 }

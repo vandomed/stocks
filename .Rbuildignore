@@ -1,10 +1,12 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
 ^LICENSE$
-^generate_lists.R$
-^largest100.csv$
 ^README.*$
 ^Thumbs.db$
-^notes.docx$
 ^.travis.yml$
 ^bibliography.bib$
+^misc$
+^archived$
+^R\archived$
+^generate_lists.R$
+^largest100.csv$

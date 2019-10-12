@@ -1,12 +1,13 @@
-#' Convert Prices to Gains
+#' Convert Sequence of Prices to Sequence of Gains
 #' 
-#' Calculates gains based on vector or matrix of prices.
-#' 
-#' 
-#' @inheritParams metrics
+#' Converts sequence of prices to sequence of gains for one or more investments.
 #' 
 #' 
-#' @return Numeric vector or matrix.
+#' @param prices Numeric vector of prices for one investment or data frame with 
+#' one column for each investment and an optional Date variable.
+#' 
+#' 
+#' @return Numeric vector or data frame.
 #' 
 #' 
 #' @examples
@@ -22,12 +23,17 @@
 #' @export
 prices_gains <- function(prices) {
   
-  if (is.vector(prices)) {
-    gains <- pchanges(prices)
-  } else {
-    gains <- apply(prices, 2, pchanges)
-    rownames(gains) <- rownames(prices)[-1]
+  if (! any(class(prices) %in% c("numeric", "data.frame"))) {
+    stop("The input 'gains' must be a numeric vector or data frame")
   }
+  
+  if (is.vector(prices)) {
+    return(pchanges(prices))
+  }
+  numeric.vars <- sapply(prices, is.numeric)
+  gains <- cbind(prices[! numeric.vars][-1, , drop = FALSE], 
+                 sapply(prices[numeric.vars], pchanges))
+  names(gains) <- c(names(prices)[! numeric.vars], names(prices)[numeric.vars])
   return(gains)
   
 }

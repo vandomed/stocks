@@ -9,20 +9,20 @@ targetall(tickers = NULL, intercepts = NULL, slopes = NULL, ...,
   rebalance.cost = 0, initial = 10000)
 }
 \arguments{
-\item{tickers}{Character vector of ticker symbols that Yahoo! Finance 
-recognizes, if you want to download data on the fly.}
+\item{tickers}{Character vector specifying 2 ticker symbols that Yahoo! 
+Finance recognizes, if you want to download data on the fly.}
 
 \item{intercepts}{Numeric vector of values to add to daily gains for each 
-ticker.}
+fund.}
 
-\item{slopes}{Numeric vector of values to multiply daily gains for each ticker 
+\item{slopes}{Numeric vector of values to multiply daily gains for each fund 
 by. Slopes are multiplied prior to adding intercepts.}
 
 \item{...}{Arguments to pass along with \code{tickers} to 
 \code{\link{load_gains}}.}
 
-\item{tickers.gains}{Numeric matrix of gains, where each column has gains for 
-a particular fund.}
+\item{tickers.gains}{Data frame with one column of gains for each investment 
+and a date variable named Date.}
 
 \item{target.alls}{Numeric vector specifying target allocations to each fund. 
 If unspecified, equal allocations are used (e.g. 1/3, 1/3, 1/3 if there are 
@@ -58,9 +58,4 @@ port <- targetall(tickers = c("UPRO", "VBLTX", "VWEHX"))
 plot(port$fund.balances[, "Portfolio"])
 }
 
-}
-\references{
-Ryan, J.A. and Ulrich, J.M. (2017) quantmod: Quantitative Financial Modelling 
-Framework. R package version 0.4-12, 
-\url{https://CRAN.R-project.org/package=quantmod}.
 }

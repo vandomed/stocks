@@ -46,36 +46,36 @@
 #' allocated to whichever fund has a beta closer to \code{target.beta}.
 #' 
 #' 
-#' @inheritParams onemetric_graph
-#' @inheritParams twofunds_graph
-#' @inheritParams load_gains
-#' @inheritParams load_prices
-#' 
 #' @param tickers Character vector specifying 2 ticker symbols that Yahoo! 
 #' Finance recognizes, if you want to download data on the fly.
-#' 
+#' @param intercepts Numeric vector of values to add to daily gains for each 
+#' fund.
+#' @param slopes Numeric vector of values to multiply daily gains for each fund 
+#' by. Slopes are multiplied prior to adding intercepts.
+#' @param ... Arguments to pass along with \code{tickers} to 
+#' \code{\link{load_gains}}.
 #' @param benchmark.ticker Character string specifying ticker symbol for 
 #' benchmark index for calculating beta. If unspecified, the first fund in 
 #' \code{tickers} is used as the benchmark.
-#'
+#' @param reference.tickers Character vector of ticker symbols to include on  
+#' graph as data points for comparative purposes.
+#' @param tickers.gains Data frame with one column of gains for each investment 
+#' and a date variable named Date.
 #' @param benchmark.gains Numeric vector of gains for the benchmark index for 
 #' calculating beta. If unspecified, the first fund in \code{tickers.gains} is 
 #' used as the benchmark.
-#' 
+#' @param reference.gains Numeric vector or matrix of gains for funds to 
+#' include on graph as data points for comparative purposes.
 #' @param target.beta Numeric value.
-#' 
 #' @param tol Numeric value specifying how far the effective portfolio beta has 
 #' to deviate from \code{target.beta} to trigger a rebalancing trade.
-#' 
 #' @param window.units Numeric value specifying the width of the trailing moving 
 #' window used to estimate each fund's beta.
-#' 
 #' @param failure.method Character string or vector specifying method(s) to use 
 #' when fund betas are such that the target portfolio beta cannot be achieved. 
 #' Choices are \code{"cash"}, \code{"fund1"}, \code{"fund2"}, 
 #' \code{"fund1.maxall"}, \code{"fund2.maxall"}, \code{"inverse1"}, 
 #' \code{"inverse2"}, and \code{"closer"}. See Details.
-#' 
 #' @param maxall.tol Numeric value specifying tolerance to use when implementing 
 #' the \code{"fund1.maxall"} or \code{"fund2.maxall"} failure method. To 
 #' illustrate, if \code{target.beta = 0}, fund 1 has a current beta of 1, fund 2 
@@ -86,6 +86,8 @@
 #' frequently triggering another trade on the very next day, as fund 2's beta 
 #' changes a little and moves the portfolio beta outside of 
 #' \code{[target.beta - tol, target.beta + tol]}.
+#' @param initial Numeric value specifying what value to scale initial prices 
+#' to.
 #'
 #' 
 #' @return
@@ -101,14 +103,11 @@
 #' }
 #' 
 #' 
-#' @inherit ticker_dates references
-#' 
-#' 
 #' @examples
 #' \dontrun{
 #' # Backtest zero-beta UPRO/VBLTX strategy
 #' beta0 <- targetbeta_twofunds(tickers = c("UPRO", "VBLTX"), target.beta = 0)
-#' plot(beta0$fund.balances[, "Portfolio"])
+#' plot(beta0$fund.balances$Portfolio)
 #' }
 #'
 #' @export
@@ -233,7 +232,7 @@ targetbeta_twofunds <- function(tickers = NULL,
                        3)
     
     # Distribute initial balance to fund 1, fund 2, and cash
-    if (inside(fund1.all, c(0, 1))) {
+    if (fund1.all >= 0 & fund1.all <= 1) {
       fund2.all <- 1 - fund1.all
       cash.all <- 0
     } else {
@@ -293,7 +292,7 @@ targetbeta_twofunds <- function(tickers = NULL,
         # trade.
         # (2) Otherwise, continue to hold 100% cash.
         
-        if (inside(fund1.all, c(0, 1))) {
+        if (fund1.all >= 0 & fund1.all <= 1) {
           
           trades <- trades + 1
           fund2.all <- 1 - fund1.all
@@ -315,9 +314,9 @@ targetbeta_twofunds <- function(tickers = NULL,
         # If effective beta is outside acceptable range, execute rebalancing
         # trade if target beta is achievable, otherwise switch to 100% cash.
         
-        if (! inside(effective.beta, beta.range)) {
+        if (! (effective.beta >= beta.range[1] & effective.beta <= beta.range[2])) {
           
-          if (inside(fund1.all, c(0, 1))) {
+          if (fund1.all >= 0 & fund1.all <= 1) {
             
             trades <- trades + 1
             fund2.all <- 1 - fund1.all
@@ -374,7 +373,7 @@ targetbeta_twofunds <- function(tickers = NULL,
                        3)
     
     # Distribute initial balance to fund 1 and fund 2
-    if (! inside(fund1.all, c(0, 1))) {
+    if (! (fund1.all >= 0 & fund1.all <= 1)) {
       fund1.all <- 1
     }
     fund2.all <- 1 - fund1.all
@@ -429,7 +428,7 @@ targetbeta_twofunds <- function(tickers = NULL,
         # trade.
         # (2) Otherwise, continue to hold 100% fund 1.
         
-        if (inside(fund1.all, c(0, 1))) {
+        if (fund1.all >= 0 & fund1.all <= 1) {
           
           trades <- trades + 1
           fund2.all <- 1 - fund1.all
@@ -450,9 +449,9 @@ targetbeta_twofunds <- function(tickers = NULL,
         # If effective beta is outside acceptable range, execute rebalancing
         # trade if target beta is achievable, otherwise switch to 100% fund 1.
         
-        if (! inside(effective.beta, beta.range)) {
+        if (! (effective.beta <= beta.range[1] & effective.beta <= beta.range[2])) {
           
-          if (inside(fund1.all, c(0, 1))) {
+          if (fund1.all >= 0 & fund1.all <= 1) {
             
             trades <- trades + 1
             fund2.all <- 1 - fund1.all
@@ -504,7 +503,7 @@ targetbeta_twofunds <- function(tickers = NULL,
                        3)
     
     # Distribute initial balance to fund 1 and fund 2
-    if (! inside(fund1.all, c(0, 1))) {
+    if (! (fund1.all >= 0 & fund1.all <= 1)) {
       fund1.all <- 0
     }
     fund2.all <- 1 - fund1.all
@@ -559,7 +558,7 @@ targetbeta_twofunds <- function(tickers = NULL,
         # trade.
         # (2) Otherwise, continue to hold 100% fund 2.
         
-        if (inside(fund1.all, c(0, 1))) {
+        if (fund1.all >= 0 & fund1.all <= 1) {
           
           trades <- trades + 1
           fund2.all <- 1 - fund1.all
@@ -580,9 +579,9 @@ targetbeta_twofunds <- function(tickers = NULL,
         # If effective beta is outside acceptable range, execute rebalancing
         # trade if target beta is achievable, otherwise switch to 100% fund 2.
         
-        if (! inside(effective.beta, beta.range)) {
+        if (! (effective.beta >= beta.range[1] & effective.beta <= beta.range[2])) {
           
-          if (inside(fund1.all, c(0, 1))) {
+          if (fund1.all >= 0 & fund1.all <= 1) {
             
             trades <- trades + 1
             fund2.all <- 1 - fund1.all
@@ -636,15 +635,15 @@ targetbeta_twofunds <- function(tickers = NULL,
                        3)
     
     # Distribute initial balance to fund 1 and fund 2
-    if (! inside(fund1.all, c(0, 1))) {
-      if (inside(fund1.beta, maxall.beta.range)) {
+    if (! (fund1.all >= 0 & fund1.all <= 1)) {
+      if (fund1.beta >= maxall.beta.range[1] & fund1.beta <= maxall.beta.range[2]) {
         fund1.all <- 1
       } else {
         fund1.alls <- seq(0, 1, 0.001)
         port.betas <- fund1.alls * fund1.beta
         fund1.all <-
-          fund1.alls[which.max(fund1.alls[inside(port.betas,
-                                                 maxall.beta.range)])]
+          fund1.alls[which.max(fund1.alls[port.betas >= maxall.beta.range[1] & 
+                                            port.betas <= maxall.beta.range[2]])]
       }
       fund2.all <- 0
       cash.all <- 1 - fund1.all
@@ -705,7 +704,7 @@ targetbeta_twofunds <- function(tickers = NULL,
         # (2) Otherwise, if effective beta is outside acceptable range,
         # rebalance fund 1 / cash
         
-        if (inside(fund1.all, c(0, 1))) {
+        if (fund1.all >= 0 & fund1.all <= 1) {
           
           trades <- trades + 1
           fund2.all <- 1 - fund1.all
@@ -716,17 +715,17 @@ targetbeta_twofunds <- function(tickers = NULL,
           
         } else {
           
-          if (! inside(effective.beta, beta.range)) {
+          if (! (effective.beta >= beta.range[1] & effective.beta <= beta.range[2])) {
             
             trades <- trades + 1
-            if (inside(fund1.beta, maxall.beta.range)) {
+            if (fund1.beta >= maxall.beta.range[1] & fund1.beta <= maxall.beta.range[2]) {
               fund1.all <- 1
             } else {
               fund1.alls <- seq(0, 1, 0.001)
               port.betas <- fund1.alls * fund1.beta
               fund1.all <-
-                fund1.alls[which.max(fund1.alls[inside(port.betas,
-                                                       maxall.beta.range)])]
+                fund1.alls[which.max(fund1.alls[port.betas >= maxall.beta.range[1] & 
+                                                  port.betas <= maxall.beta.range[2]])]
             }
             fund2.all <- 0
             cash.all <- 1 - fund1.all
@@ -743,9 +742,9 @@ targetbeta_twofunds <- function(tickers = NULL,
         # If effective beta is outside acceptable range, execute rebalancing
         # trade if target beta is achievable, otherwise switch to fund 1 / cash.
         
-        if (! inside(effective.beta, beta.range)) {
+        if (! (effective.beta >= beta.range[1] & effective.beta <= beta.range[2])) {
           
-          if (inside(fund1.all, c(0, 1))) {
+          if (fund1.all >= 0 & fund1.all <= 1) {
             
             trades <- trades + 1
             fund2.all <- 1 - fund1.all
@@ -757,14 +756,14 @@ targetbeta_twofunds <- function(tickers = NULL,
           } else {
             
             trades <- trades + 1
-            if (inside(fund1.beta, maxall.beta.range)) {
+            if (fund1.beta >= maxall.beta.range[1] & fund1.beta <= maxall.beta.range[2]) {
               fund1.all <- 1
             } else {
               fund1.alls <- seq(0, 1, 0.001)
               port.betas <- fund1.alls * fund1.beta
               fund1.all <-
-                fund1.alls[which.max(fund1.alls[inside(port.betas,
-                                                       maxall.beta.range)])]
+                fund1.alls[which.max(fund1.alls[port.betas >= maxall.beta.range[1] & 
+                                                  port.betas <= maxall.beta.range[2]])]
             }
             fund2.all <- 0
             cash.all <- 1 - fund1.all
@@ -811,15 +810,15 @@ targetbeta_twofunds <- function(tickers = NULL,
                        3)
     
     # Distribute initial balance to fund 1 and fund 2
-    if (! inside(fund1.all, c(0, 1))) {
-      if (inside(fund2.beta, maxall.beta.range)) {
+    if (! (fund1.all >= 0 & fund1.all <= 1)) {
+      if (fund2.beta >= maxall.beta.range[1] & fund2.beta <= maxall.beta.range[2]) {
         fund2.all <- 1
       } else {
         fund2.alls <- seq(0, 1, 0.001)
         port.betas <- fund2.alls * fund2.beta
         fund2.all <-
-          fund2.alls[which.max(fund2.alls[inside(port.betas,
-                                                 maxall.beta.range)])]
+          fund2.alls[which.max(fund2.alls[port.betas >= maxall.beta.range[1] & 
+                                            port.betas <= maxall.beta.range[2]])]
       }
       fund1.all <- 0
       cash.all <- 1 - fund2.all
@@ -880,7 +879,7 @@ targetbeta_twofunds <- function(tickers = NULL,
         # (2) Otherwise, if effective beta is outside acceptable range,
         # rebalance fund 2 / cash
         
-        if (inside(fund1.all, c(0, 1))) {
+        if (fund1.all >= 0 & fund1.all <= 1) {
           
           trades <- trades + 1
           fund2.all <- 1 - fund1.all
@@ -891,17 +890,17 @@ targetbeta_twofunds <- function(tickers = NULL,
           
         } else {
           
-          if (! inside(effective.beta, beta.range)) {
+          if (! (effective.beta >= beta.range[1] & effective.beta <= beta.range[2])) {
             
             trades <- trades + 1
-            if (inside(fund2.beta, maxall.beta.range)) {
+            if (fund2.beta >= maxall.beta.range[1] & fund2.beta <= maxall.beta.range[2]) {
               fund2.all <- 1
             } else {
               fund2.alls <- seq(0, 1, 0.001)
               port.betas <- fund2.alls * fund2.beta
               fund2.all <-
-                fund2.alls[which.max(fund2.alls[inside(port.betas,
-                                                       maxall.beta.range)])]
+                fund2.alls[which.max(fund2.alls[port.betas >= maxall.beta.range[1] & 
+                                                  port.betas <= maxall.beta.range[2]])]
             }
             fund1.all <- 0
             cash.all <- 1 - fund2.all
@@ -918,9 +917,9 @@ targetbeta_twofunds <- function(tickers = NULL,
         # If effective beta is outside acceptable range, execute rebalancing
         # trade if target beta is achievable, otherwise switch to fund 2 / cash.
         
-        if (! inside(effective.beta, beta.range)) {
+        if (! (effective.beta >= beta.range[1] & effective.beta <= beta.range[2])) {
           
-          if (inside(fund1.all, c(0, 1))) {
+          if (fund1.all >= 0 & fund1.all <= 1) {
             
             trades <- trades + 1
             fund2.all <- 1 - fund1.all
@@ -932,14 +931,14 @@ targetbeta_twofunds <- function(tickers = NULL,
           } else {
             
             trades <- trades + 1
-            if (inside(fund2.beta, maxall.beta.range)) {
+            if (fund2.beta >= maxall.beta.range[1] & fund2.beta <= maxall.beta.range[2]) {
               fund2.all <- 1
             } else {
               fund2.alls <- seq(0, 1, 0.001)
               port.betas <- fund2.alls * fund2.beta
               fund2.all <-
-                fund2.alls[which.max(fund2.alls[inside(port.betas,
-                                                       maxall.beta.range)])]
+                fund2.alls[which.max(fund2.alls[port.betas >= maxall.beta.range[1] & 
+                                                  port.betas <= maxall.beta.range[2]])]
             }
             fund1.all <- 0
             cash.all <- 1 - fund2.all
@@ -981,14 +980,14 @@ targetbeta_twofunds <- function(tickers = NULL,
     fund2.beta <- fund.betas[1, 2]
     fund1.all <- round((target.beta - fund2.beta) / (fund1.beta - fund2.beta),
                        3)
-    if (inside(fund1.all, c(0, 1))) {
+    if (fund1.all >= 0 & fund1.all <= 1) {
       fund2.all <- 1 - fund1.all
       inverse1.all <- 0
       cash.all <- 0
     } else {
       inverse1.all <- round((fund2.beta - target.beta) /
                               (fund1.beta + fund2.beta), 3)
-      if (inside(inverse1.all, c(0, 1))) {
+      if (inverse1.all >= 0 & inverse1.all <= 1) {
         fund1.all <- 0
         fund2.all <- 1 - inverse1.all
         cash.all <- 0
@@ -1063,7 +1062,7 @@ targetbeta_twofunds <- function(tickers = NULL,
         # fund 2, execute that trade.
         # (3) Otherwise, continue to hold 100% cash.
         
-        if (inside(fund1.all, c(0, 1))) {
+        if (fund1.all >= 0 & fund1.all <= 1) {
           
           trades <- trades + 1
           fund2.all <- 1 - fund1.all
@@ -1079,7 +1078,7 @@ targetbeta_twofunds <- function(tickers = NULL,
           inverse1.all <- round((fund2.beta - target.beta) /
                                   (fund1.beta + fund2.beta), 3)
           
-          if (inside(inverse1.all, c(0, 1))) {
+          if (inverse1.all >= 0 & inverse1.all <= 1) {
             
             trades <- trades + 1
             fund1.all <- 0
@@ -1113,7 +1112,7 @@ targetbeta_twofunds <- function(tickers = NULL,
         # trade to rebalance inverse fund 1 / fund 2 if target beta is
         # achievable, otherwise switch to 100% cash.
         
-        if (inside(fund1.all, c(0, 1))) {
+        if (fund1.all >= 0 & fund1.all <= 1) {
           
           trades <- trades + 1
           fund2.all <- 1 - fund1.all
@@ -1126,12 +1125,12 @@ targetbeta_twofunds <- function(tickers = NULL,
           
         } else {
           
-          if (! inside(effective.beta, beta.range)) {
+          if (! (effective.beta <= beta.range[1] & effective.beta <= beta.range[2])) {
             
             inverse1.all <- round((fund2.beta - target.beta) /
                                     (fund1.beta + fund2.beta), 3)
             
-            if (inside(inverse1.all, c(0, 1))) {
+            if (inverse1.all >= 0 & inverse1.all <= 1) {
               
               trades <- trades + 1
               fund1.all <- 0
@@ -1168,9 +1167,9 @@ targetbeta_twofunds <- function(tickers = NULL,
         # trade.
         # (3) If target beta is still not achievable, switch to 100% cash.
         
-        if (! inside(effective.beta, beta.range)) {
+        if (! (effective.beta >= beta.range[1] & effective.beta <= beta.range[2])) {
           
-          if (inside(fund1.all, c(0, 1))) {
+          if (fund1.all >= 0 & fund1.all <= 1) {
             
             trades <- trades + 1
             fund2.all <- 1 - fund1.all
@@ -1186,7 +1185,7 @@ targetbeta_twofunds <- function(tickers = NULL,
             inverse1.all <- round((fund2.beta - target.beta) /
                                     (fund1.beta + fund2.beta), 3)
             
-            if (inside(inverse1.all, c(0, 1))) {
+            if (inverse1.all >= 0 & inverse1.all <= 1) {
               
               trades <- trades + 1
               fund1.all <- 0
@@ -1244,14 +1243,14 @@ targetbeta_twofunds <- function(tickers = NULL,
     fund2.beta <- fund.betas[1, 2]
     fund1.all <- round((target.beta - fund2.beta) / (fund1.beta - fund2.beta),
                        3)
-    if (inside(fund1.all, c(0, 1))) {
+    if (fund1.all >= 0 & fund1.all <= 1) {
       fund2.all <- 1 - fund1.all
       inverse2.all <- 0
       cash.all <- 0
     } else {
       inverse2.all <- round((fund1.beta - target.beta) /
                               (fund1.beta + fund2.beta), 3)
-      if (inside(inverse2.all, c(0, 1))) {
+      if (inverse2.all >= 0 & inverse2.all <= 1) {
         fund1.all <- 1 - inverse2.all
         fund2.all <- 0
         cash.all <- 0
@@ -1326,7 +1325,7 @@ targetbeta_twofunds <- function(tickers = NULL,
         # fund 2, execute that trade.
         # (3) Otherwise, continue to hold 100% cash.
         
-        if (inside(fund1.all, c(0, 1))) {
+        if (fund1.all >= 0 & fund1.all <= 1) {
           
           trades <- trades + 1
           fund2.all <- 1 - fund1.all
@@ -1342,7 +1341,7 @@ targetbeta_twofunds <- function(tickers = NULL,
           inverse2.all <- round((fund1.beta - target.beta) /
                                   (fund1.beta + fund2.beta), 3)
           
-          if (inside(inverse2.all, c(0, 1))) {
+          if (inverse2.all >= 0 & inverse2.all <= 1) {
             
             trades <- trades + 1
             fund1.all <- 1 - inverse2.all
@@ -1376,7 +1375,7 @@ targetbeta_twofunds <- function(tickers = NULL,
         # trade to rebalance fund 1 / inverse fund 2 if target beta is
         # achievable, otherwise switch to 100% cash.
         
-        if (inside(fund1.all, c(0, 1))) {
+        if (fund1.all >= 0 & fund1.all <= 1) {
           
           trades <- trades + 1
           fund2.all <- 1 - fund1.all
@@ -1389,12 +1388,12 @@ targetbeta_twofunds <- function(tickers = NULL,
           
         } else {
           
-          if (! inside(effective.beta, beta.range)) {
+          if (! (effective.beta >= beta.range[1] & effective.beta <= beta.range[2])) {
             
             inverse2.all <- round((fund1.beta - target.beta) /
                                     (fund1.beta + fund2.beta), 3)
             
-            if (inside(inverse2.all, c(0, 1))) {
+            if (inverse2.all >= 0 & inverse2.all <= 1) {
               
               trades <- trades + 1
               fund1.all <- 1 - inverse2.all
@@ -1431,9 +1430,9 @@ targetbeta_twofunds <- function(tickers = NULL,
         # trade.
         # (3) If target beta is still not achievable, switch to 100% cash.
         
-        if (! inside(effective.beta, beta.range)) {
+        if (! (effective.beta >= beta.range[1] & effective.beta <= beta.range[2])) {
           
-          if (inside(fund1.all, c(0, 1))) {
+          if (fund1.all >= 0 & fund1.all <= 1) {
             
             trades <- trades + 1
             fund2.all <- 1 - fund1.all
@@ -1449,7 +1448,7 @@ targetbeta_twofunds <- function(tickers = NULL,
             inverse2.all <- round((fund1.beta - target.beta) /
                                     (fund1.beta + fund2.beta), 3)
             
-            if (inside(inverse2.all, c(0, 1))) {
+            if (inverse2.all >= 0 & inverse2.all <= 1) {
               
               trades <- trades + 1
               fund1.all <- 1 - inverse2.all
@@ -1509,7 +1508,7 @@ targetbeta_twofunds <- function(tickers = NULL,
                        3)
     
     # Distribute initial balance to fund 1 and fund 2
-    if (inside(fund1.all, c(0, 1))) {
+    if (fund1.all >= 0 & fund1.all <= 1) {
       fund2.all <- 1 - fund1.all
     } else {
       fund1.all <- ifelse(which.min(abs(c(fund1.beta, fund2.beta) -
@@ -1568,7 +1567,7 @@ targetbeta_twofunds <- function(tickers = NULL,
         # 100% fund 1.
         # (3) Otherwise, switch to 100% fund 2.
         
-        if (inside(fund1.all, c(0, 1))) {
+        if (fund1.all >= 0 & fund1.all <= 1) {
           
           trades <- trades + 1
           fund2.all <- 1 - fund1.all
@@ -1604,7 +1603,7 @@ targetbeta_twofunds <- function(tickers = NULL,
         # 100% fund 2.
         # (3) Otherwise, switch to 100% fund 1.
         
-        if (inside(fund1.all, c(0, 1))) {
+        if (fund1.all >= 0 & fund1.all <= 1) {
           
           trades <- trades + 1
           fund2.all <- 1 - fund1.all
@@ -1638,9 +1637,9 @@ targetbeta_twofunds <- function(tickers = NULL,
         # trade if target beta is achievable, otherwise switch to 100% whichever
         # fund has beta closer to target.
         
-        if (! inside(effective.beta, beta.range)) {
+        if (! (effective.beta >= beta.range[1] & effective.beta <= beta.range[2])) {
           
-          if (inside(fund1.all, c(0, 1))) {
+          if (fund1.all >= 0 & fund1.all <= 1) {
             
             trades <- trades + 1
             fund2.all <- 1 - fund1.all

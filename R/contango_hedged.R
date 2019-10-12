@@ -20,43 +20,37 @@
 #' \code{to} inputs to match the date range for your contango values.
 #' 
 #' 
-#' @inheritParams contango_simple
-#' 
+#' @param contango Numeric vector of contango values at the end of each trading 
+#' day.
 #' @param xiv.spxu.gains 2-column numeric matrix with gains for XIV and SPXU. 
 #' Should have the same number of rows as \code{contango} and be date-shifted 
 #' one value to the right. For example, the first row should have the XIV and 
 #' SPXU gains for the day AFTER the first contango value.
-#' 
 #' @param vxx.upro.gains 2-column numeric matrix with gains for VXX and UPRO. 
 #' Should have the same number of rows as \code{contango} and be date-shifted 
 #' one value to the right. For example, the first row should have the VXX and 
 #' UPRO gains for the day AFTER the first contango value.
-#' 
 #' @param xiv.spxu.cutpoint Numeric value giving the contango cutpoint for  
 #' XIV/SPXU position. For example, if \code{xiv.spxu.cutpoint = 5}, XIV/SPXU 
 #' will be held whenever contango is greater than 5\%.
-#' 
 #' @param vxx.upro.cutpoint Numeric value giving the contango cutpoint for 
 #' VXX/UPRO position. For example, if \code{vxx.upro.cutpoint = -5}, VXX/UPRO 
 #' will be held whenever contango is less than -5\%.
-#' 
 #' @param xiv.allocation Numeric value specifying XIV allocation for XIV/SPXU 
 #' position. For example, if set to 0.46, 46\% is allocated to XIV and 54\% to 
 #' SPXU when contango > \code{xiv.spxu.cutpoint}.
-#' 
 #' @param vxx.allocation Numeric value specifying VXX allocation for VXX/UPRO 
 #' position. For example, if set to 0.46, 46\% is allocated to VXX and 54\% to 
 #' UPRO when contango < \code{vxx.upro.cutpoint}.
-#' 
 #' @param xiv.beta Numeric value specifying XIV's beta. If specified, the 
 #' function figures out what \code{xiv.allocation} needs to be for zero-beta 
 #' XIV/SPXU positions. For example, if set to 3.5, then 46.2\% XIV/53.8\% SPXU 
 #' achieves zero beta.
-#' 
 #' @param vxx.beta Numeric value indicating VXX's beta. If specified, the 
 #' function figures out what \code{vxx.allocation} needs to be for zero-beta 
 #' VXX/UPRO positions. For example, if set to -3.5, then 46.2\% VXX/53.8\% UPRO 
 #' achieves zero beta.
+#' @param initial Numeric value giving the initial value of the portfolio.
 #' 
 #' 
 #' @return
@@ -72,9 +66,6 @@
 #' \item Numeric value named \code{trades} giving the total number of trades 
 #' executed.
 #' }
-#' 
-#' 
-#' @inherit ticker_dates references
 #' 
 #'
 #' @export
@@ -134,6 +125,5 @@ contango_hedged <- function(contango,
                        port.gains = port.gains,
                        port.balances = port.balances,
                        trades = trades)
-  return(results.list)
   
 }

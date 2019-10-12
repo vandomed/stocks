@@ -7,9 +7,6 @@
 prices_rate(prices, units.rate = NULL)
 }
 \arguments{
-\item{prices}{Numeric matrix with 1 column of prices for each investment (can 
-be a vector if there is only one).}
-
 \item{units.rate}{Numeric value specifying the number of units for growth 
 rate calculation, if you want something other than total growth. For 
 annualized growth rate, set to 252 if \code{prices} has daily prices, 12 if 

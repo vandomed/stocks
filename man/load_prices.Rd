@@ -2,36 +2,37 @@
 % Please edit documentation in R/load_prices.R
 \name{load_prices}
 \alias{load_prices}
-\title{Download and Align Historical Prices for a Set of Tickers}
+\title{Download Historical Prices}
 \usage{
 load_prices(tickers, intercepts = NULL, slopes = NULL,
   from = "1950-01-01", to = Sys.Date(), time.scale = "daily",
   preto.days = NULL, prefrom.days = NULL, initial = NULL,
-  earliest = FALSE, latest = FALSE)
+  mutual.start = FALSE, mutual.end = TRUE, anchor = FALSE,
+  drop.anyNA = FALSE)
 }
 \arguments{
-\item{tickers}{Character vector with ticker symbols that Yahoo! Finance 
+\item{tickers}{Character vector of ticker symbols that Yahoo! Finance 
 recognizes.}
 
 \item{intercepts}{Numeric vector of values to add to daily gains for each 
-ticker.}
+fund.}
 
-\item{slopes}{Numeric vector of values to multiply daily gains for each ticker 
+\item{slopes}{Numeric vector of values to multiply daily gains for each fund 
 by. Slopes are multiplied prior to adding intercepts.}
 
-\item{from}{Date or character string (e.g. \code{"2015-01-15"}.}
+\item{from}{Date or character string, e.g. \code{"2015-01-15"}.}
 
-\item{to}{Date or character string (e.g. \code{"2016-01-30"}).}
+\item{to}{Date or character string, e.g. \code{"2018-12-31"}.}
 
-\item{time.scale}{Character string controlling time frame for gains. Choices 
-are \code{"daily"}, \code{"monthly"}, and \code{"yearly"}.}
+\item{time.scale}{Character string. Choices are \code{"daily"}, 
+\code{"monthly"}, and \code{"yearly"}.}
 
-\item{preto.days}{Numeric value. If specified, function returns gains for 
-\code{preto.days} trading days prior to \code{to}. To illustrate, to load the 
-most recent 50 daily gains, you would leave \code{to} and \code{time.scale} 
-as the defaults and set \code{preto.days = 50}.}
+\item{preto.days}{Numeric value. If specified, function returns prices for 
+\code{preto.days} trading days prior to \code{to}. For example, to load the 
+most recent 50 closing prices, leave \code{to} and \code{time.scale} as the 
+defaults and set \code{preto.days = 50}.}
 
-\item{prefrom.days}{Numeric value. If specified, function returns gains for 
+\item{prefrom.days}{Numeric value. If specified, function returns prices for 
 \code{prefrom.days} trading days prior to \code{from}. Useful when you want 
 to test a trading strategy starting on a particular date, but the strategy 
 requires data leading up to that date (e.g. trailing beta).}
@@ -39,25 +40,26 @@ requires data leading up to that date (e.g. trailing beta).}
 \item{initial}{Numeric value specifying what value to scale initial prices 
 to.}
 
-\item{earliest}{Logical value for whether to retain only the subset of 
-tickers with data going the furthest back. Set to \code{FALSE} if you want 
-all tickers retained and gains over their mutual lifetimes.}
+\item{mutual.start}{Logical value for whether to start on the first day of
+the funds' mutual lifetimes.}
 
-\item{latest}{Logical value for whether to retain only the subset of 
-tickers with data going the furthest forward, e.g. dropping funds that were 
-discontinued at some point.}
+\item{mutual.end}{Logical value for whether to end on the last day of the 
+funds' mutual lifetimes.}
+
+\item{anchor}{Logical value for whether to anchor the starting price for each 
+fund to the price of the longest-running fund on that day. Useful for 
+visualizing funds' entire histories while also fairly comparing them over 
+their mutual lifetimes. Only used if \code{mutual.start = FALSE}.}
+
+\item{drop.anyNA}{Logical value for whether to drop dates on which prices are
+missing for any of the funds.}
 }
 \value{
-Numeric matrix.
+Data frame with closing prices for each fund.
 }
 \description{
-Downloads and aligns historical prices for specified tickers from Yahoo! 
-Finance, using the \pkg{quantmod} package.
-}
-\details{
-In aligning historical prices, dates on which not all funds have data are 
-simply dropped. Messages are printed indicating which dates are dropped for 
-which tickers.
+Downloads historical prices for specified tickers from Yahoo! Finance, with 
+various options. Relies heavily on the \pkg{quantmod} package.
 }
 \examples{
 \dontrun{
@@ -68,7 +70,7 @@ prices <- load_prices(c("NFLX", "AMZN"))
 
 }
 \references{
-Ryan, J.A. and Ulrich, J.M. (2017) quantmod: Quantitative Financial Modelling 
-Framework. R package version 0.4-12, 
-\url{https://CRAN.R-project.org/package=quantmod}.
+Jeffrey A. Ryan and Joshua M. Ulrich (2019). quantmod: Quantitative Financial 
+Modelling Framework. R package version 0.4-15. 
+\url{https://CRAN.R-project.org/package=quantmod}
 }

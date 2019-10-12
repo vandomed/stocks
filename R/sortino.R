@@ -5,12 +5,13 @@
 #' risk-free rate of return.
 #' 
 #' 
-#' @inheritParams metrics
+#' @param gains Numeric vector of gains.
+#' @param prices Numeric vector of prices.
 #' @param rf Numeric value.
 #' 
 #' 
 #' @return
-#' Numeric value or vector.
+#' Numeric value.
 #' 
 #' 
 #' @examples
@@ -27,20 +28,10 @@ sortino <- function(gains = NULL,
                     prices = NULL,
                     rf = 0) {
   
-  # Convert from prices to gains if necessary
-  if (! is.null(prices)) {
-    gains <- prices_gains(prices)
+  if (! is.null(gains)) {
+    return((mean(gains) - rf) / sd(gains[gains < 0]))
   }
-  
-  # Calculate and return Sortino ratio
-  if (is.vector(gains)) {
-    sortino.ratio <- (mean(gains) - rf) / sd(gains[gains < 0])
-  } else {
-    means <- apply(gains, 2, mean)
-    sds <- apply(gains, 2, function(x) sd(x[x < 0]))
-    sortino.ratio <- (means - rf) / sds
-  }
-  
-  return(sortino.ratio)
+  gains <- prices_gains(prices)
+  (mean(gains) - rf) / sd(gains[gains < 0])
   
 }

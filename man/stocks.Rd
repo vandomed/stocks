@@ -9,15 +9,14 @@
 Functions for analyzing stocks or other investments. Main features are
 loading and aligning historical data for ticker symbols, calculating
 performance metrics for individual funds or portfolios (e.g. annualized 
-growth, maximum drawdown, Sharpe/Sortino ratio), and creating graphs. C++ 
-code is used to improve processing speed where possible.
+growth, maximum drawdown, Sharpe/Sortino ratio), and creating graphs.
 }
 \details{
 \tabular{ll}{
 Package: \tab stocks \cr
 Type: \tab Package \cr
-Version: \tab 1.1.5 \cr
-Date: \tab 2019-08-17 \cr
+Version: \tab 2.0.0 \cr
+Date: \tab 2019-10-11 \cr
 License: \tab GPL-3 \cr
 }
 
@@ -29,22 +28,18 @@ package with some examples.
 \references{
 Eddelbuettel, D. and Francois, R. (2011) Rcpp: Seamless R and C++ 
 Integration. Journal of Statistical Software, 40(8), 1-18. 
-\url{http://www.jstatsoft.org/v40/i08/}.
+\url{http://www.jstatsoft.org/v40/i08/}
 
 Eddelbuettel, D. (2013) Seamless R and C++ Integration with Rcpp. Springer, 
 New York. ISBN 978-1-4614-6867-7.
 
 Eddelbuettel, D. and Balamuta, J.J. (2017). Extending R with C++: A Brief 
 Introduction to Rcpp. PeerJ Preprints 5:e3188v1. 
-\url{https://doi.org/10.7287/peerj.preprints.3188v1}.
+\url{https://doi.org/10.7287/peerj.preprints.3188v1}
 
-Ryan, J.A. and Ulrich, J.M. (2017) quantmod: Quantitative Financial Modelling 
-Framework. R package version 0.4-12, 
-\url{https://CRAN.R-project.org/package=quantmod}.
-
-Acknowledgment: This material is based upon work supported by the
-National Science Foundation Graduate Research Fellowship under Grant No.
-DGE-0940903.
+Jeffrey A. Ryan and Joshua M. Ulrich (2019). quantmod: Quantitative Financial 
+Modelling Framework. R package version 0.4-15. 
+\url{https://CRAN.R-project.org/package=quantmod}
 }
 \author{
 Dane R. Van Domelen \cr \email{vandomed@gmail.com}

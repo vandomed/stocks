@@ -1,7 +1,7 @@
 Get Rich with 'stocks'
 ================
 Dane Van Domelen <br> <vandomed@gmail.com>
-2018-08-30
+2019-10-11
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 [![Build Status](https://travis-ci.org/vandomed/stocks.svg?branch=master)](https://travis-ci.org/vandomed/stocks)
@@ -11,11 +11,7 @@ Dane Van Domelen <br> <vandomed@gmail.com>
 
 The **stocks** package has a variety of functions for analyzing investments and investment strategies. I use it for a lot of my articles on [Seeking Alpha](https://seekingalpha.com/author/dane-van-domelen/articles#regular_articles). The package relies heavily on [Yahoo! Finance](https://finance.yahoo.com/) for historical prices and on the **quantmod** package for downloading that data into R.
 
-There are functions for calculating performance metrics, backtesting trading strategies, and visualizing the performance of funds or strategies. I would say it is similar in spirit to the website [Portfolio Visualizer](https://www.portfoliovisualizer.com/) and the R package **PerformanceAnalytics**.
-
-Like most vignettes, the purpose here will be to illustrate typical usage of the functions in **stocks**. I'll try to incorporate some interesting examples.
-
-To start, here are the functions:
+There are functions for calculating performance metrics, visualizing the performance of funds and multi-fund portfolios, and backtesting trading strategies. The main functions are:
 
 <table>
 <colgroup>
@@ -30,328 +26,221 @@ To start, here are the functions:
 </thead>
 <tbody>
 <tr class="odd">
-<td align="left"><em>load_prices</em></td>
-<td align="left">Download and align historical prices for a set of tickers.</td>
+<td align="left"><code>load_prices</code></td>
+<td align="left">Download Historical Prices for a Set of Tickers</td>
 </tr>
 <tr class="even">
-<td align="left"><em>load_gains</em></td>
-<td align="left">Download and align gains for a set of tickers.</td>
+<td align="left"><code>load_gains</code></td>
+<td align="left">Download Historical Gains for a Set of Tickers</td>
 </tr>
 <tr class="odd">
-<td align="left"><em>prices_rate</em></td>
-<td align="left">Calculate growth rate from a vector of prices.</td>
+<td align="left"><code>plot_growth</code></td>
+<td align="left">Plot Growth of Investments</td>
 </tr>
 <tr class="even">
-<td align="left"><em>gains_rate</em></td>
-<td align="left">Calculate growth rate from a vector of gains.</td>
+<td align="left"><code>calc_metrics</code></td>
+<td align="left">Calculate Performance Metrics</td>
 </tr>
 <tr class="odd">
-<td align="left"><em>sharpe</em></td>
-<td align="left">Sharpe ratio.</td>
+<td align="left"><code>calc_metrics_overtime</code></td>
+<td align="left">Calculate Performance Metrics over Time</td>
 </tr>
 <tr class="even">
-<td align="left"><em>sortino</em></td>
-<td align="left">Sortino ratio.</td>
+<td align="left"><code>calc_metrics_2funds</code></td>
+<td align="left">Calculate Performance Metrics for Two-Fund Portfolios with Varying Allocations</td>
 </tr>
 <tr class="odd">
-<td align="left"><em>mdd</em></td>
-<td align="left">Maximum drawdown.</td>
+<td align="left"><code>calc_metrics_3funds</code></td>
+<td align="left">Calculate Performance Metrics for Three-Fund Portfolios with Varying Allocations</td>
 </tr>
 <tr class="even">
-<td align="left"><em>rrr</em></td>
-<td align="left">Risk-return ratio.</td>
+<td align="left"><code>plot_metrics</code></td>
+<td align="left">Plot One Performance Metric (Sorted Bar Plot) or One Performance Metric vs. Another (Scatterplot)</td>
 </tr>
 <tr class="odd">
-<td align="left"><em>metrics</em></td>
-<td align="left">Calculate various performance metrics.</td>
+<td align="left"><code>plot_metrics_overtime</code></td>
+<td align="left">Plot One Performance Metric vs. Time or One Performance Metric vs. Another over Time</td>
 </tr>
 <tr class="even">
-<td align="left"><em>twofunds_graph</em></td>
-<td align="left">Graph one performance metric vs. another for two-fund portfolios as allocation varies.</td>
+<td align="left"><code>plot_metrics_2funds</code></td>
+<td align="left">Plot One Performance Metric vs. Time or One Performance Metric vs. Another over Time</td>
 </tr>
 <tr class="odd">
-<td align="left"><em>threefunds_graph</em></td>
-<td align="left">Graph One performance metric vs. another for three-fund portfolios as allocation varies.</td>
-</tr>
-<tr class="even">
-<td align="left"><em>onemetric_graph</em></td>
-<td align="left">Graph performance metric for various investments.</td>
-</tr>
-<tr class="odd">
-<td align="left"><em>onemetric_overtime_graph</em></td>
-<td align="left">Graph performance metric over time for various investments.</td>
-</tr>
-<tr class="even">
-<td align="left"><em>twometrics_graph</em></td>
-<td align="left">Graph one performance metric vs. another for various investments.</td>
-</tr>
-<tr class="odd">
-<td align="left"><em>targetbeta_twofunds</em></td>
-<td align="left">Backtest a two-fund strategy that targets a certain beta.</td>
-</tr>
-<tr class="even">
-<td align="left"><em>targetall</em></td>
-<td align="left">Backtest a fixed-allocation trading strategy.</td>
+<td align="left"><code>plot_metrics_3funds</code></td>
+<td align="left">Plot One Performance Metric vs. Another for a Three-Fund Portfolio with Varying Allocations</td>
 </tr>
 </tbody>
 </table>
 
-Loading data from Yahoo! Finance
---------------------------------
+Motivating example: A two-fund stocks and bonds portfolio
+---------------------------------------------------------
 
-The functions *load\_prices* and *load\_gains* let you download historical data from Yahoo! Finance. They use **quantmod**'s *getSymbols* function internally. Here are some examples. (Note: R output is printed in nice tables rather than usual-looking R output because I loaded **printr**)
+### Rationale
+
+Stocks and bonds are obviously the primary building blocks for a retirement portfolio, and I think the ETF's SPY and TLT pair together very nicely for a very effective two-fund strategy. Let's look at the performance of these funds separately and together.
+
+### Assess each fund's performance over their mutual lifetimes
+
+We can use *load\_gains* to download historical daily gains for SPY and TLT over their mutual lifetimes:
 
 ``` r
 library("stocks")
-library("printr")
-prices <- load_prices(c("SPY", "TLT"), to = "2018-03-02")
-head(prices)
-```
-
-|            |    SPY|    TLT|
-|------------|------:|------:|
-| 2002-07-30 |  66.29|  45.04|
-| 2002-07-31 |  66.45|  45.59|
-| 2002-08-01 |  64.72|  45.85|
-| 2002-08-02 |  63.26|  46.32|
-| 2002-08-05 |  61.06|  46.53|
-| 2002-08-06 |  63.12|  46.13|
-
-``` r
-
-gains <- load_gains(c("SPY", "TLT"), to = "2018-03-02")
+gains <- load_gains(c("SPY", "TLT"), mutual.start = TRUE, to = "2018-12-31")
 head(gains)
+#>            Date     SPY     TLT
+#> 2395 2002-07-31  0.0024  0.0124
+#> 2396 2002-08-01 -0.0261  0.0057
+#> 2397 2002-08-02 -0.0224  0.0102
+#> 2398 2002-08-05 -0.0348  0.0044
+#> 2399 2002-08-06  0.0337 -0.0085
+#> 2400 2002-08-07  0.0174  0.0024
 ```
 
-|            |      SPY|      TLT|
-|------------|--------:|--------:|
-| 2002-07-31 |   0.0024|   0.0124|
-| 2002-08-01 |  -0.0261|   0.0057|
-| 2002-08-02 |  -0.0224|   0.0102|
-| 2002-08-05 |  -0.0348|   0.0044|
-| 2002-08-06 |   0.0337|  -0.0085|
-| 2002-08-07 |   0.0174|   0.0024|
-
-In either case, data going as far back as possible for SPY and TLT (which happens to be mid-2002) are retrieved.
-
-Performance metrics
--------------------
-
-### Total or annualized growth, Sharpe ratio, max drawdown
-
-There are functions for calculating various performance metrics based on a vector of prices or gains, or a matrix where each column has prices or gains for a different fund. To illustrate a few, here's net growth based on either data type:
+We can call (or pipe into) *calc\_metrics* to calculate some performance metrics. `calc_metrics` returns a normal data frame, but I'll call `knitr::kable` to print it as a neat-looking table:
 
 ``` r
-prices_rate(prices)
-#>   SPY   TLT 
-#> 3.025 1.599
-gains_rate(gains)
-#>   SPY   TLT 
-#> 3.025 1.599
+metrics <- calc_metrics(gains)
+knitr::kable(metrics)
 ```
 
-Values of 3.025 and 1.599 mean SPY grew 302.5% and TLT 159.9%. For annualized rather than total growth:
+| Fund |  Mean (%)|  SD (%)|  Growth (%)|  CAGR (%)|  Max drawdown (%)|  Sharpe ratio|  Sortino ratio|  Alpha (%)|  Annualized alpha (%)|   Beta|  R-squared|  Pearson corr.|  Spearman corr.|  Pearson autocorr.|  Spearman autocorr.|
+|:-----|---------:|-------:|-----------:|---------:|-----------------:|-------------:|--------------:|----------:|---------------------:|------:|----------:|--------------:|---------------:|------------------:|-------------------:|
+| SPY  |      0.04|    1.17|         281|       8.5|                55|          0.03|           0.04|       0.00|                     0|   1.00|       1.00|            1.0|            1.00|              -0.08|               -0.05|
+| TLT  |      0.03|    0.84|         173|       6.3|                27|          0.03|           0.05|       0.04|                    10|  -0.29|       0.16|           -0.4|           -0.34|              -0.04|               -0.05|
+
+We see here that SPY has achieved stronger growth (8.5% vs. 6.3%), but with a much worse max drawdown (55.2% vs. 26.6%). TLT's Sharpe ratio (a measure of risk-adjusted returns) is somewhat higher than SPY's.
+
+Without getting too far ahead of myself, TLT's positive alpha (0.04%) and negative beta (-0.29) are precisely why it pairs so well with SPY. This isn't unique to TLT; all bond funds should generate alpha (otherwise, don't invest!), and they're often negatively correlated with equities.
+
+For a visual comparison of the returns and volatility of these two ETF's, we can plot mean vs. SD using `plot_metrics`.
 
 ``` r
-prices_rate(prices, units.rate = 252)
-#>     SPY     TLT 
-#> 0.09352 0.06324
-gains_rate(gains, units.rate = 252)
-#>     SPY     TLT 
-#> 0.09352 0.06324
+plot_metrics(metrics, mean ~ sd)
 ```
 
-Sharpe ratio and max drawdown:
+![](README-unnamed-chunk-4-1.png)
+
+No surprise, the S&P 500 ETF had more growth, but also higher volatility.
+
+(Side note: You could achieve the same plot by specifying `gains` rather than `metrics`, or by simply specifying the `tickers` input.)
+
+### How reliable is TLT's negative correlation?
+
+Negative correlation works wonders for a two-fund portfolio, so let's look at how consistently TLT achieves negative correlation with SPY, using `calc_metrics_overtime` and `plot_metrics_overtime`. For illustrative purposes, I'll include the full 3-step process: load historical gains, calculate beta over time, and plot beta over time.
 
 ``` r
-sharpe(prices = prices)
-#>     SPY     TLT 
-#> 0.03608 0.03271
-sharpe(gains = gains)
-#>     SPY     TLT 
-#> 0.03608 0.03271
-
-mdd(prices = prices)
-#>    SPY    TLT 
-#> 0.5519 0.2659
-mdd(gains = gains)
-#>    SPY    TLT 
-#> 0.5519 0.2659
+c("SPY", "TLT") %>%
+  load_gains(to = "2018-12-31") %>%
+  calc_metrics_overtime("pearson") %>%
+  plot_metrics_overtime(pearson ~ .)
 ```
 
-### All-in-one
+![](README-unnamed-chunk-5-1.png)
 
-Better yet, a single call to *metrics* produces a data frame with all of these metrics (and potentially others) and a correlation matrix for gains.
+While the tendency is certainly for negative correlation, there's a lot of variability, and in some years the correlation was actually slightly positive.
+
+As you can see, the default behavior is to calculate the requested metric on a per-year basis. You can also request per-month calculations or rolling windows of a certain width (see `?calc_metrics_overtime`). And the Pearson correlation is just one of many metrics you can plot (see `?calc_metrics` for the full list).
+
+Everyone loves piping these days, but for typical use cases I would actually recommend skipping directly to `plot_metrics_overtime`. If you specify `tickers`, it will download the data it needs on the fly. This code is much shorter and produces the same figure as above:
 
 ``` r
-bond.metrics <- metrics(gains = gains, perf.metrics = c("growth", "cagr", "sharpe", "mdd"))
-bond.metrics$perf.metrics
+plot_metrics_overtime(formula = beta ~ ., tickers = "TLT")
 ```
 
-|     |  Growth|    CAGR|  Sharpe|     MDD|
-|-----|-------:|-------:|-------:|-------:|
-| SPY |   3.025|  0.0935|  0.0361|  0.5519|
-| TLT |   1.599|  0.0632|  0.0327|  0.2659|
+### A 50-50 blend
+
+A 50% SPY, 50% TLT portfolio should generate much better risk-adjusted returns than SPY (and perhaps TLT) itself, but a 50% bonds allocation is pretty high so raw returns will probably be lower.
+
+To look at this, we can add a column to `gains` and then call `calc_metrics`, requesting a few particular metrics:
 
 ``` r
-bond.metrics$cor.mat
+gains$`50-50` <- gains$SPY * 0.5 + gains$TLT * 0.5
+calc_metrics(gains, c("cagr", "mdd", "sharpe", "sortino")) %>%
+  knitr::kable()
 ```
 
-|     |      SPY|      TLT|
-|-----|--------:|--------:|
-| SPY |   1.0000|  -0.4066|
-| TLT |  -0.4066|   1.0000|
+| Fund  |  CAGR (%)|  Max drawdown (%)|  Sharpe ratio|  Sortino ratio|
+|:------|---------:|-----------------:|-------------:|--------------:|
+| SPY   |       8.5|                55|          0.03|           0.04|
+| TLT   |       6.3|                27|          0.03|           0.05|
+| 50-50 |       8.4|                23|          0.06|           0.08|
 
-Looking at the performance metrics, we see that SPY achieved almost 2x the growth of TLT, but also had a max drawdown more than 2x as severe. A higher Sharpe ratio suggests better risk-adjusted returns for SPY.
+Indeed, while the 50-50 portfolio achieved slightly lower raw returns than SPY alone (8.4% vs. 8.5% annualized), its max drawdown was far better, and its Sharpe and Sortino ratios indicated much better risk-adjusted growth compared to the individual ETF's.
 
-Graphics
---------
+### What's the optimal allocation?
 
-### Growth of $10k
-
-Let's look at the famous FANG stocks (Facebook, Amazon, Netflix, Google) for the past 3 years, with SPY (an S&P 500 ETF) included for reference.
+That will likely depend on what metric you want to maximize. In terms of raw growth, roughly 75% SPY is optimal, but the curve is pretty flat--the CAGR is roughly the same from 60-100% SPY.
 
 ``` r
-fig <- growth_graph(c("SPY", "FB", "AMZN", "NFLX", "GOOG"), from = "2015-03-02", 
-                    to = "2018-03-02")
-```
-
-![](README-unnamed-chunk-7-1.png)
-
-Notice that I specified a vector of ticker symbols, not a matrix of prices or gains. All of the graphing functions in *stocks* have the ability to download data on the fly.
-
-Clearly the FANG stocks have continued with their remarkable growth over the past 3 years. I actually held Amazon and Google briefly, but sold them once I decided I couldn't beat the market through stock-picking. I can't, but in this case I wish I would have kept trying.
-
-### Gains vs. benchmark (alpha, beta, R-squared)
-
-Before buying a fund, you should have a rough idea of how it tends to move with the market. The classic way of doing this is plotting the fund's daily gains vs. a benchmark (typically the S&P) and looking at the estimated intercept ("alpha") and slope ("beta"). For example, for Vanguard's long-term bond fund VBLTX, over the past 5 years:
-
-``` r
-fig <- gains_graph(c("SPY", "VBLTX"), from = "2013-03-02", to = "2018-03-02")
+plot_metrics_2funds(gains = gains, 
+                    formula = cagr ~ allocation, 
+                    tickers = c("SPY", "TLT"))
 ```
 
 ![](README-unnamed-chunk-8-1.png)
 
-Definitely a negative trend there, although a weak one: *R*<sup>2</sup> = 0.08 means only 8% of variability in VBLTX gains are explained by the regression on SPY.
-
-Looking at the regression equation, we see positive alpha and negative beta, suggesting VBLTX and SPY would complement each other nicely in a retirement portfolio.
-
-### Compare funds on 1 metric
-
-To compare annualized growth for the 10 Select Sector SPDR ETFs over the past year:
+In terms of risk-adjusted growth, the Sharpe ratio curve is somewhat more interesting. The maximum Sharpe ratio occurs around 40% SPY, and the Sharpe ratio gets much worse as you approach 60% SPY and higher.
 
 ``` r
-data(sector_spdr_etfs)
-fig <- onemetric_graph(tickers = sector_spdr_etfs$ticker, 
-                       from = "2017-03-02", to = "2018-03-02")
+plot_metrics_2funds(gains = gains, 
+                    formula = sharpe ~ allocation, 
+                    tickers = c("SPY", "TLT"))
 ```
 
 ![](README-unnamed-chunk-9-1.png)
 
-Notice that I loaded the 10 ticker symbols with `data(sector_spdr_etfs)`. That worked because a dataset called `sector_spdr_etfs` is included in **stocks**. Quite a few other ticker lists are also available (run `data(package = "stocks")` to see them).
-
-Looks like only 6 of the 10 sectors had positive growth over the past year; XLK (technology) was the best performer with 30.3% growth.
-
-### Compare funds on 2 metrics
-
-To simultaneousy look at annualized growth and maximum drawdown for the sector ETFs:
+We can gain additional insight by plotting two metrics against each other, across all possible allocations. A common strategy is to plot the mean vs. standard deviation as a function of the allocation:
 
 ``` r
-fig <- twometrics_graph(tickers = sector_spdr_etfs$ticker, 
-                        from = "2017-03-02", to = "2018-03-02", 
-                        x.metric = "mdd", y.metric = "cagr")
+plot_metrics_2funds(gains = gains, 
+                    formula = mean ~ sd, 
+                    tickers = c("SPY", "TLT"))
 ```
 
 ![](README-unnamed-chunk-10-1.png)
 
-Here XLY (consumer discretionary) looks pretty good, with the best max drawdown and second-best growth.
+This plot yields an interesting finding: starting at 100% TLT, increasing the allocation to SPY simultaneously *reduces volatility* and *increases returns*. In other words, you'd be crazy not to ride the curve up and to the left, adding at least a 30% SPY allocation.
 
-### One metric over time
+A big caveat is that this is all based on historical data. There's no guarantee that 30% SPY, 70% TLT will have lower volatility *or* greater returns than TLT going forward.
 
-Let's move to another example: Warren Buffett's Berkshire Hathaway (BRK-B). Let's see whether BRK-B has consistently outperformed SPY over the past 15 years, looking at the 100-day moving Sharpe ratio:
+Three-fund portfolios, plus a stock tip
+---------------------------------------
+
+I won't go into detail about it here, but one of my favorite strategies is UPRO-VBLTX-VWEHX. [UPRO](https://www.proshares.com/funds/upro.html) is a 3x daily S&P 500 ETF and VBLTX and VWEHX are two bonds mutual funds offered by Vanguard.
+
+To visualize the behavior of this 3-fund portfolio, let's plot mean vs. SD as the allocations vary.
 
 ``` r
-fig <- onemetric_overtime_graph(tickers = c("SPY", "BRK-B"), 
-                                from = "2003-03-02", to = "2018-03-02", 
-                                window.units = 100, y.metric = "sharpe")
+plot_metrics_3funds(formula = mean ~ sd, 
+                    tickers = c("VWEHX", "VBLTX", "UPRO"))
 ```
 
 ![](README-unnamed-chunk-11-1.png)
 
-There are certainly some periods where SPy does a lot better, and some where BRK-B does a lot better. There's no obvious winner here, visually. The actual 100-day Sharpe ratios are returned by *onemetric\_overtime\_graph*, so we can compare the medians and see what percent of the time BRK-B's is higher:
+By default, SPY is included on the plot, so you can compare metrics to the S&P. Notice that many points on the UPRO-VBLTX-VWEHX surface are higher and to the left of SPY, meaning this strategy has the potential to trump the S&P in terms of risk-reward.
+
+One idea would be to choose an allocation to match the volatility (i.e, SD) of SPY. At roughly 1% SD, it looks like the higher black curve, which is just UPRO-VBLTX (0% VWEHX), achieves the highest historical returns. Still, I like having VWEHX in there for a second source of alpha.
+
+To see the actual numbers, you can either specify `return = "data"` (or `return = "both"`), or inptu the plot returned by `plot_metrics_3funds` to `plotly::ggplotly`.
+
+I'll close it out with a hot stock tip: buy FANG.
 
 ``` r
-apply(fig, 2, median)
-#>     SPY   BRK-B 
-#> 0.07349 0.05481
-mean(fig[, 2] > fig[, 1])
-#> [1] 0.4331
+plot_growth(tickers = c("FB", "AAPL", "NFLX", "GOOG"), from = "2015-01-01")
 ```
 
-BRK-B has a tendency for worse risk-adjusted returns than SPY - not good, Mr. Buffett!
+![](README-unnamed-chunk-12-1.png)
 
-### 2-fund portfolio optimization
-
-Until recently, my own retirement portfolio was simply 1/3 UPRO, 2/3 VBLTX. UPRO is a 3x daily S&P 500 ETF, and VBLTX is Vanguard's long-term bond mutual fund. A good way of visualizing the characteristics of a two-fund portfolio is to plot mean vs. standard deviation of daily gains, for allocations ranging from 100% fund 1 to 100% fund 2. To do that, using data over UPRO's lifetime, going back to 6/25/09:
-
-``` r
-fig <- twofunds_graph(tickers = c("UPRO", "VBLTX"), reference.tickers = "SPY",  
-                      to = "2018-03-02")
-```
-
-![](README-unnamed-chunk-13-1.png)
-
-The UPRO/VBLTX strategy sort of trumps SPY, because there are regions on the curve with higher returns and lower volatility than SPY.
-
-For another example, we, could look at annualized growth vs. maximum drawdown rather than mean vs. standard deviation, and look at UPRO/VBLTX as well as UPRO/VBMFX, to see how swapping the long-term fund VBLTX with the total bond fund VBMFX would affect our portfolio.
-
-``` r
-fig <- twofunds_graph(tickers = c("UPRO", "VBLTX", "UPRO", "VBMFX"), 
-                      reference.tickers = "SPY",  
-                      to = "2018-03-02", 
-                      x.metric = "mdd", y.metric = "cagr")
-```
-
-![](README-unnamed-chunk-14-1.png)
-
-UPRO/VBLTX clearly has much better performance. One more example, this time Sharpe ratio vs. allocation, for the same two funds plus UPRO/TLT:
-
-``` r
-fig <- twofunds_graph(tickers = c("UPRO", "VBLTX", "UPRO", "VBMFX", "UPRO", "TLT"), 
-                      reference.tickers = "SPY",  
-                      to = "2018-03-02", 
-                      x.metric = "mean", y.metric = "sharpe", 
-                      plot.list = list(ylim = c(0, 0.12)))
-```
-
-![](README-unnamed-chunk-15-1.png)
-
-The rationale for this graph is that we might want to target the same level of expected returns as SPY, but with as high of a Sharpe ratio as possible. If you go straight up on the graph from the SPY data point, you hit the red curve first, then the orange, and finally the blue. So we would choose UPRO/VBLTX, with something like 75-80% allocated to VBLTX.
-
-### 3-fund portfolio optimization
-
-The change I made recently was adding Vanguard's high-yield (aka "junk bond") mutual fund, VWEHX, to the mix. To visualize characteristics of VWEHX/UPRO/VBLTX:
-
-``` r
-fig <- threefunds_graph(tickers = c("VWEHX", "UPRO", "VBLTX"), 
-                        reference.tickers = "SPY",  
-                        to = "2018-03-02")
-```
-
-![](README-unnamed-chunk-16-1.png)
-
-Each curve is for a fixed allocation to the first fund. The black curve is 0% VWEHX, so it is the same as the UPRO/VBLTX curve in the previous graph. The red curve is 20% VWEHX, and the remaining 80% allocated entirely to VBLTX (bottom-most point), entirely to UPRO (top-right data point), and everywhere in between.
-
-At SPY's SD, the black curve (0% VWEHX) achieves the highest mean. At SPY's mean, the blue (40% VWEHX) or red (20% VWEHX) curve has the lowest SD. So depending on what you're going for, it may or may not be worthwhile adding VWEHX. My rationale was sort of qualitative: two nearly independent alpha-generating bond funds seems better than one.
-
-Conclusions
------------
-
-Hopefully this gives you a good idea of the main functions in **stocks**. There are a lot of options I didn't cover, especially for the graphics functions. You can read about these options by looking at the relevant help files (e.g. run `?twofunds_graph` in R). Please feel free to e-mail me at <vandomed@gmail.com> with questions or suggestions, or, better yet, contribute to the project on [GitHub](https://github.com/vandomed/stocks).
-
-References
-----------
-
+<!-- ## Conclusions -->
+<!-- Hopefully this gives you a good idea of the main functions in **stocks**. There are a lot of options I didn't cover, especially for the graphics functions. You can read about these options by looking at the relevant help files (e.g. run `?twofunds_graph` in R). Please feel free to e-mail me at <vandomed@gmail.com> with questions or suggestions, or, better yet, contribute to the project on [GitHub](https://github.com/vandomed/stocks). -->
+<!-- ## Version history -->
+<!-- | Version                   |Notes -->
+<!-- |:--------------------------|:----------------------------------------------------- -->
+<!-- |1.0-1.5                    |Original -->
+<!-- |2.0                        |Switched from base R to ggplot (slower but better) -->
+<!-- |                           |Added support for piping -->
+<!-- |                           |Simplified functions to calculate performance metrics -->
+<!-- ## References -->
 Peterson, Brian G., and Peter Carl. 2014. *PerformanceAnalytics: Econometric Tools for Performance and Risk Analysis*. <https://CRAN.R-project.org/package=PerformanceAnalytics>.
 
 Ryan, Jeffrey A., and Joshua M. Ulrich. 2017. *Quantmod: Quantitative Financial Modelling Framework*. <https://CRAN.R-project.org/package=quantmod>.

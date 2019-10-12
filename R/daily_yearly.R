@@ -1,10 +1,11 @@
 #' Convert Daily Gain to X-year Gain
 #' 
 #' For example, you can use this function to calculate that an investment that 
-#' gains 0.1% per day would gain approximately 28.5% in a year (252 trading 
+#' gains 0.1\% each day would gain approximately 28.5\% in a year (252 trading 
 #' days).
 #' 
-#' @inheritParams convert_gain 
+#' @param gain Numeric vector specifying each gain to convert, e.g. 0.001 for 
+#' 0.1\%.
 #' @param years Numeric value.
 #' 
 #' 
@@ -21,5 +22,5 @@
 #' 
 #' @export
 daily_yearly <- function(gain, years = 1) {
-  return((1 + gain)^(252 * years) - 1)
+  (1 + gain)^(252 * years) - 1
 }

@@ -2,25 +2,24 @@
 % Please edit documentation in R/gains_rate.R
 \name{gains_rate}
 \alias{gains_rate}
-\title{Calculate Growth Rate From a Vector of Gains}
+\title{Calculate Growth Rate from Sequence of Gains}
 \usage{
-gains_rate(gains, units.rate = NULL)
+gains_rate(gains, units.out = NULL)
 }
 \arguments{
-\item{gains}{Numeric matrix with 1 column of gains for each investment (can 
-be a vector if there is only one).}
+\item{gains}{Data frame with one column of gains for each investment (can be 
+a numeric vector if there is only one).}
 
-\item{units.rate}{Numeric value specifying the number of units for growth 
+\item{units.out}{Numeric value specifying the number of units for growth 
 rate calculation, if you want something other than total growth. For 
 annualized growth rate, set to 252 if \code{gains} has daily gains, 12 if 
 \code{gains} has monthly gains, etc.}
 }
 \value{
-Numeric value if \code{gains} is a vector, numeric matrix if 
-\code{gains} is a matrix.
+Numeric vector.
 }
 \description{
-The formula is simply: \code{prod(gains + 1) - 1}. If \code{units.rate} is 
+The formula is simply: \code{prod(gains + 1) - 1}. If \code{units.out} is 
 specified, then it converts to x-unit growth rate.
 }
 \examples{
