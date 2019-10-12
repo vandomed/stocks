@@ -13,6 +13,9 @@ calc_metrics_2funds(gains = NULL, metrics = c("mean", "sd"),
 \item{gains}{Data frame with a date variable named Date and one column of 
 gains for each investment.}
 
+\item{metrics}{Character vector specifying metrics to calculate. See 
+\code{?calc_metrics} for choices.}
+
 \item{tickers}{Character vector of ticker symbols, where the first two are 
 are a two-fund pair, the next two are another, and so on.}
 
@@ -25,13 +28,7 @@ prices for each investment.}
 \item{benchmark}{Character string specifying which fund to use as a 
 benchmark for metrics that require one.}
 
-\item{ref.tickers}{Character vector of ticker symbols to include on the 
-plot.}
-
-\item{formula}{Formula specifying what to plot, e.g. \code{mean ~ sd}, 
-\code{cagr ~ mdd}, or \code{sharpe ~ allocation}. See \code{?calc_metrics} 
-for list of metrics to choose from (\code{"allocation"} is an extra option 
-here).}
+\item{ref.tickers}{Character vector of ticker symbols to include.}
 }
 \value{
 Depending on \code{return}, a \code{\link[ggplot2]{ggplot}} object, a data

@@ -176,13 +176,13 @@ plot_metrics_overtime <- function(metrics = NULL,
       
       if (! is.null(y.metric)) {
         df[[ylabel]] <- gains.long[, rolling_metric(
-          gain = Gain, metric = y.metric, width = width, units.year = units.year, benchmark.gains = get(y.benchmark)
+          gains = Gain, metric = y.metric, width = width, units.year = units.year, benchmark.gains = get(y.benchmark)
         ), Fund][[2]]
       }
       
       if (! is.null(x.metric)) {
         df[[xlabel]] <- gains.long[, rolling_metric(
-          gain = Gain, metric = x.metric, width = width, units.year = units.year, benchmark.gains = get(x.benchmark)
+          gains = Gain, metric = x.metric, width = width, units.year = units.year, benchmark.gains = get(x.benchmark)
         ), Fund][[2]]
       }
       
@@ -206,7 +206,7 @@ plot_metrics_overtime <- function(metrics = NULL,
       labs(title = paste(metric.info$title[y.metric], "over Time"),
            y = metric.info$label[y.metric], 
            x = "End date") + 
-      ylim(range(c(0, df[[ylabel]]))) + 
+      ylim(range(c(0, df[[ylabel]])) * 1.01) + 
       theme_bw()
     
   } else if (is.null(y.metric)) {
@@ -232,8 +232,8 @@ plot_metrics_overtime <- function(metrics = NULL,
       labs(title = paste(metric.info$title[y.metric], "vs.", metric.info$title[x.metric]),
            y = ylabel, 
            x = xlabel) + 
-      ylim(range(c(0, df[[ylabel]]))) + 
-      xlim(range(c(0, df[[xlabel]]))) +  
+      ylim(range(c(0, df[[ylabel]])) * 1.01) + 
+      xlim(range(c(0, df[[xlabel]])) * 1.01) +  
       theme_bw()
     
   }

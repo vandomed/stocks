@@ -187,8 +187,8 @@ plot_metrics <- function(metrics = NULL,
       labs(title = paste(metric.info$title[y.metric], "vs.", metric.info$title[x.metric]),
            y = ylabel, 
            x = xlabel) +
-      ylim(range(c(0, df[[ylabel]]))) +
-      xlim(range(c(0, df[[xlabel]]))) + 
+      ylim(range(c(0, df[[ylabel]])) * 1.02) +
+      xlim(range(c(0, df[[xlabel]])) * 1.02) + 
       theme_bw()
     
   }

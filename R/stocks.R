@@ -9,7 +9,7 @@
 #' Package: \tab stocks \cr
 #' Type: \tab Package \cr
 #' Version: \tab 2.0.0 \cr
-#' Date: \tab 2019-10-11 \cr
+#' Date: \tab 2019-10-12 \cr
 #' License: \tab GPL-3 \cr
 #' }
 #'
@@ -63,5 +63,6 @@
 NULL
 utils::globalVariables(
   c(".", "Allocation (%)", "Allocation 1 (%)", "Allocation 2 (%)", "Balance", 
-    "Date", "Fund", "Gain", "Label", "n", "Pair", "Period", ".SD", "Trio")
+    "Date", "Fund", "Gain", "Label", "metric.info", "n", ".N", "Pair", "Period", 
+    ".SD", "Trio")
 )

@@ -6,10 +6,8 @@
 #' 
 #' @param gains Data frame with a date variable named Date and one column of 
 #' gains for each investment.
-#' @param formula Formula specifying what to plot, e.g. \code{mean ~ sd}, 
-#' \code{cagr ~ mdd}, or \code{sharpe ~ allocation}. See \code{?calc_metrics} 
-#' for list of metrics to choose from (\code{"allocation"} is an extra option 
-#' here).
+#' @param metrics Character vector specifying metrics to calculate. See 
+#' \code{?calc_metrics} for choices.
 #' @param tickers Character vector of ticker symbols, where the first two are 
 #' are a two-fund pair, the next two are another, and so on.
 #' @param ... Arguments to pass along with \code{tickers} to 
@@ -18,8 +16,7 @@
 #' prices for each investment.
 #' @param benchmark Character string specifying which fund to use as a 
 #' benchmark for metrics that require one.
-#' @param ref.tickers Character vector of ticker symbols to include on the 
-#' plot.
+#' @param ref.tickers Character vector of ticker symbols to include.
 #' 
 #' 
 #' @return
@@ -121,8 +118,8 @@ calc_metrics_2funds <- function(gains = NULL,
       `Allocation (%)` = `Allocation 1 (%)`
     )
     for (x in metrics) {
-      df.pair[[metric.info$label[x]]] <- apply(wgains.pair, 2, function(x) {
-        calc_metric(gains = x, metric = x.metric, units.year = units.year, benchmark.gains = x.benchmark.gains)
+      df.pair[[metric.info$label[x]]] <- apply(wgains.pair, 2, function(y) {
+        calc_metric(gains = y, metric = x, units.year = units.year, benchmark.gains = benchmark.gains)
       })
     }
     return(df.pair)

@@ -17,7 +17,9 @@ want to plot. Typically the result of a prior call to
 \item{formula}{Formula specifying what to plot, e.g. \code{mean ~ sd}, 
 \code{cagr ~ mdd}, or \code{sharpe ~ allocation}. See \code{?calc_metrics} 
 for list of metrics to choose from (\code{"allocation"} is an extra option 
-here).}
+here). If you specify \code{metrics}, default behavior is to use 
+\code{mean ~ sd} unless either is not available, in which case the first two 
+performance metrics that appear as columns in \code{metrics} are used.}
 
 \item{tickers}{Character vector of ticker symbols, where the first three are 
 are a three-fund set, the next three are another, and so on.}

@@ -1,7 +1,7 @@
 Get Rich with 'stocks'
 ================
 Dane Van Domelen <br> <vandomed@gmail.com>
-2019-10-11
+2019-10-12
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 [![Build Status](https://travis-ci.org/vandomed/stocks.svg?branch=master)](https://travis-ci.org/vandomed/stocks)
@@ -27,15 +27,15 @@ There are functions for calculating performance metrics, visualizing the perform
 <tbody>
 <tr class="odd">
 <td align="left"><code>load_prices</code></td>
-<td align="left">Download Historical Prices for a Set of Tickers</td>
+<td align="left">Download Historical Prices</td>
 </tr>
 <tr class="even">
 <td align="left"><code>load_gains</code></td>
-<td align="left">Download Historical Gains for a Set of Tickers</td>
+<td align="left">Download Historical Gains</td>
 </tr>
 <tr class="odd">
 <td align="left"><code>plot_growth</code></td>
-<td align="left">Plot Growth of Investments</td>
+<td align="left">Plot Investment Growth</td>
 </tr>
 <tr class="even">
 <td align="left"><code>calc_metrics</code></td>
@@ -47,27 +47,27 @@ There are functions for calculating performance metrics, visualizing the perform
 </tr>
 <tr class="even">
 <td align="left"><code>calc_metrics_2funds</code></td>
-<td align="left">Calculate Performance Metrics for Two-Fund Portfolios with Varying Allocations</td>
+<td align="left">Calculate Performance Metrics for Two-Fund Portfolios</td>
 </tr>
 <tr class="odd">
 <td align="left"><code>calc_metrics_3funds</code></td>
-<td align="left">Calculate Performance Metrics for Three-Fund Portfolios with Varying Allocations</td>
+<td align="left">Calculate Performance Metrics for Three-Fund Portfolios</td>
 </tr>
 <tr class="even">
 <td align="left"><code>plot_metrics</code></td>
-<td align="left">Plot One Performance Metric (Sorted Bar Plot) or One Performance Metric vs. Another (Scatterplot)</td>
+<td align="left">Plot One Performance Metric (Sorted Bar Plot) or One vs. Another (Scatterplot)</td>
 </tr>
 <tr class="odd">
 <td align="left"><code>plot_metrics_overtime</code></td>
-<td align="left">Plot One Performance Metric vs. Time or One Performance Metric vs. Another over Time</td>
+<td align="left">Plot One Performance Metric vs. Time or One vs. Another over Time</td>
 </tr>
 <tr class="even">
 <td align="left"><code>plot_metrics_2funds</code></td>
-<td align="left">Plot One Performance Metric vs. Time or One Performance Metric vs. Another over Time</td>
+<td align="left">Plot One Performance Metric vs. Another for Two-Fund Portfolios</td>
 </tr>
 <tr class="odd">
 <td align="left"><code>plot_metrics_3funds</code></td>
-<td align="left">Plot One Performance Metric vs. Another for a Three-Fund Portfolio with Varying Allocations</td>
+<td align="left">Plot One Performance Metric vs. Another for Three-Fund Portfolios</td>
 </tr>
 </tbody>
 </table>
@@ -81,36 +81,36 @@ Stocks and bonds are obviously the primary building blocks for a retirement port
 
 ### Assess each fund's performance over their mutual lifetimes
 
-We can use *load\_gains* to download historical daily gains for SPY and TLT over their mutual lifetimes:
+We can use `load_gains` to download historical daily gains for SPY and TLT over their mutual lifetimes:
 
 ``` r
 library("stocks")
 gains <- load_gains(c("SPY", "TLT"), mutual.start = TRUE, to = "2018-12-31")
 head(gains)
-#>            Date     SPY     TLT
-#> 2395 2002-07-31  0.0024  0.0124
-#> 2396 2002-08-01 -0.0261  0.0057
-#> 2397 2002-08-02 -0.0224  0.0102
-#> 2398 2002-08-05 -0.0348  0.0044
-#> 2399 2002-08-06  0.0337 -0.0085
-#> 2400 2002-08-07  0.0174  0.0024
+#>            Date      SPY      TLT
+#> 2395 2002-07-31  0.00242  0.01239
+#> 2396 2002-08-01 -0.02611  0.00569
+#> 2397 2002-08-02 -0.02241  0.01024
+#> 2398 2002-08-05 -0.03480  0.00441
+#> 2399 2002-08-06  0.03366 -0.00855
+#> 2400 2002-08-07  0.01744  0.00240
 ```
 
-We can call (or pipe into) *calc\_metrics* to calculate some performance metrics. `calc_metrics` returns a normal data frame, but I'll call `knitr::kable` to print it as a neat-looking table:
+We can call (or pipe into) `calc_metrics` to calculate some performance metrics. `calc_metrics` returns a normal data frame, but I'll call `knitr::kable` to print it as a neat-looking table:
 
 ``` r
 metrics <- calc_metrics(gains)
 knitr::kable(metrics)
 ```
 
-| Fund |  Mean (%)|  SD (%)|  Growth (%)|  CAGR (%)|  Max drawdown (%)|  Sharpe ratio|  Sortino ratio|  Alpha (%)|  Annualized alpha (%)|   Beta|  R-squared|  Pearson corr.|  Spearman corr.|  Pearson autocorr.|  Spearman autocorr.|
-|:-----|---------:|-------:|-----------:|---------:|-----------------:|-------------:|--------------:|----------:|---------------------:|------:|----------:|--------------:|---------------:|------------------:|-------------------:|
-| SPY  |      0.04|    1.17|         281|       8.5|                55|          0.03|           0.04|       0.00|                     0|   1.00|       1.00|            1.0|            1.00|              -0.08|               -0.05|
-| TLT  |      0.03|    0.84|         173|       6.3|                27|          0.03|           0.05|       0.04|                    10|  -0.29|       0.16|           -0.4|           -0.34|              -0.04|               -0.05|
+| Fund |  Mean (%)|  SD (%)|  Growth (%)|  CAGR (%)|  Max drawdown (%)|  Sharpe ratio|  Sortino ratio|  Alpha (%)|  Annualized alpha (%)|    Beta|  R-squared|  Pearson correlation|  Spearman correlation|  Pearson autocorr.|  Spearman autocorr.|
+|:-----|---------:|-------:|-----------:|---------:|-----------------:|-------------:|--------------:|----------:|---------------------:|-------:|----------:|--------------------:|---------------------:|------------------:|-------------------:|
+| SPY  |     0.039|   1.168|         281|      8.49|              55.2|         0.034|          0.042|      0.000|                   0.0|   1.000|      1.000|                1.000|                 1.000|             -0.079|              -0.051|
+| TLT  |     0.028|   0.844|         173|      6.31|              26.6|         0.033|          0.050|      0.039|                  10.4|  -0.292|      0.163|               -0.404|                -0.344|             -0.037|              -0.045|
 
 We see here that SPY has achieved stronger growth (8.5% vs. 6.3%), but with a much worse max drawdown (55.2% vs. 26.6%). TLT's Sharpe ratio (a measure of risk-adjusted returns) is somewhat higher than SPY's.
 
-Without getting too far ahead of myself, TLT's positive alpha (0.04%) and negative beta (-0.29) are precisely why it pairs so well with SPY. This isn't unique to TLT; all bond funds should generate alpha (otherwise, don't invest!), and they're often negatively correlated with equities.
+Without getting too far ahead of myself, TLT's positive alpha (0.039%) and negative beta (-0.292) are precisely why it pairs so well with SPY. This isn't unique to TLT; all bond funds should generate alpha (otherwise, don't invest!), and they're often negatively correlated with equities.
 
 For a visual comparison of the returns and volatility of these two ETF's, we can plot mean vs. SD using `plot_metrics`.
 
@@ -118,7 +118,7 @@ For a visual comparison of the returns and volatility of these two ETF's, we can
 plot_metrics(metrics, mean ~ sd)
 ```
 
-![](README-unnamed-chunk-4-1.png)
+<img src="README-unnamed-chunk-4-1.png" width="80%" />
 
 No surprise, the S&P 500 ETF had more growth, but also higher volatility.
 
@@ -135,7 +135,7 @@ c("SPY", "TLT") %>%
   plot_metrics_overtime(pearson ~ .)
 ```
 
-![](README-unnamed-chunk-5-1.png)
+<img src="README-unnamed-chunk-5-1.png" width="80%" />
 
 While the tendency is certainly for negative correlation, there's a lot of variability, and in some years the correlation was actually slightly positive.
 
@@ -161,11 +161,11 @@ calc_metrics(gains, c("cagr", "mdd", "sharpe", "sortino")) %>%
 
 | Fund  |  CAGR (%)|  Max drawdown (%)|  Sharpe ratio|  Sortino ratio|
 |:------|---------:|-----------------:|-------------:|--------------:|
-| SPY   |       8.5|                55|          0.03|           0.04|
-| TLT   |       6.3|                27|          0.03|           0.05|
-| 50-50 |       8.4|                23|          0.06|           0.08|
+| SPY   |      8.49|              55.2|         0.034|          0.042|
+| TLT   |      6.31|              26.6|         0.033|          0.050|
+| 50-50 |      8.37|              23.0|         0.059|          0.082|
 
-Indeed, while the 50-50 portfolio achieved slightly lower raw returns than SPY alone (8.4% vs. 8.5% annualized), its max drawdown was far better, and its Sharpe and Sortino ratios indicated much better risk-adjusted growth compared to the individual ETF's.
+Indeed, while the 50-50 portfolio achieved slightly lower raw returns than SPY alone, its max drawdown was far better, and its Sharpe and Sortino ratios indicated much better risk-adjusted growth compared to the individual ETF's.
 
 ### What's the optimal allocation?
 
@@ -177,7 +177,7 @@ plot_metrics_2funds(gains = gains,
                     tickers = c("SPY", "TLT"))
 ```
 
-![](README-unnamed-chunk-8-1.png)
+<img src="README-unnamed-chunk-8-1.png" width="80%" />
 
 In terms of risk-adjusted growth, the Sharpe ratio curve is somewhat more interesting. The maximum Sharpe ratio occurs around 40% SPY, and the Sharpe ratio gets much worse as you approach 60% SPY and higher.
 
@@ -187,7 +187,7 @@ plot_metrics_2funds(gains = gains,
                     tickers = c("SPY", "TLT"))
 ```
 
-![](README-unnamed-chunk-9-1.png)
+<img src="README-unnamed-chunk-9-1.png" width="80%" />
 
 We can gain additional insight by plotting two metrics against each other, across all possible allocations. A common strategy is to plot the mean vs. standard deviation as a function of the allocation:
 
@@ -197,7 +197,7 @@ plot_metrics_2funds(gains = gains,
                     tickers = c("SPY", "TLT"))
 ```
 
-![](README-unnamed-chunk-10-1.png)
+<img src="README-unnamed-chunk-10-1.png" width="80%" />
 
 This plot yields an interesting finding: starting at 100% TLT, increasing the allocation to SPY simultaneously *reduces volatility* and *increases returns*. In other words, you'd be crazy not to ride the curve up and to the left, adding at least a 30% SPY allocation.
 
@@ -215,7 +215,7 @@ plot_metrics_3funds(formula = mean ~ sd,
                     tickers = c("VWEHX", "VBLTX", "UPRO"))
 ```
 
-![](README-unnamed-chunk-11-1.png)
+<img src="README-unnamed-chunk-11-1.png" width="80%" />
 
 By default, SPY is included on the plot, so you can compare metrics to the S&P. Notice that many points on the UPRO-VBLTX-VWEHX surface are higher and to the left of SPY, meaning this strategy has the potential to trump the S&P in terms of risk-reward.
 
@@ -229,7 +229,7 @@ I'll close it out with a hot stock tip: buy FANG.
 plot_growth(tickers = c("FB", "AAPL", "NFLX", "GOOG"), from = "2015-01-01")
 ```
 
-![](README-unnamed-chunk-12-1.png)
+<img src="README-unnamed-chunk-12-1.png" width="80%" />
 
 <!-- ## Conclusions -->
 <!-- Hopefully this gives you a good idea of the main functions in **stocks**. There are a lot of options I didn't cover, especially for the graphics functions. You can read about these options by looking at the relevant help files (e.g. run `?twofunds_graph` in R). Please feel free to e-mail me at <vandomed@gmail.com> with questions or suggestions, or, better yet, contribute to the project on [GitHub](https://github.com/vandomed/stocks). -->
@@ -240,9 +240,7 @@ plot_growth(tickers = c("FB", "AAPL", "NFLX", "GOOG"), from = "2015-01-01")
 <!-- |2.0                        |Switched from base R to ggplot (slower but better) -->
 <!-- |                           |Added support for piping -->
 <!-- |                           |Simplified functions to calculate performance metrics -->
-<!-- ## References -->
-Peterson, Brian G., and Peter Carl. 2014. *PerformanceAnalytics: Econometric Tools for Performance and Risk Analysis*. <https://CRAN.R-project.org/package=PerformanceAnalytics>.
+References
+----------
 
 Ryan, Jeffrey A., and Joshua M. Ulrich. 2017. *Quantmod: Quantitative Financial Modelling Framework*. <https://CRAN.R-project.org/package=quantmod>.
-
-Xie, Yihui. 2017. *Printr: Automatically Print R Objects to Appropriate Formats According to the ’Knitr’ Output Format*. <https://CRAN.R-project.org/package=printr>.

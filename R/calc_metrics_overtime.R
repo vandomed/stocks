@@ -17,8 +17,8 @@
 #' \code{"roll.n"} where n is a positive integer, \code{"hop.n"} where n is a 
 #' positive integer, \code{"hop.month"}, and \code{"hop.year"}. The "roll" 
 #' and "hop" options correspond to rolling and disjoint windows, respectively.
-#' @param prices Data frame with one column of prices for each investment and a 
-#' date variable named Date.
+#' @param prices Data frame with a date variable named Date and one column of 
+#' prices for each investment.
 #' @param benchmark Character string specifying which fund to use as a 
 #' benchmark for metrics that require one.
 #' 
@@ -127,7 +127,7 @@ calc_metrics_overtime <- function(gains = NULL,
       gains.long[, .(Date = Date[width: length(Date)]), by = Fund], 
       sapply(metrics, function(x) {
         gains.long[, rolling_metric(
-          gain = Gain, metric = x, width = width, units.year = units.year, 
+          gains = Gain, metric = x, width = width, units.year = units.year, 
           benchmark.gains = get(benchmark)
         ), by = Fund][[2]]
       })

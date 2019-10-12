@@ -6,10 +6,8 @@
 #' 
 #' @param gains Data frame with a date variable named Date and one column of 
 #' gains for each investment.
-#' @param formula Formula specifying what to plot, e.g. \code{mean ~ sd}, 
-#' \code{cagr ~ mdd}, or \code{sharpe ~ allocation}. See \code{?calc_metrics} 
-#' for list of metrics to choose from (\code{"allocation"} is an extra option 
-#' here).
+#' @param metrics Character vector specifying metrics to calculate. See 
+#' \code{?calc_metrics} for choices.
 #' @param tickers Character vector of ticker symbols, where the first three are 
 #' are a three-fund set, the next three are another, and so on.
 #' @param ... Arguments to pass along with \code{tickers} to 
@@ -18,6 +16,7 @@
 #' prices for each investment.
 #' @param benchmark Character string specifying which fund to use as a 
 #' benchmark for metrics that require one.
+#' @param ref.tickers Character vector of ticker symbols to include.
 #' 
 #' 
 #' @return
@@ -45,7 +44,8 @@ calc_metrics_3funds <- function(gains = NULL,
                                 step1 = 5, 
                                 step2 = step1,  
                                 prices = NULL, 
-                                benchmark = "SPY") {
+                                benchmark = "SPY", 
+                                ref.tickers = "SPY") {
   
   # Check that requested metrics are valid
   invalid.requests <- setdiff(metrics, names(metric.info$label))
@@ -112,7 +112,7 @@ calc_metrics_3funds <- function(gains = NULL,
   w2 <- weights[2, ] * 100
   w3 <- weights[3, ] * 100
   
-  df <- lapply(seq(1, length(tickers), 3), function(x) {
+  df <- bind_rows(lapply(seq(1, length(tickers), 3), function(x) {
     gains.trio <- as.matrix(gains[tickers[x: (x + 2)]]) 
     wgains.trio <- gains.trio %*% weights
     df.trio <- tibble(
@@ -125,13 +125,35 @@ calc_metrics_3funds <- function(gains = NULL,
       `Allocation 3 (%)` = w3, 
       `Allocation (%)` = `Allocation 1 (%)`
     )
-    for (x in metrics) {
-      df.trio[[metric.info$label[x]]] <- apply(wgains.trio, 2, function(x) {
-        calc_metric(gains = x, metric = x, units.year = units.year, benchmark.gains = benchmark.gains)
+    for (y in metrics) {
+      
+      df.trio[[metric.info$label[y]]] <- apply(wgains.trio, 2, function(z) {
+        calc_metric(gains = z, metric = y, units.year = units.year, benchmark.gains = benchmark.gains)
       })
     }
     return(df.trio)
-  })
-  as.data.frame(bind_rows(df))
+  }))
+  
+  # Extract metrics for 100% each ticker
+  df$Label <- ifelse(
+    df$`Allocation 1 (%)` == 100, paste("100%", df$`Fund 1`), 
+    ifelse(df$`Allocation 2 (%)` == 100, paste("100%", df$`Fund 2`), 
+           ifelse(df$`Allocation 3 (%)` == 100, paste("100%", df$`Fund 3`), NA))
+  )
+  
+  # Calculate metrics for reference funds
+  if (! is.null(ref.tickers)) {
+    
+    df.ref <- tibble(Trio = ref.tickers, Label = ref.tickers, `Allocation (%)` = 50.1)
+    for (x in metrics) {
+      df.ref[[x]] <- sapply(gains[ref.tickers], function(x) {
+        calc_metric(gains = x, metric = y.metric, units.year = units.year, benchmark.gains = y.benchmark.gains)
+      })
+    }
+    df <- bind_rows(df.ref, df)
+    
+  }
+  
+  as.data.frame(df)
   
 }

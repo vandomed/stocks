@@ -10,7 +10,9 @@
 #' @param formula Formula specifying what to plot, e.g. \code{mean ~ sd}, 
 #' \code{cagr ~ mdd}, or \code{sharpe ~ allocation}. See \code{?calc_metrics} 
 #' for list of metrics to choose from (\code{"allocation"} is an extra option 
-#' here).
+#' here). If you specify \code{metrics}, default behavior is to use 
+#' \code{mean ~ sd} unless either is not available, in which case the first two 
+#' performance metrics that appear as columns in \code{metrics} are used.
 #' @param tickers Character vector of ticker symbols, where the first two are 
 #' are a two-fund pair, the next two are another, and so on.
 #' @param ... Arguments to pass along with \code{tickers} to 
@@ -59,6 +61,14 @@ plot_metrics_2funds <- function(metrics = NULL,
   
   # Extract info from formula
   all.metrics <- all.vars(formula, functions = FALSE)
+  if (! is.null(metrics) & ! all(metric.info$label[all.metrics] %in% names(metrics))) {
+    all.metrics <- names(metric.info$label[metric.info$label %in% intersect(names(metrics), metric.info$label)])
+    if (length(metric.labels) >= 2) {
+      all.metrics <- all.metrics[1: 2]
+    } else {
+      stop("The input 'metrics' must have at least two columns with performance metrics")
+    }
+  }
   y.metric <- x.metric <- NULL
   if (all.metrics[1] != ".") y.metric <- all.metrics[1]
   if (all.metrics[2] != ".") x.metric <- all.metrics[2]
@@ -211,8 +221,8 @@ plot_metrics_2funds <- function(metrics = NULL,
     labs(title = paste(metric.info$title[y.metric], "vs.", metric.info$title[x.metric]),
          y = ylabel, 
          x = xlabel) + 
-    ylim(range(c(0, df[[ylabel]]))) + 
-    xlim(range(c(0, df[[xlabel]]))) + 
+    ylim(range(c(0, df[[ylabel]])) * 1.01) + 
+    xlim(range(c(0, df[[xlabel]])) * 1.01) + 
     scale_colour_manual(values = cols) +
     theme_bw()
   

@@ -18,23 +18,14 @@ knitr::opts_chunk$set(
   comment = "#>",
   fig.path = "README-",
   warning = FALSE, 
-  message = FALSE
+  message = FALSE, 
+  out.width = '80%', 
+  dpi = 600
 )
 ```
 
 ```{r setup, include = FALSE}
-
-# Load packages
-library("xtable")
-library("knitr")
-
-# Set xtable options
-options("xtable.caption.placement" = "top", 
-        "xtable.include.rownames" = TRUE, 
-        "xtable.comment" = FALSE)
-
-# Other options
-options(digits = 2)
+options(digits = 3)
 ```
 
 ## 'stocks' package
@@ -66,7 +57,7 @@ Stocks and bonds are obviously the primary building blocks for a retirement port
 
 ### Assess each fund's performance over their mutual lifetimes
 
-We can use *load_gains* to download historical daily gains for SPY and TLT over their mutual lifetimes:
+We can use `load_gains` to download historical daily gains for SPY and TLT over their mutual lifetimes:
 
 ```{r}
 library("stocks")
@@ -74,7 +65,7 @@ gains <- load_gains(c("SPY", "TLT"), mutual.start = TRUE, to = "2018-12-31")
 head(gains)
 ```
 
-We can call (or pipe into) *calc_metrics* to calculate some performance metrics. `calc_metrics` returns a normal data frame, but I'll call `knitr::kable` to print it as a neat-looking table:
+We can call (or pipe into) `calc_metrics` to calculate some performance metrics. `calc_metrics` returns a normal data frame, but I'll call `knitr::kable` to print it as a neat-looking table:
 
 ```{r}
 metrics <- calc_metrics(gains)
@@ -83,7 +74,7 @@ knitr::kable(metrics)
 
 We see here that SPY has achieved stronger growth (8.5% vs. 6.3%), but with a much worse max drawdown (55.2% vs. 26.6%). TLT's Sharpe ratio (a measure of risk-adjusted returns) is somewhat higher than SPY's. 
 
-Without getting too far ahead of myself, TLT's positive alpha (0.04%) and negative beta (-0.29) are precisely why it pairs so well with SPY. This isn't unique to TLT; all bond funds should generate alpha (otherwise, don't invest!), and they're often negatively correlated with equities. 
+Without getting too far ahead of myself, TLT's positive alpha (0.039%) and negative beta (-0.292) are precisely why it pairs so well with SPY. This isn't unique to TLT; all bond funds should generate alpha (otherwise, don't invest!), and they're often negatively correlated with equities. 
 
 For a visual comparison of the returns and volatility of these two ETF's, we can plot mean vs. SD using `plot_metrics`. 
 
@@ -130,7 +121,7 @@ calc_metrics(gains, c("cagr", "mdd", "sharpe", "sortino")) %>%
   knitr::kable()
 ```
 
-Indeed, while the 50-50 portfolio achieved slightly lower raw returns than SPY alone (8.4% vs. 8.5% annualized), its max drawdown was far better, and its Sharpe and Sortino ratios indicated much better risk-adjusted growth compared to the individual ETF's.
+Indeed, while the 50-50 portfolio achieved slightly lower raw returns than SPY alone, its max drawdown was far better, and its Sharpe and Sortino ratios indicated much better risk-adjusted growth compared to the individual ETF's.
 
 
 ### What's the optimal allocation?
@@ -203,4 +194,4 @@ plot_growth(tickers = c("FB", "AAPL", "NFLX", "GOOG"), from = "2015-01-01")
 <!-- |                           |Simplified functions to calculate performance metrics -->
 
 
-<!-- ## References -->
+## References

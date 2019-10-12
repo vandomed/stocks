@@ -26,8 +26,8 @@ recognizes, if you want to download data on the fly.}
 positive integer, \code{"hop.month"}, and \code{"hop.year"}. The "roll" 
 and "hop" options correspond to rolling and disjoint windows, respectively.}
 
-\item{prices}{Data frame with one column of prices for each investment and a 
-date variable named Date.}
+\item{prices}{Data frame with a date variable named Date and one column of 
+prices for each investment.}
 
 \item{benchmark}{Character string specifying which fund to use as a 
 benchmark for metrics that require one.}
