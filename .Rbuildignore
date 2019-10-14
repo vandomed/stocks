@@ -1,7 +1,7 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
 ^LICENSE$
-^README.*$
+^README*$
 ^Thumbs.db$
 ^.travis.yml$
 ^bibliography.bib$

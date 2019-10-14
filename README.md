@@ -1,7 +1,7 @@
 Get Rich with 'stocks'
 ================
 Dane Van Domelen <br> <vandomed@gmail.com>
-2019-10-12
+2019-10-13
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 [![Build Status](https://travis-ci.org/vandomed/stocks.svg?branch=master)](https://travis-ci.org/vandomed/stocks)
@@ -118,7 +118,7 @@ For a visual comparison of the returns and volatility of these two ETF's, we can
 plot_metrics(metrics, mean ~ sd)
 ```
 
-<img src="README-unnamed-chunk-4-1.png" width="80%" />
+<img src="README-figures/unnamed-chunk-4-1.png" width="80%" />
 
 No surprise, the S&P 500 ETF had more growth, but also higher volatility.
 
@@ -135,7 +135,7 @@ c("SPY", "TLT") %>%
   plot_metrics_overtime(pearson ~ .)
 ```
 
-<img src="README-unnamed-chunk-5-1.png" width="80%" />
+<img src="README-figures/unnamed-chunk-5-1.png" width="80%" />
 
 While the tendency is certainly for negative correlation, there's a lot of variability, and in some years the correlation was actually slightly positive.
 
@@ -177,7 +177,7 @@ plot_metrics_2funds(gains = gains,
                     tickers = c("SPY", "TLT"))
 ```
 
-<img src="README-unnamed-chunk-8-1.png" width="80%" />
+<img src="README-figures/unnamed-chunk-8-1.png" width="80%" />
 
 In terms of risk-adjusted growth, the Sharpe ratio curve is somewhat more interesting. The maximum Sharpe ratio occurs around 40% SPY, and the Sharpe ratio gets much worse as you approach 60% SPY and higher.
 
@@ -187,7 +187,7 @@ plot_metrics_2funds(gains = gains,
                     tickers = c("SPY", "TLT"))
 ```
 
-<img src="README-unnamed-chunk-9-1.png" width="80%" />
+<img src="README-figures/unnamed-chunk-9-1.png" width="80%" />
 
 We can gain additional insight by plotting two metrics against each other, across all possible allocations. A common strategy is to plot the mean vs. standard deviation as a function of the allocation:
 
@@ -197,7 +197,7 @@ plot_metrics_2funds(gains = gains,
                     tickers = c("SPY", "TLT"))
 ```
 
-<img src="README-unnamed-chunk-10-1.png" width="80%" />
+<img src="README-figures/unnamed-chunk-10-1.png" width="80%" />
 
 This plot yields an interesting finding: starting at 100% TLT, increasing the allocation to SPY simultaneously *reduces volatility* and *increases returns*. In other words, you'd be crazy not to ride the curve up and to the left, adding at least a 30% SPY allocation.
 
@@ -215,7 +215,7 @@ plot_metrics_3funds(formula = mean ~ sd,
                     tickers = c("VWEHX", "VBLTX", "UPRO"))
 ```
 
-<img src="README-unnamed-chunk-11-1.png" width="80%" />
+<img src="README-figures/unnamed-chunk-11-1.png" width="80%" />
 
 By default, SPY is included on the plot, so you can compare metrics to the S&P. Notice that many points on the UPRO-VBLTX-VWEHX surface are higher and to the left of SPY, meaning this strategy has the potential to trump the S&P in terms of risk-reward.
 
@@ -229,7 +229,7 @@ I'll close it out with a hot stock tip: buy FANG.
 plot_growth(tickers = c("FB", "AAPL", "NFLX", "GOOG"), from = "2015-01-01")
 ```
 
-<img src="README-unnamed-chunk-12-1.png" width="80%" />
+<img src="README-figures/unnamed-chunk-12-1.png" width="80%" />
 
 <!-- ## Conclusions -->
 <!-- Hopefully this gives you a good idea of the main functions in **stocks**. There are a lot of options I didn't cover, especially for the graphics functions. You can read about these options by looking at the relevant help files (e.g. run `?twofunds_graph` in R). Please feel free to e-mail me at <vandomed@gmail.com> with questions or suggestions, or, better yet, contribute to the project on [GitHub](https://github.com/vandomed/stocks). -->
