@@ -38,13 +38,13 @@
 #' @examples
 #' \dontrun{
 #' # Plot mean vs. SD for UPRO/VBLTX, and compare to SPY
-#' plot_metrics_2funds(mean ~ sd, c("UPRO", "VBLTX"))
+#' plot_metrics_2funds(formula = mean ~ sd, tickers = c("UPRO", "VBLTX"))
 #' 
 #' # Plot CAGR vs. MDD for AAPL/GOOG and FB/TWTR
-#' plot_metrics_2funds(cagr ~ mdd, tickers = c("AAPL", "GOOG", "FB", "TWTR"))
+#' plot_metrics_2funds(formula = cagr ~ mdd, tickers = c("AAPL", "GOOG", "FB", "TWTR"))
 #' 
 #' # Plot Sharpe ratio vs. allocation for SPY/TLT
-#' plot_metrics_2funds(sharpe ~ allocation, tickers = c("SPY", "TLT"))
+#' plot_metrics_2funds(formula = sharpe ~ allocation, tickers = c("SPY", "TLT"))
 #' }
 #'
 #' @export
@@ -217,14 +217,7 @@ plot_metrics_2funds <- function(metrics = NULL,
   cols[pairs] <- gg_color_hue(length(pairs))
   cols[ref.tickers] <- "black"
   
-  p <- ggplot(df, mapping = aes(x = .data[[xlabel]], y = .data[[ylabel]], group = Pair, color = Pair)) + 
-    labs(title = paste(metric.info$title[y.metric], "vs.", metric.info$title[x.metric]),
-         y = ylabel, 
-         x = xlabel) + 
-    ylim(range(c(0, df[[ylabel]])) * 1.01) + 
-    xlim(range(c(0, df[[xlabel]])) * 1.01) + 
-    scale_colour_manual(values = cols) +
-    theme_bw()
+  p <- ggplot(df, aes(y = .data[[ylabel]], x = .data[[xlabel]], group = Pair, color = Pair))
   
   if (x.metric == "allocation" & ! is.null(ref.tickers)) {
     p <- p + geom_hline(data = df.ref, yintercept = df.ref[[ylabel]], lty = 2)
@@ -235,10 +228,16 @@ plot_metrics_2funds <- function(metrics = NULL,
   p <- p + 
     geom_point(data = df.points, show.legend = FALSE) +
     geom_path(show.legend = FALSE) + 
-    geom_label_repel(aes(label = Label), data = subset(df, ! is.na(Label)), show.legend = FALSE) 
+    geom_label_repel(aes(label = Label), subset(df, ! is.na(Label)), show.legend = FALSE) + 
+    ylim(range(c(0, df[[ylabel]])) * 1.01) + 
+    xlim(range(c(0, df[[xlabel]])) * 1.01) + 
+    scale_colour_manual(values = cols) + 
+    theme(legend.title = element_blank()) + 
+    labs(title = paste(metric.info$title[y.metric], "vs.", metric.info$title[x.metric]),
+         y = ylabel, x = xlabel)
   
   if (return == "plot") return(p)
-  if (return == "data") return(df[, ! names(df) %in% c("Fund 1", "Fund 2", "Allocation (%)")])
-  if (return == "both") return(list(plot = p, data = df[, ! names(df) %in% c("Fund 1", "Fund 2", "Allocation (%)")]))
+  if (return == "data") return(df)
+  if (return == "both") return(list(plot = p, data = df))
   
 }

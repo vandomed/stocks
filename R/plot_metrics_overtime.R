@@ -80,9 +80,8 @@ plot_metrics_overtime <- function(metrics = NULL,
   if (all.metrics[2] != ".") x.metric <- all.metrics[2]
   all.metrics <- c(x.metric, y.metric)
   
-  xlabel <- metric.info$label[x.metric]
   ylabel <- metric.info$label[y.metric]
-  labels <- c(xlabel, ylabel)
+  xlabel <- metric.info$label[x.metric]
   
   # Align benchmarks with metrics
   if (! any(c("alpha", "alpha.annualized", "beta", "r.squared", "pearson", "spearman") %in% y.metric)) {
@@ -198,38 +197,34 @@ plot_metrics_overtime <- function(metrics = NULL,
     p <- ggplot(df, aes(y = .data[[ylabel]], x = Date, group = Fund, color = Fund)) + 
       geom_point() + 
       geom_path() + 
-      labs(title = paste(metric.info$title[y.metric], "over Time"),
-           y = metric.info$label[y.metric], 
-           x = "End date") + 
       ylim(range(c(0, df[[ylabel]])) * 1.01) + 
-      theme_bw()
+      theme(legend.title = element_blank()) + 
+      labs(title = paste(metric.info$title[y.metric], "over Time"),
+           y = metric.info$label[y.metric], x = "End date")
     
   } else if (is.null(y.metric)) {
     
     p <- ggplot(df, aes(y = Date, x = .data[[xlabel]], group = Fund, color = Fund)) + 
       geom_point() + 
       geom_path() + 
+      xlim(range(c(0, df[[xlabel]])) * 1.01) + 
+      theme(legend.title = element_blank()) + 
       labs(title = paste(metric.info$title[y.metric], "over Time"),
-           y = "End date", 
-           x = xlabel) + 
-      xlim(range(c(0, df[[xlabel]]))) +
-      theme_bw()
+           y = "End date", x = xlabel)
     
   } else {
     
-    p <- ggplot(df, aes(x = .data[[xlabel]], y = .data[[ylabel]], 
-                        group = Fund, color = Fund)) + 
+    p <- ggplot(df, aes(y = .data[[ylabel]], x = .data[[xlabel]], group = Fund, color = Fund)) + 
       geom_path() + 
       geom_point() + 
       geom_point(data = df[, .SD[1], Fund], show.legend = FALSE) + 
-      geom_path(data = df[, .SD[c(.N-1, .N)], Fund], show.legend = FALSE, 
+      geom_path(data = df[, .SD[c(.N - 1, .N)], Fund], show.legend = FALSE, 
                 arrow = arrow(angle = 15, type = "closed", length = unit(0.1, "inches"))) + 
-      labs(title = paste(metric.info$title[y.metric], "vs.", metric.info$title[x.metric]),
-           y = ylabel, 
-           x = xlabel) + 
       ylim(range(c(0, df[[ylabel]])) * 1.01) + 
       xlim(range(c(0, df[[xlabel]])) * 1.01) +  
-      theme_bw()
+      theme(legend.title = element_blank()) + 
+      labs(title = paste(metric.info$title[y.metric], "vs.", metric.info$title[x.metric]),
+           y = ylabel, x = xlabel)
     
   }
   

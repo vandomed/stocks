@@ -54,13 +54,13 @@ a measure of growth vs. a measure of volatility.
 \examples{
 \dontrun{
 # Plot mean vs. SD for UPRO/VBLTX, and compare to SPY
-plot_metrics_2funds(mean ~ sd, c("UPRO", "VBLTX"))
+plot_metrics_2funds(formula = mean ~ sd, tickers = c("UPRO", "VBLTX"))
 
 # Plot CAGR vs. MDD for AAPL/GOOG and FB/TWTR
-plot_metrics_2funds(cagr ~ mdd, tickers = c("AAPL", "GOOG", "FB", "TWTR"))
+plot_metrics_2funds(formula = cagr ~ mdd, tickers = c("AAPL", "GOOG", "FB", "TWTR"))
 
 # Plot Sharpe ratio vs. allocation for SPY/TLT
-plot_metrics_2funds(sharpe ~ allocation, tickers = c("SPY", "TLT"))
+plot_metrics_2funds(formula = sharpe ~ allocation, tickers = c("SPY", "TLT"))
 }
 
 }

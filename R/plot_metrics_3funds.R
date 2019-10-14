@@ -42,13 +42,13 @@
 #' @examples
 #' \dontrun{
 #' # Plot mean vs. SD for UPRO/VBLTX/VWEHX
-#' plot_metrics_3funds(mean ~ sd, tickers = c("UPRO", "VBLTX", "VWEHX"))
+#' plot_metrics_3funds(formula = mean ~ sd, tickers = c("UPRO", "VBLTX", "VWEHX"))
 #' 
 #' # Plot CAGR vs. MDD for FB/AAPL/NFLX and SPY/TLT/JNK
-#' plot_metrics_3funds(cagr ~ mdd, tickers = c("FB", "AAPL", "NFLX", "SPY", "TLT", "JNK"))
+#' plot_metrics_3funds(formula = cagr ~ mdd, tickers = c("FB", "AAPL", "NFLX", "SPY", "TLT", "JNK"))
 #' 
 #' # Plot Sharpe ratio vs. allocation for the same sets
-#' plot_metrics_3funds(sharpe ~ allocation, tickers = c("FB", "AAPL", "NFLX", "SPY", "TLT", "JNK"))
+#' plot_metrics_3funds(formula = sharpe ~ allocation, tickers = c("FB", "AAPL", "NFLX", "SPY", "TLT", "JNK"))
 #' }
 #' 
 #'
@@ -245,14 +245,7 @@ plot_metrics_3funds <- function(metrics = NULL,
   cols[ref.tickers] <- "black"
   
   # Create plot
-  p <- ggplot(df, mapping = aes(x = .data[[xlabel]], y = .data[[ylabel]], group = Trio, color = Trio)) + 
-    labs(title = paste(metric.info$title[y.metric], "vs.", metric.info$title[x.metric]),
-         y = ylabel, 
-         x = xlabel) + 
-    xlim(range(c(0, df[[xlabel]])) * 1.01) + 
-    ylim(range(c(0, df[[ylabel]])) * 1.01) + 
-    scale_colour_manual(values = cols) + 
-    theme_bw()
+  p <- ggplot(df, aes(y = .data[[ylabel]], x = .data[[xlabel]], group = Trio, color = Trio))
     
   if (x.metric == "allocation" & ! is.null(ref.tickers)) {
     p <- p + geom_hline(data = df.ref, yintercept = df.ref[[ylabel]], lty = 2)
@@ -266,10 +259,16 @@ plot_metrics_3funds <- function(metrics = NULL,
     geom_path(data = subset(df, `Allocation 1 (%)` == 0), color = "black") + 
     geom_path(data = subset(df, `Allocation 2 (%)` == 0), color = "black") + 
     geom_path(data = subset(df, `Allocation 3 (%)` == 0), color = "black") + 
-    geom_label_repel(aes(label = Label), data = subset(df, ! is.na(Label)), show.legend = FALSE)
+    geom_label_repel(aes(label = Label), subset(df, ! is.na(Label)), show.legend = FALSE) + 
+    ylim(range(c(0, df[[ylabel]])) * 1.01) + 
+    xlim(range(c(0, df[[xlabel]])) * 1.01) + 
+    scale_colour_manual(values = cols) + 
+    theme(legend.title = element_blank()) + 
+    labs(title = paste(metric.info$title[y.metric], "vs.", metric.info$title[x.metric]),
+         y = ylabel, x = xlabel)
   
   if (return == "plot") return(p)
-  if (return == "data") return(df[, ! names(df) %in% c("Fund 1", "Fund 2", "Fund 3", "Allocation (%)")])
-  if (return == "both") return(list(plot = p, data = df[, ! names(df) %in% c("Fund 1", "Fund 2", "Fund 3", "Allocation (%)")]))
+  if (return == "data") return(df)
+  if (return == "both") return(list(plot = p, data = df))
   
 }

@@ -167,39 +167,29 @@ plot_metrics <- function(metrics = NULL,
   if (is.null(x.metric)) {
     
     # For y.metric only
-    p <- ggplot(df, aes(y = .data[[ylabel]], 
-                        x = reorder(Fund, .data[[ylabel]]))) + 
+    p <- ggplot(df, aes(y = .data[[ylabel]], x = reorder(Fund, .data[[ylabel]]))) + 
       geom_col() + 
       labs(title = paste(metric.info$title[y.metric], "for Various Funds"),
-           y = ylabel, 
-           x = NULL) + 
-      theme_bw()
+           y = ylabel, x = NULL)
     
   } else if (is.null(y.metric)) {
     
     # For x.metric only
-    p <- ggplot(df, aes(y = .data[[xlabel]], 
-                        x = reorder(Fund, .data[[xlabel]]))) + 
+    p <- ggplot(df, aes(y = .data[[xlabel]], x = reorder(Fund, .data[[xlabel]]))) + 
       geom_col() + 
-      labs(title = paste(metric.info$title[x.metric], "for Various Funds"),
-           y = ylabel, 
-           x = NULL) + 
       coord_flip() + 
-      theme_bw()
+      labs(title = paste(metric.info$title[x.metric], "for Various Funds"),
+           y = ylabel, x = NULL)
     
   } else {
     
-    p <- ggplot(df, aes(y = .data[[ylabel]], 
-                        x = .data[[xlabel]], 
-                        group = Fund, label = Fund)) + 
+    p <- ggplot(df, aes(y = .data[[ylabel]], x = .data[[xlabel]], group = Fund, label = Fund)) + 
       geom_point() + 
       geom_label_repel() + 
-      labs(title = paste(metric.info$title[y.metric], "vs.", metric.info$title[x.metric]),
-           y = ylabel, 
-           x = xlabel) +
       ylim(range(c(0, df[[ylabel]])) * 1.02) +
       xlim(range(c(0, df[[xlabel]])) * 1.02) + 
-      theme_bw()
+      labs(title = paste(metric.info$title[y.metric], "vs.", metric.info$title[x.metric]),
+           y = ylabel, x = xlabel)
     
   }
   

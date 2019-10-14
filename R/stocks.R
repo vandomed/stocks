@@ -52,7 +52,7 @@
 #' @import quantmod
 #' @importFrom Rcpp evalCpp
 #' @importFrom rbenchmark benchmark
-#' @importFrom scales hue_pal
+#' @importFrom scales comma hue_pal
 #' @import stats
 #' @importFrom tidyr as_tibble pivot_longer
 #' @importFrom TTR ROC

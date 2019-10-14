@@ -64,12 +64,10 @@ plot_growth <- function(prices = NULL,
   # Create plot
   p <- ggplot(df, aes(x = Date, y = Balance, group = Fund, color = Fund)) + 
     geom_line(na.rm = TRUE) + 
-    labs(title = "Balance over Time", 
-         y = "Balance ($)", 
-         x = "Date") + 
-    theme_bw() + 
-    theme(legend.title = element_blank())
-
+    scale_y_continuous(labels = comma) + 
+    theme(legend.title = element_blank()) +
+    labs(title = "Balance over Time", y = "Balance ($)", x = "Date")
+  
   return(p)
   
 }
