@@ -248,11 +248,11 @@ Version history
 <tbody>
 <tr class="odd">
 <td align="left">1.0</td>
-<td align="left">Original and minor changes</td>
+<td align="left">Original</td>
 </tr>
 <tr class="even">
 <td align="left">1.2-1.4</td>
-<td align="left">Added some new functions</td>
+<td align="left">Added functions, bug fixes, etc.</td>
 </tr>
 <tr class="odd">
 <td align="left">2.0</td>

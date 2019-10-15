@@ -184,8 +184,8 @@ plot_growth(tickers = c("FB", "AAPL", "NFLX", "GOOG"), from = "2015-01-01")
 
 | Version                   |Updates
 |:--------------------------|:-----------------------------------------------------
-|1.0                        |Original and minor changes
-|1.2-1.4                    |Added some new functions
+|1.0                        |Original
+|1.2-1.4                    |Added functions, bug fixes, etc.
 |2.0                        |Switched to **ggplot**, added piping support, simplified functions for calculating metrics
 
 
