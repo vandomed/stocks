@@ -1,7 +1,7 @@
 Get Rich with 'stocks'
 ================
 Dane Van Domelen <br> <vandomed@gmail.com>
-2019-10-13
+2019-10-15
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 [![Build Status](https://travis-ci.org/vandomed/stocks.svg?branch=master)](https://travis-ci.org/vandomed/stocks)
@@ -231,15 +231,36 @@ plot_growth(tickers = c("FB", "AAPL", "NFLX", "GOOG"), from = "2015-01-01")
 
 <img src="README-figures/unnamed-chunk-12-1.png" width="80%" />
 
-<!-- ## Conclusions -->
-<!-- Hopefully this gives you a good idea of the main functions in **stocks**. There are a lot of options I didn't cover, especially for the graphics functions. You can read about these options by looking at the relevant help files (e.g. run `?twofunds_graph` in R). Please feel free to e-mail me at <vandomed@gmail.com> with questions or suggestions, or, better yet, contribute to the project on [GitHub](https://github.com/vandomed/stocks). -->
-<!-- ## Version history -->
-<!-- | Version                   |Notes -->
-<!-- |:--------------------------|:----------------------------------------------------- -->
-<!-- |1.0-1.5                    |Original -->
-<!-- |2.0                        |Switched from base R to ggplot (slower but better) -->
-<!-- |                           |Added support for piping -->
-<!-- |                           |Simplified functions to calculate performance metrics -->
+Version history
+---------------
+
+<table>
+<colgroup>
+<col width="33%" />
+<col width="66%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Version</th>
+<th align="left">Updates</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">1.0</td>
+<td align="left">Original and minor changes</td>
+</tr>
+<tr class="even">
+<td align="left">1.2-1.4</td>
+<td align="left">Added some new functions</td>
+</tr>
+<tr class="odd">
+<td align="left">2.0</td>
+<td align="left">Switched to <strong>ggplot</strong>, added piping support, simplified functions for calculating metrics</td>
+</tr>
+</tbody>
+</table>
+
 References
 ----------
 

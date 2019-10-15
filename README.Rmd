@@ -180,19 +180,13 @@ plot_growth(tickers = c("FB", "AAPL", "NFLX", "GOOG"), from = "2015-01-01")
 ```
 
 
-<!-- ## Conclusions -->
+## Version history
 
-<!-- Hopefully this gives you a good idea of the main functions in **stocks**. There are a lot of options I didn't cover, especially for the graphics functions. You can read about these options by looking at the relevant help files (e.g. run `?twofunds_graph` in R). Please feel free to e-mail me at <vandomed@gmail.com> with questions or suggestions, or, better yet, contribute to the project on [GitHub](https://github.com/vandomed/stocks). -->
-
-
-<!-- ## Version history -->
-
-<!-- | Version                   |Notes -->
-<!-- |:--------------------------|:----------------------------------------------------- -->
-<!-- |1.0-1.5                    |Original -->
-<!-- |2.0                        |Switched from base R to ggplot (slower but better) -->
-<!-- |                           |Added support for piping -->
-<!-- |                           |Simplified functions to calculate performance metrics -->
+| Version                   |Updates
+|:--------------------------|:-----------------------------------------------------
+|1.0                        |Original and minor changes
+|1.2-1.4                    |Added some new functions
+|2.0                        |Switched to **ggplot**, added piping support, simplified functions for calculating metrics
 
 
 ## References

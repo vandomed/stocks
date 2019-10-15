@@ -183,11 +183,11 @@ plot_metrics <- function(metrics = NULL,
     
   } else {
     
-    p <- ggplot(df, aes(y = .data[[ylabel]], x = .data[[xlabel]], group = Fund, label = Fund)) + 
-      geom_point() + 
-      geom_label_repel() + 
+    p <- ggplot(df, aes(y = .data[[ylabel]], x = .data[[xlabel]], group = Fund, label = Fund)) +
+      geom_point() +
+      geom_label_repel() +
       ylim(range(c(0, df[[ylabel]])) * 1.02) +
-      xlim(range(c(0, df[[xlabel]])) * 1.02) + 
+      xlim(range(c(0, df[[xlabel]])) * 1.02) +
       labs(title = paste(metric.info$title[y.metric], "vs.", metric.info$title[x.metric]),
            y = ylabel, x = xlabel)
     
