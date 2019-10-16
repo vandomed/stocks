@@ -13,9 +13,17 @@
 #' @param gains Data frame with one column of gains for each investment and a 
 #' date variable named Date.
 #' @param initial Numeric value specifying value to scale initial prices to.
+#' @param ggplotly Logical value for whether to convert the 
+#' \code{\link[ggplot2]{ggplot}} to a \code{\link[plotly]{ggplotly}} object 
+#' internally.
 #' @param return Character string specifying what to return. Choices are 
 #' \code{"plot"}, \code{"data"}, and \code{"both"}.
 #' 
+#' 
+#' @return
+#' Depending on \code{return} and \code{ggplotly}, a 
+#' \code{\link[ggplot2]{ggplot}}/\code{\link[plotly]{ggplotly}} object, a data 
+#' frame with the source data, or a list containing both.
 #' 
 #' @return
 #' A \code{\link[ggplot2]{ggplot}} object.
@@ -32,6 +40,7 @@ plot_growth <- function(prices = NULL,
                         tickers = NULL, ...,
                         gains = NULL, 
                         initial = 10000, 
+                        ggplotly = FALSE, 
                         return = "plot") {
   
   # Determine prices if not pre-specified
@@ -59,15 +68,24 @@ plot_growth <- function(prices = NULL,
     data.table::as.data.table() %>% 
     data.table::melt(measure.vars = tickers, 
                      variable.name = "Fund", 
-                     value.name = "Balance")
+                     value.name = "Balance") %>%
+    as.data.frame()
   
   # Create plot
-  p <- ggplot(df, aes(x = Date, y = Balance, group = Fund, color = Fund)) + 
+  df$text <- paste("Fund: ", df$Fund,
+                   "<br>", "Balance: $", comma(df$Balance, accuracy = 0.01), 
+                   "<br>", "Date: ", df$Date, sep = "") 
+  p <- ggplot(df, aes(x = Date, y = Balance, group = Fund, color = Fund, text = text)) + 
     geom_line(na.rm = TRUE) + 
     scale_y_continuous(labels = comma) + 
     theme(legend.title = element_blank()) +
     labs(title = "Balance over Time", y = "Balance ($)", x = "Date")
   
+  if (ggplotly) p <- ggplotly(p, tooltip = "text")
+  
+  if (return == "plot") return(p)
+  if (return == "data") return(df)
+  if (return == "both") return(list(plot = p, data = df))
   return(p)
   
 }

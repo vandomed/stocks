@@ -5,7 +5,7 @@
 \title{Plot Investment Growth}
 \usage{
 plot_growth(prices = NULL, tickers = NULL, ..., gains = NULL,
-  initial = 10000, return = "plot")
+  initial = 10000, ggplotly = FALSE, return = "plot")
 }
 \arguments{
 \item{prices}{Data frame with one column of prices for each investment and a 
@@ -22,10 +22,18 @@ date variable named Date.}
 
 \item{initial}{Numeric value specifying value to scale initial prices to.}
 
+\item{ggplotly}{Logical value for whether to convert the 
+\code{\link[ggplot2]{ggplot}} to a \code{\link[plotly]{ggplotly}} object 
+internally.}
+
 \item{return}{Character string specifying what to return. Choices are 
 \code{"plot"}, \code{"data"}, and \code{"both"}.}
 }
 \value{
+Depending on \code{return} and \code{ggplotly}, a 
+\code{\link[ggplot2]{ggplot}}/\code{\link[plotly]{ggplotly}} object, a data 
+frame with the source data, or a list containing both.
+
 A \code{\link[ggplot2]{ggplot}} object.
 }
 \description{

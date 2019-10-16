@@ -24,6 +24,9 @@
 #' for y-axis metric.
 #' @param x.benchmark Character string specifying which fund to use as benchmark 
 #' for x-axis metric.
+#' @param ggplotly Logical value for whether to convert the 
+#' \code{\link[ggplot2]{ggplot}} to a \code{\link[plotly]{ggplotly}} object 
+#' internally.
 #' @param return Character string specifying what to return. Choices are 
 #' \code{"plot"}, \code{"data"}, and \code{"both"}.
 #' 
@@ -59,6 +62,7 @@ plot_metrics <- function(metrics = NULL,
                          benchmark = "SPY", 
                          y.benchmark = benchmark, 
                          x.benchmark = benchmark, 
+                         ggplotly = FALSE, 
                          return = "plot") {
   
   # Extract info from formula
@@ -164,10 +168,13 @@ plot_metrics <- function(metrics = NULL,
   df <- subset(df, ! Fund %in% c(y.benchmark, x.benchmark))
 
   # Create plot
+  
   if (is.null(x.metric)) {
     
     # For y.metric only
-    p <- ggplot(df, aes(y = .data[[ylabel]], x = reorder(Fund, .data[[ylabel]]))) + 
+    df$text <- paste("Fund: ", df$Fund,
+                     "<br>", ylabel, ": ", round(df[[ylabel]], metric.info$decimals[ylabel]), sep = "") 
+    p <- ggplot(df, aes(y = .data[[ylabel]], x = reorder(Fund, .data[[ylabel]]), text = text)) + 
       geom_col() + 
       labs(title = paste(metric.info$title[y.metric], "for Various Funds"),
            y = ylabel, x = NULL)
@@ -175,7 +182,9 @@ plot_metrics <- function(metrics = NULL,
   } else if (is.null(y.metric)) {
     
     # For x.metric only
-    p <- ggplot(df, aes(y = .data[[xlabel]], x = reorder(Fund, .data[[xlabel]]))) + 
+    df$text <- paste("Fund: ", df$Fund,
+                     "<br>", xlabel, ": ", round(df[[xlabel]], metric.info$decimals[xlabel]), sep = "") 
+    p <- ggplot(df, aes(y = .data[[xlabel]], x = reorder(Fund, .data[[xlabel]]), text = text)) + 
       geom_col() + 
       coord_flip() + 
       labs(title = paste(metric.info$title[x.metric], "for Various Funds"),
@@ -183,7 +192,10 @@ plot_metrics <- function(metrics = NULL,
     
   } else {
     
-    p <- ggplot(df, aes(y = .data[[ylabel]], x = .data[[xlabel]], group = Fund, label = Fund)) +
+    df$text <- paste("Fund: ", df$Fund,
+                     "<br>", xlabel, ": ", round(df[[xlabel]], metric.info$decimals[xlabel]), 
+                     "<br>", ylabel, ": ", round(df[[ylabel]], metric.info$decimals[ylabel]), sep = "") 
+    p <- ggplot(df, aes(y = .data[[ylabel]], x = .data[[xlabel]], group = Fund, label = Fund, text = text)) +
       geom_point() +
       geom_label_repel() +
       ylim(range(c(0, df[[ylabel]])) * 1.02) +
@@ -192,6 +204,9 @@ plot_metrics <- function(metrics = NULL,
            y = ylabel, x = xlabel)
     
   }
+  
+  if (ggplotly) p <- ggplotly(p, tooltip = "text")
+  df <- df[names(df) != "text"]
   
   if (return == "plot") return(p)
   if (return == "data") return(df)

@@ -48,6 +48,7 @@
 #' @importFrom grDevices hcl
 #' @importFrom lubridate month year
 #' @import methods
+#' @importFrom plotly ggplotly
 #' @importFrom purrr reduce
 #' @import quantmod
 #' @importFrom Rcpp evalCpp

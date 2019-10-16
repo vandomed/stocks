@@ -4,10 +4,10 @@
 \name{metric_info}
 \alias{metric_info}
 \alias{metric.info}
-\title{Labels for Performance Metrics}
+\title{Lookup Table for Performance Metrics}
 \source{
 Original
 }
 \description{
-Labels for Performance Metrics
+Lookup Table for Performance Metrics
 }

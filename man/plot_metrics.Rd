@@ -7,7 +7,8 @@
 \usage{
 plot_metrics(metrics = NULL, formula = cagr ~ mdd, tickers = NULL,
   ..., gains = NULL, prices = NULL, benchmark = "SPY",
-  y.benchmark = benchmark, x.benchmark = benchmark, return = "plot")
+  y.benchmark = benchmark, x.benchmark = benchmark, ggplotly = FALSE,
+  return = "plot")
 }
 \arguments{
 \item{metrics}{"Long" data frame with Fund column and column for each metric 
@@ -38,6 +39,10 @@ for y-axis metric.}
 
 \item{x.benchmark}{Character string specifying which fund to use as benchmark 
 for x-axis metric.}
+
+\item{ggplotly}{Logical value for whether to convert the 
+\code{\link[ggplot2]{ggplot}} to a \code{\link[plotly]{ggplotly}} object 
+internally.}
 
 \item{return}{Character string specifying what to return. Choices are 
 \code{"plot"}, \code{"data"}, and \code{"both"}.}

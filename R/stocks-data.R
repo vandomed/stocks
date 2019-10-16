@@ -169,7 +169,7 @@ NULL
 #' @source \url{https://investor.vanguard.com/etf/list?assetclass=bond#/etf/asset-class/month-end-returns}
 NULL
 #'
-#' Labels for Performance Metrics
+#' Lookup Table for Performance Metrics
 #' @name metric_info
 #' @aliases metric.info
 #' @docType data
