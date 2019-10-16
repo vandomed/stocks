@@ -7,7 +7,7 @@
 plot_metrics_overtime(metrics = NULL, formula = cagr ~ .,
   type = "hop.year", tickers = NULL, ..., gains = NULL,
   prices = NULL, benchmark = "SPY", y.benchmark = benchmark,
-  x.benchmark = benchmark, return = "plot")
+  x.benchmark = benchmark, ggplotly = FALSE, return = "plot")
 }
 \arguments{
 \item{metrics}{"Long" data frame with Fund column, Date column, and column 
@@ -37,6 +37,10 @@ prices for each investment.}
 \item{benchmark, y.benchmark, x.benchmark}{Character string specifying which 
 fund to use as benchmark for metrics (if you request \code{alpha}, 
 \code{alpha.annualized}, \code{beta}, or \code{r.squared}).}
+
+\item{ggplotly}{Logical value for whether to convert the 
+\code{\link[ggplot2]{ggplot}} to a \code{\link[plotly]{ggplotly}} object 
+internally.}
 
 \item{return}{Character string specifying what to return. Choices are 
 \code{"plot"}, \code{"data"}, and \code{"both"}.}

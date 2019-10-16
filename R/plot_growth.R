@@ -73,9 +73,9 @@ plot_growth <- function(prices = NULL,
   
   # Create plot
   df$text <- paste("Fund: ", df$Fund,
-                   "<br>", "Balance: $", comma(df$Balance, accuracy = 0.01), 
-                   "<br>", "Date: ", df$Date, sep = "") 
-  p <- ggplot(df, aes(x = Date, y = Balance, group = Fund, color = Fund, text = text)) + 
+                   "<br>", "Date: ", df$Date, 
+                   "<br>", "Balance: $", comma(df$Balance, accuracy = 0.01), sep = "") 
+  p <- ggplot(df, aes(y = Balance, x = Date, group = Fund, color = Fund, text = text)) + 
     geom_line(na.rm = TRUE) + 
     scale_y_continuous(labels = comma) + 
     theme(legend.title = element_blank()) +

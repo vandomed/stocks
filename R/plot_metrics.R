@@ -173,8 +173,10 @@ plot_metrics <- function(metrics = NULL,
     
     # For y.metric only
     df$text <- paste("Fund: ", df$Fund,
-                     "<br>", ylabel, ": ", round(df[[ylabel]], metric.info$decimals[ylabel]), sep = "") 
-    p <- ggplot(df, aes(y = .data[[ylabel]], x = reorder(Fund, .data[[ylabel]]), text = text)) + 
+                     "<br>", ylabel, ": ", round(df[[ylabel]], metric.info$decimals[y.metric]), sep = "") 
+    p <- ggplot(df, aes(y = .data[[ylabel]], 
+                        x = reorder(Fund, .data[[ylabel]]), 
+                        text = text)) + 
       geom_col() + 
       labs(title = paste(metric.info$title[y.metric], "for Various Funds"),
            y = ylabel, x = NULL)
@@ -183,8 +185,9 @@ plot_metrics <- function(metrics = NULL,
     
     # For x.metric only
     df$text <- paste("Fund: ", df$Fund,
-                     "<br>", xlabel, ": ", round(df[[xlabel]], metric.info$decimals[xlabel]), sep = "") 
-    p <- ggplot(df, aes(y = .data[[xlabel]], x = reorder(Fund, .data[[xlabel]]), text = text)) + 
+                     "<br>", xlabel, ": ", round(df[[xlabel]], metric.info$decimals[x.metric]), sep = "") 
+    p <- ggplot(df, aes(y = .data[[xlabel]], x = reorder(Fund, .data[[xlabel]]), 
+                        text = text)) + 
       geom_col() + 
       coord_flip() + 
       labs(title = paste(metric.info$title[x.metric], "for Various Funds"),
@@ -193,9 +196,11 @@ plot_metrics <- function(metrics = NULL,
   } else {
     
     df$text <- paste("Fund: ", df$Fund,
-                     "<br>", xlabel, ": ", round(df[[xlabel]], metric.info$decimals[xlabel]), 
-                     "<br>", ylabel, ": ", round(df[[ylabel]], metric.info$decimals[ylabel]), sep = "") 
-    p <- ggplot(df, aes(y = .data[[ylabel]], x = .data[[xlabel]], group = Fund, label = Fund, text = text)) +
+                     "<br>", xlabel, ": ", round(df[[xlabel]], metric.info$decimals[x.metric]), 
+                     "<br>", ylabel, ": ", round(df[[ylabel]], metric.info$decimals[y.metric]), sep = "") 
+    p <- ggplot(df, aes(y = .data[[ylabel]], 
+                        x = .data[[xlabel]], 
+                        group = Fund, label = Fund, text = text)) +
       geom_point() +
       geom_label_repel() +
       ylim(range(c(0, df[[ylabel]])) * 1.02) +

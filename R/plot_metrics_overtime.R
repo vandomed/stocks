@@ -25,6 +25,9 @@
 #' @param benchmark,y.benchmark,x.benchmark Character string specifying which 
 #' fund to use as benchmark for metrics (if you request \code{alpha}, 
 #' \code{alpha.annualized}, \code{beta}, or \code{r.squared}).
+#' @param ggplotly Logical value for whether to convert the 
+#' \code{\link[ggplot2]{ggplot}} to a \code{\link[plotly]{ggplotly}} object 
+#' internally.
 #' @param return Character string specifying what to return. Choices are 
 #' \code{"plot"}, \code{"data"}, and \code{"both"}. 
 #' 
@@ -61,6 +64,7 @@ plot_metrics_overtime <- function(metrics = NULL,
                                   benchmark = "SPY", 
                                   y.benchmark = benchmark, 
                                   x.benchmark = benchmark, 
+                                  ggplotly = FALSE, 
                                   return = "plot") {
   
   # Extract info from formula
@@ -194,7 +198,12 @@ plot_metrics_overtime <- function(metrics = NULL,
   
   if (is.null(x.metric)) {
     
-    p <- ggplot(df, aes(y = .data[[ylabel]], x = Date, group = Fund, color = Fund)) + 
+    df$text <- paste("Fund: ", df$Fund,
+                     "<br>End date: ", df$Date,
+                     "<br>", ylabel, ": ", round(df[[ylabel]], metric.info$decimals[y.metric]), sep = "")
+    p <- ggplot(df, aes(y = .data[[ylabel]], 
+                        x = Date, 
+                        group = Fund, color = Fund, text = text)) + 
       geom_point() + 
       geom_path() + 
       ylim(range(c(0, df[[ylabel]])) * 1.01) + 
@@ -204,7 +213,12 @@ plot_metrics_overtime <- function(metrics = NULL,
     
   } else if (is.null(y.metric)) {
     
-    p <- ggplot(df, aes(y = Date, x = .data[[xlabel]], group = Fund, color = Fund)) + 
+    df$text <- paste("Fund: ", df$Fund,
+                     "<br>End date: ", df$Date, 
+                     "<br>", xlabel, ": ", round(df[[xlabel]], metric.info$decimals[x.metric]), sep = "")
+    p <- ggplot(df, aes(y = Date, 
+                        x = .data[[xlabel]], 
+                        group = Fund, color = Fund, text = text)) + 
       geom_point() + 
       geom_path() + 
       xlim(range(c(0, df[[xlabel]])) * 1.01) + 
@@ -214,11 +228,17 @@ plot_metrics_overtime <- function(metrics = NULL,
     
   } else {
     
-    p <- ggplot(df, aes(y = .data[[ylabel]], x = .data[[xlabel]], group = Fund, color = Fund)) + 
+    df$text <- paste("Fund: ", df$Fund,
+                     "<br>End date: ", df$Date, 
+                     "<br>", xlabel, ": ", round(df[[xlabel]], metric.info$decimals[x.metric]), 
+                     "<br>", ylabel, ": ", round(df[[ylabel]], metric.info$decimals[y.metric]), sep = "")
+    p <- ggplot(df, aes(y = .data[[ylabel]], 
+                        x = .data[[xlabel]], 
+                        group = Fund, color = Fund, text = text)) + 
       geom_path() + 
       geom_point() + 
-      geom_point(data = df[, .SD[1], Fund], show.legend = FALSE) + 
-      geom_path(data = df[, .SD[c(.N - 1, .N)], Fund], show.legend = FALSE, 
+      geom_point(data = df %>% group_by(Fund) %>% slice(1) %>% ungroup(), show.legend = FALSE) + 
+      geom_path(data = df %>% group_by(Fund) %>% slice(-1) %>% ungroup(), show.legend = FALSE, 
                 arrow = arrow(angle = 15, type = "closed", length = unit(0.1, "inches"))) + 
       ylim(range(c(0, df[[ylabel]])) * 1.01) + 
       xlim(range(c(0, df[[xlabel]])) * 1.01) +  
@@ -227,6 +247,9 @@ plot_metrics_overtime <- function(metrics = NULL,
            y = ylabel, x = xlabel)
     
   }
+  
+  if (ggplotly) p <- ggplotly(p, tooltip = "text")
+  df <- df[names(df) != "text"]
   
   if (return == "plot") return(p)
   if (return == "data") return(df)
