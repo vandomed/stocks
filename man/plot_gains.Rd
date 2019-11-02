@@ -8,32 +8,32 @@ plot_gains(formula = BRK.B ~ VFINX, ..., gains = NULL, prices = NULL,
   poly_order = 1, return = "plot")
 }
 \arguments{
-\item{formula}{Formula, e.g. \code{SSO + UPRO ~ SPY} to plot gains for SSO 
+\item{formula}{Formula, e.g. \code{SSO + UPRO ~ SPY} to plot gains for SSO
 and UPRO vs. SPY.}
 
-\item{...}{Arguments to pass along with \code{tickers} to 
+\item{...}{Arguments to pass along with \code{tickers} to
 \code{\link{load_gains}}.}
 
-\item{gains}{Data frame with one column of gains for each investment 
-mentioned in \code{formula}. If unspecified, function downloads historical 
+\item{gains}{Data frame with one column of gains for each investment
+mentioned in \code{formula}. If unspecified, function downloads historical
 gains internally.}
 
-\item{prices}{Data frame with one column of prices for each investment 
+\item{prices}{Data frame with one column of prices for each investment
 mentionedin \code{formula}.}
 
-\item{poly_order}{Numeric value specifying the polynomial order for linear 
-regression, e.g. \code{1} for simple linear regression or \code{2} for 
+\item{poly_order}{Numeric value specifying the polynomial order for linear
+regression, e.g. \code{1} for simple linear regression or \code{2} for
 linear regression with first- and second-order terms.}
 
-\item{return}{Character string specifying what to return. Choices are 
+\item{return}{Character string specifying what to return. Choices are
 \code{"plot"}, \code{"data"}, and \code{"both"}.}
 }
 \value{
-In addition to the graph, a list containing fitted linear regression models 
+In addition to the graph, a list containing fitted linear regression models
 returned by \code{\link[stats]{lm}} for each investment vs. the benchmark.
 }
 \description{
-Useful for visualizing how two investments behave relate to each other, or 
+Useful for visualizing how two investments behave relate to each other, or
 how several investments behave relative to the same benchmark.
 }
 \examples{
@@ -44,7 +44,7 @@ p <- plot_gains(SSO + UPRO ~ VFINX)
 
 }
 \references{
-Jeffrey A. Ryan and Joshua M. Ulrich (2019). quantmod: Quantitative Financial 
-Modelling Framework. R package version 0.4-15. 
+Jeffrey A. Ryan and Joshua M. Ulrich (2019). quantmod: Quantitative Financial
+Modelling Framework. R package version 0.4-15.
 \url{https://CRAN.R-project.org/package=quantmod}
 }

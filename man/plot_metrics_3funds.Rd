@@ -10,43 +10,43 @@ plot_metrics_3funds(metrics = NULL, formula = mean ~ sd,
   x.benchmark = benchmark, ref.tickers = "SPY", return = "plot")
 }
 \arguments{
-\item{metrics}{Data frame with Fund column and column for each metric you 
-want to plot. Typically the result of a prior call to 
+\item{metrics}{Data frame with Fund column and column for each metric you
+want to plot. Typically the result of a prior call to
 \code{\link{calc_metrics_3funds}}.}
 
-\item{formula}{Formula specifying what to plot, e.g. \code{mean ~ sd}, 
-\code{cagr ~ mdd}, or \code{sharpe ~ allocation}. See \code{?calc_metrics} 
-for list of metrics to choose from (\code{"allocation"} is an extra option 
-here). If you specify \code{metrics}, default behavior is to use 
-\code{mean ~ sd} unless either is not available, in which case the first two 
+\item{formula}{Formula specifying what to plot, e.g. \code{mean ~ sd},
+\code{cagr ~ mdd}, or \code{sharpe ~ allocation}. See \code{?calc_metrics}
+for list of metrics to choose from (\code{"allocation"} is an extra option
+here). If you specify \code{metrics}, default behavior is to use
+\code{mean ~ sd} unless either is not available, in which case the first two
 performance metrics that appear as columns in \code{metrics} are used.}
 
-\item{tickers}{Character vector of ticker symbols, where the first three are 
+\item{tickers}{Character vector of ticker symbols, where the first three are
 are a three-fund set, the next three are another, and so on.}
 
-\item{...}{Arguments to pass along with \code{tickers} to 
+\item{...}{Arguments to pass along with \code{tickers} to
 \code{\link{load_gains}}.}
 
-\item{step1}{Numeric value controlling allocation increments for first fund 
+\item{step1}{Numeric value controlling allocation increments for first fund
 of each set.}
 
-\item{step2}{Numeric value controlling allocation increments for the second 
+\item{step2}{Numeric value controlling allocation increments for the second
 and third fund in each set.}
 
-\item{gains}{Data frame with a date variable named Date and one column of 
+\item{gains}{Data frame with a date variable named Date and one column of
 gains for each investment.}
 
-\item{prices}{Data frame with a date variable named Date and one column of 
+\item{prices}{Data frame with a date variable named Date and one column of
 prices for each investment.}
 
-\item{benchmark, y.benchmark, x.benchmark}{Character string specifying which 
-fund to use as benchmark for metrics (if you request \code{alpha}, 
+\item{benchmark, y.benchmark, x.benchmark}{Character string specifying which
+fund to use as benchmark for metrics (if you request \code{alpha},
 \code{alpha.annualized}, \code{beta}, or \code{r.squared}).}
 
-\item{ref.tickers}{Character vector of ticker symbols to include on the 
+\item{ref.tickers}{Character vector of ticker symbols to include on the
 graph.}
 
-\item{return}{Character string specifying what to return. Choices are 
+\item{return}{Character string specifying what to return. Choices are
 \code{"plot"}, \code{"data"}, and \code{"both"}.}
 }
 \value{
@@ -54,7 +54,7 @@ Depending on \code{return}, a \code{\link[ggplot2]{ggplot}} object, a data
 frame, or a list containing both.
 }
 \description{
-Useful for visualizing the behavior of three-fund portfolios, often by 
+Useful for visualizing the behavior of three-fund portfolios, often by
 plotting a measure of growth vs. a measure of volatility.
 }
 \examples{
@@ -66,7 +66,8 @@ plot_metrics_3funds(formula = mean ~ sd, tickers = c("UPRO", "VBLTX", "VWEHX"))
 plot_metrics_3funds(formula = cagr ~ mdd, tickers = c("FB", "AAPL", "NFLX", "SPY", "TLT", "JNK"))
 
 # Plot Sharpe ratio vs. allocation for the same sets
-plot_metrics_3funds(formula = sharpe ~ allocation, tickers = c("FB", "AAPL", "NFLX", "SPY", "TLT", "JNK"))
+plot_metrics_3funds(formula = sharpe ~ allocation,
+                    tickers = c("FB", "AAPL", "NFLX", "SPY", "TLT", "JNK"))
 }
 
 

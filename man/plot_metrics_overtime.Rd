@@ -5,53 +5,58 @@
 \title{Plot One Performance Metric over Time or One vs. Another over Time}
 \usage{
 plot_metrics_overtime(metrics = NULL, formula = cagr ~ .,
-  type = "hop.year", tickers = NULL, ..., gains = NULL,
-  prices = NULL, benchmark = "SPY", y.benchmark = benchmark,
-  x.benchmark = benchmark, ggplotly = FALSE, return = "plot")
+  type = "hop.year", minimum.n = 3, tickers = NULL, ...,
+  gains = NULL, prices = NULL, benchmark = "SPY",
+  y.benchmark = benchmark, x.benchmark = benchmark, ggplotly = FALSE,
+  return = "plot")
 }
 \arguments{
-\item{metrics}{"Long" data frame with Fund column, Date column, and column 
-for each metric you want to plot. Typically the result of a prior call to 
+\item{metrics}{"Long" data frame with Fund column, Date column, and column
+for each metric you want to plot. Typically the result of a prior call to
 \code{\link{calc_metrics_overtime}}.}
 
-\item{formula}{Formula specifying what to plot, e.g. \code{cagr ~ mdd} for 
-CAGR vs. MDD or \code{cagr ~ .} for CAGR over time. See \code{?calc_metrics} 
+\item{formula}{Formula specifying what to plot, e.g. \code{cagr ~ mdd} for
+CAGR vs. MDD or \code{cagr ~ .} for CAGR over time. See \code{?calc_metrics}
 for list of performance metrics to choose from.}
 
-\item{type}{Character string specifying type of calculation. Choices are 
-\code{"roll.n"} where n is a positive integer, \code{"hop.n"} where n is a 
+\item{type}{Character string specifying type of calculation. Choices are
+\code{"roll.n"} where n is a positive integer, \code{"hop.n"} where n is a
 positive integer, \code{hop.month}, and \code{hop.year}.}
 
-\item{tickers}{Character vector of ticker symbols that Yahoo! Finance 
+\item{minimum.n}{Integer value specifying the minimum number of observations
+per period, e.g. if you want to exclude short partial months at the beginning
+or end of the analysis period.}
+
+\item{tickers}{Character vector of ticker symbols that Yahoo! Finance
 recognizes, if you want to download data on the fly.}
 
-\item{...}{Arguments to pass along with \code{tickers} to 
+\item{...}{Arguments to pass along with \code{tickers} to
 \code{\link{load_gains}}.}
 
-\item{gains}{Data frame with a date variable named Date and one column of 
+\item{gains}{Data frame with a date variable named Date and one column of
 gains for each investment.}
 
-\item{prices}{Data frame with a date variable named Date and one column of 
+\item{prices}{Data frame with a date variable named Date and one column of
 prices for each investment.}
 
-\item{benchmark, y.benchmark, x.benchmark}{Character string specifying which 
-fund to use as benchmark for metrics (if you request \code{alpha}, 
+\item{benchmark, y.benchmark, x.benchmark}{Character string specifying which
+fund to use as benchmark for metrics (if you request \code{alpha},
 \code{alpha.annualized}, \code{beta}, or \code{r.squared}).}
 
-\item{ggplotly}{Logical value for whether to convert the 
-\code{\link[ggplot2]{ggplot}} to a \code{\link[plotly]{ggplotly}} object 
+\item{ggplotly}{Logical value for whether to convert the
+\code{\link[ggplot2]{ggplot}} to a \code{\link[plotly]{ggplotly}} object
 internally.}
 
-\item{return}{Character string specifying what to return. Choices are 
+\item{return}{Character string specifying what to return. Choices are
 \code{"plot"}, \code{"data"}, and \code{"both"}.}
 }
 \value{
-Depending on \code{return}, a \code{\link[ggplot2]{ggplot}}, a data frame 
+Depending on \code{return}, a \code{\link[ggplot2]{ggplot}}, a data frame
 with the source data, or a list containing both.
 }
 \description{
-Useful for assessing how one or two performance metrics vary over time, for 
-one or several funds. Supports fixed-width rolling windows, fixed-width 
+Useful for assessing how one or two performance metrics vary over time, for
+one or several funds. Supports fixed-width rolling windows, fixed-width
 disjoint windows, and disjoint windows on per-month or per-year basis.
 }
 \examples{
@@ -63,11 +68,11 @@ plot_metrics_overtime(formula = growth ~ ., type = "hop.year", tickers = c("BRK-
 gains <- load_gains(c("FB", "AAPL", "NFLX", "GOOG"))
 plot_metrics_overtime(formula = sharpe ~ ., gains = gains)
 
-# Plot betas from 100-day disjoint intervals for a 2x daily (SSO) and 3x 
+# Plot betas from 100-day disjoint intervals for a 2x daily (SSO) and 3x
 # daily (UPRO) leveraged ETF, using approach (3) and piping
-c("SPY", "SSO", "UPRO") \%>\% 
-  load_gains() \%>\% 
-  calc_metrics_overtime(metrics = "beta", type = "hop.100") \%>\% 
+c("SPY", "SSO", "UPRO") \%>\%
+  load_gains() \%>\%
+  calc_metrics_overtime(metrics = "beta", type = "hop.100") \%>\%
   plot_metrics_overtime(formula = beta ~ .)
 }
 
