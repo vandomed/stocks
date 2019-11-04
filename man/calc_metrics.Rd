@@ -10,21 +10,21 @@ calc_metrics(gains = NULL, metrics = c("mean", "sd", "growth", "cagr",
   prices = NULL, tickers = NULL, ..., benchmark = "SPY")
 }
 \arguments{
-\item{gains}{Data frame with one column of gains for each investment and a 
+\item{gains}{Data frame with one column of gains for each investment and a
 date variable named Date.}
 
 \item{metrics}{Character vector specifying metrics to calculate.}
 
-\item{prices}{Data frame with one column of prices for each investment and a 
+\item{prices}{Data frame with one column of prices for each investment and a
 date variable named Date.}
 
-\item{tickers}{Character vector of ticker symbols that Yahoo! Finance 
+\item{tickers}{Character vector of ticker symbols that Yahoo! Finance
 recognizes, if you want to download data on the fly.}
 
-\item{...}{Arguments to pass along with \code{tickers} to 
+\item{...}{Arguments to pass along with \code{tickers} to
 \code{\link{load_gains}}.}
 
-\item{benchmark}{Character string specifying which fund to use as a 
+\item{benchmark}{Character string specifying which fund to use as a
 benchmark for metrics that require one.}
 }
 \value{

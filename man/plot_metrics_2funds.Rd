@@ -5,42 +5,45 @@
 \title{Plot One Performance Metric vs. Another for Two-Fund Portfolios}
 \usage{
 plot_metrics_2funds(metrics = NULL, formula = mean ~ sd,
-  tickers = NULL, ..., gains = NULL, prices = NULL,
+  tickers = NULL, ..., step = 10, gains = NULL, prices = NULL,
   benchmark = "SPY", y.benchmark = benchmark,
-  x.benchmark = benchmark, ref.tickers = "SPY", return = "plot")
+  x.benchmark = benchmark, ref.tickers = NULL, return = "plot")
 }
 \arguments{
-\item{metrics}{Data frame with Fund column and column for each metric you 
-want to plot. Typically the result of a prior call to 
+\item{metrics}{Data frame with Fund column and column for each metric you
+want to plot. Typically the result of a prior call to
 \code{\link{calc_metrics_2funds}}.}
 
-\item{formula}{Formula specifying what to plot, e.g. \code{mean ~ sd}, 
-\code{cagr ~ mdd}, or \code{sharpe ~ allocation}. See \code{?calc_metrics} 
-for list of metrics to choose from (\code{"allocation"} is an extra option 
-here). If you specify \code{metrics}, default behavior is to use 
-\code{mean ~ sd} unless either is not available, in which case the first two 
+\item{formula}{Formula specifying what to plot, e.g. \code{mean ~ sd},
+\code{cagr ~ mdd}, or \code{sharpe ~ allocation}. See \code{?calc_metrics}
+for list of metrics to choose from (\code{"allocation"} is an extra option
+here). If you specify \code{metrics}, default behavior is to use
+\code{mean ~ sd} unless either is not available, in which case the first two
 performance metrics that appear as columns in \code{metrics} are used.}
 
-\item{tickers}{Character vector of ticker symbols, where the first two are 
+\item{tickers}{Character vector of ticker symbols, where the first two are
 are a two-fund pair, the next two are another, and so on.}
 
-\item{...}{Arguments to pass along with \code{tickers} to 
+\item{...}{Arguments to pass along with \code{tickers} to
 \code{\link{load_gains}}.}
 
-\item{gains}{Data frame with a date variable named Date and one column of 
+\item{step}{Numeric value controlling allocation increments for data points
+on the curve.}
+
+\item{gains}{Data frame with a date variable named Date and one column of
 gains for each investment.}
 
-\item{prices}{Data frame with a date variable named Date and one column of 
+\item{prices}{Data frame with a date variable named Date and one column of
 prices for each investment.}
 
-\item{benchmark, y.benchmark, x.benchmark}{Character string specifying which 
-fund to use as benchmark for metrics (if you request \code{alpha}, 
+\item{benchmark, y.benchmark, x.benchmark}{Character string specifying which
+fund to use as benchmark for metrics (if you request \code{alpha},
 \code{alpha.annualized}, \code{beta}, or \code{r.squared}).}
 
-\item{ref.tickers}{Character vector of ticker symbols to include on the 
+\item{ref.tickers}{Character vector of ticker symbols to include on the
 plot.}
 
-\item{return}{Character string specifying what to return. Choices are 
+\item{return}{Character string specifying what to return. Choices are
 \code{"plot"}, \code{"data"}, and \code{"both"}.}
 }
 \value{
@@ -48,7 +51,7 @@ Depending on \code{return}, a \code{\link[ggplot2]{ggplot}} object, a data
 frame, or a list containing both.
 }
 \description{
-Useful for visualizing the behavior of two-fund portfolios, often by plotting 
+Useful for visualizing the behavior of two-fund portfolios, often by plotting
 a measure of growth vs. a measure of volatility.
 }
 \examples{
