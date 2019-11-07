@@ -1,19 +1,16 @@
 #' High-Yield ETFs from ETFdb.com and Inception Dates
-#'
 #' @name highyield_etfs
 #' @docType data
 #' @source \url{http://etfdb.com/etfdb-category/high-yield-bonds/#etfs&sort_name=assets_under_management&sort_order=desc&page=2}
 NULL
 #'
 #' Largest 100 Market Cap ETFs (as of 3/2/18) and Inception Dates
-#'
 #' @name largest_etfs
 #' @docType data
 #' @source \url{http://etfdb.com/compare/market-cap/}
 NULL
 #'
 #' Sector SPDR ETFs and Inception Dates
-#'
 #' @name sector_spdr_etfs
 #' @docType data
 #' @source \url{http://www.sectorspdr.com/sectorspdr/sectors/performance}

@@ -4,7 +4,7 @@
 #' how several investments behave relative to the same benchmark.
 #'
 #'
-#' @param formula Formula, e.g. \code{SSO + UPRO ~ SPY} to plot gains for SSO
+#' @param formula Formula, e.g. \code{SSO + UPRO tilde SPY} to plot gains for SSO
 #' and UPRO vs. SPY.
 #' @param ... Arguments to pass along with \code{tickers} to
 #' \code{\link{load_gains}}.
@@ -12,7 +12,7 @@
 #' mentioned in \code{formula}. If unspecified, function downloads historical
 #' gains internally.
 #' @param prices Data frame with one column of prices for each investment
-#' mentionedin \code{formula}.
+#' mentioned in \code{formula}.
 #' @param poly_order Numeric value specifying the polynomial order for linear
 #' regression, e.g. \code{1} for simple linear regression or \code{2} for
 #' linear regression with first- and second-order terms.
