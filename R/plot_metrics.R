@@ -172,7 +172,6 @@ plot_metrics <- function(metrics = NULL,
   df <- subset(df, ! Fund %in% c(y.benchmark, x.benchmark))
 
   # Create plot
-
   if (is.null(x.metric)) {
 
     # For y.metric only

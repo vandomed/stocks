@@ -2,6 +2,7 @@
 ^\.Rproj\.user$
 ^LICENSE$
 ^README*$
+^README-figures$
 ^Thumbs.db$
 ^.travis.yml$
 ^bibliography.bib$

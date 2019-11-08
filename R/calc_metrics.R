@@ -61,12 +61,14 @@ calc_metrics <- function(gains = NULL,
       date.var <- names(prices) == "Date"
       gains <- cbind(prices[-1, date.var, drop = FALSE],
                      sapply(prices[! date.var], pchanges))
+      if (is.null(tickers)) tickers <- setdiff(names(gains), c("Date", setdiff(benchmark, tickers)))
+
 
     } else if (! is.null(tickers)) {
 
       gains <- load_gains(tickers = unique(c(benchmark, tickers)),
                           mutual.start = TRUE, mutual.end = TRUE, ...)
-      tickers <- setdiff(names(gains), c("Date", setdiff(benchmark, tickers)))
+      if (is.null(tickers)) tickers <- setdiff(names(gains), c("Date", setdiff(benchmark, tickers)))
 
     } else {
 
@@ -74,10 +76,9 @@ calc_metrics <- function(gains = NULL,
 
     }
 
+  } else {
+    if (is.null(tickers)) tickers <- setdiff(names(gains), "Date")
   }
-
-  # If tickers is NULL, set to all funds excluding benchmarks
-  if (is.null(tickers)) tickers <- setdiff(names(gains), c("Date", benchmark))
 
   # Drop NA's
   gains <- gains[complete.cases(gains), , drop = FALSE]
@@ -95,8 +96,8 @@ calc_metrics <- function(gains = NULL,
   }
 
   # Calculate metrics
-  df <- cbind(data.frame(Fund = tickers), lapply(metrics, function(x) {
-    lapply(gains[tickers], function(y) {
+  df <- cbind(data.frame(Fund = tickers), sapply(metrics, function(x) {
+    sapply(gains[tickers], function(y) {
       calc_metric(gains = y, metric = x, units.year = units.year, benchmark.gains = benchmark.gains)
     })
   }))
