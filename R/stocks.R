@@ -53,11 +53,13 @@
 #' @import quantmod
 #' @importFrom Rcpp evalCpp
 #' @importFrom rbenchmark benchmark
+#' @importFrom rvest html_nodes html_table
 #' @importFrom scales comma hue_pal
 #' @import stats
 #' @importFrom tidyr as_tibble pivot_longer
 #' @importFrom TTR ROC
 #' @importFrom utils head
+#' @importFrom xml2 read_html
 #' @importFrom zoo rollapply
 #' @useDynLib stocks, .registration=TRUE
 #' @name stocks
