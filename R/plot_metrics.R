@@ -24,9 +24,12 @@
 #' for y-axis metric.
 #' @param x.benchmark Character string specifying which fund to use as benchmark
 #' for x-axis metric.
-#' @param ggplotly Logical value for whether to convert the
-#' \code{\link[ggplot2]{ggplot}} to a \code{\link[plotly]{ggplotly}} object
+#' @param plotly Logical value for whether to convert the
+#' \code{\link[ggplot2]{ggplot}} to a \code{\link[plotly]{plotly}} object
 #' internally.
+#' @param title Character string. Only really useful if you're going to set
+#' \code{plotly = TRUE}, otherwise you can change the title, axes, etc.
+#' afterwards.
 #' @param return Character string specifying what to return. Choices are
 #' \code{"plot"}, \code{"data"}, and \code{"both"}.
 #'
@@ -63,6 +66,7 @@ plot_metrics <- function(metrics = NULL,
                          y.benchmark = benchmark,
                          x.benchmark = benchmark,
                          ggplotly = FALSE,
+                         title = NULL,
                          return = "plot") {
 
   # Extract info from formula
@@ -175,32 +179,32 @@ plot_metrics <- function(metrics = NULL,
   if (is.null(x.metric)) {
 
     # For y.metric only
-    df$text <- paste("Fund: ", df$Fund,
-                     "<br>", ylabel, ": ", round(df[[ylabel]], metric.info$decimals[y.metric]), sep = "")
+    df$text <- paste("Fund: ", df$Fund, "<br>",
+                     metric.info$title[y.metric], ": ", round(df[[ylabel]], metric.info$decimals[y.metric]), metric.info$units[y.metric], sep = "")
     p <- ggplot(df, aes(y = .data[[ylabel]],
                         x = reorder(Fund, .data[[ylabel]]),
                         text = text)) +
       geom_col() +
-      labs(title = paste(metric.info$title[y.metric], "for Various Funds"),
+      labs(title = ifelse(! hasArg(title), paste(metric.info$title[y.metric], "for Various Funds"), title),
            y = ylabel, x = NULL)
 
   } else if (is.null(y.metric)) {
 
     # For x.metric only
-    df$text <- paste("Fund: ", df$Fund,
-                     "<br>", xlabel, ": ", round(df[[xlabel]], metric.info$decimals[x.metric]), sep = "")
+    df$text <- paste("Fund: ", df$Fund, "<br>", metric.info$title[x.metric], ": ",
+                     round(df[[xlabel]], metric.info$decimals[x.metric]), metric.info$units[x.metric], sep = "")
     p <- ggplot(df, aes(y = .data[[xlabel]], x = reorder(Fund, .data[[xlabel]]),
                         text = text)) +
       geom_col() +
       coord_flip() +
-      labs(title = paste(metric.info$title[x.metric], "for Various Funds"),
+      labs(title = ifelse(is.null(title), paste(metric.info$title[x.metric], "for Various Funds"), title),
            y = ylabel, x = NULL)
 
   } else {
 
     df$text <- paste("Fund: ", df$Fund,
-                     "<br>", xlabel, ": ", round(df[[xlabel]], metric.info$decimals[x.metric]),
-                     "<br>", ylabel, ": ", round(df[[ylabel]], metric.info$decimals[y.metric]), sep = "")
+                     "<br>", metric.info$title[y.metric], ": ", round(df[[ylabel]], metric.info$decimals[y.metric]), metric.info$units[y.metric],
+                     "<br>", metric.info$title[x.metric], ": ", round(df[[xlabel]], metric.info$decimals[x.metric]), metric.info$units[x.metric], sep = "")
     p <- ggplot(df, aes(y = .data[[ylabel]],
                         x = .data[[xlabel]],
                         group = Fund, label = Fund, text = text)) +
@@ -208,7 +212,7 @@ plot_metrics <- function(metrics = NULL,
       geom_label_repel() +
       ylim(range(c(0, df[[ylabel]])) * 1.02) +
       xlim(range(c(0, df[[xlabel]])) * 1.02) +
-      labs(title = paste(metric.info$title[y.metric], "vs.", metric.info$title[x.metric]),
+      labs(title = ifelse(! hasArg(title), paste(metric.info$title[y.metric], "vs.", metric.info$title[x.metric]), title),
            y = ylabel, x = xlabel)
 
   }

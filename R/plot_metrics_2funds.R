@@ -26,6 +26,12 @@
 #' @param benchmark,y.benchmark,x.benchmark Character string specifying which
 #' fund to use as benchmark for metrics (if you request \code{alpha},
 #' \code{alpha.annualized}, \code{beta}, or \code{r.squared}).
+#' @param plotly Logical value for whether to convert the
+#' \code{\link[ggplot2]{ggplot}} to a \code{\link[plotly]{plotly}} object
+#' internally.
+#' @param title Character string. Only really useful if you're going to set
+#' \code{plotly = TRUE}, otherwise you can change the title, axes, etc.
+#' afterwards.
 #' @param ref.tickers Character vector of ticker symbols to include on the
 #' plot.
 #' @param return Character string specifying what to return. Choices are
@@ -60,6 +66,8 @@ plot_metrics_2funds <- function(metrics = NULL,
                                 y.benchmark = benchmark,
                                 x.benchmark = benchmark,
                                 ref.tickers = NULL,
+                                plotly = FALSE,
+                                title = NULL,
                                 return = "plot") {
 
   # Extract info from formula
@@ -211,6 +219,9 @@ plot_metrics_2funds <- function(metrics = NULL,
   # Prep for ggplot
   #df <- df[c("Pair", "Label", unique(c("Allocation (%)", xlabel, ylabel)))]
   df <- as.data.frame(df)
+  df$text <- paste(df$`Allocation 1 (%)`, "% ", df$`Fund 1`, ", ", df$`Allocation 2 (%)`, "% ", df$`Fund 2`,
+                   "<br>", metric.info$title[y.metric], ": ", round(df[[ylabel]], metric.info$decimals[y.metric]), metric.info$units[y.metric],
+                   "<br>", metric.info$title[x.metric], ": ", round(df[[xlabel]], metric.info$decimals[x.metric]), metric.info$units[x.metric], sep = "")
   df.points <- subset(df, Pair %in% ref.tickers | `Allocation (%)` %in% seq(0, 100, step))
   gg_color_hue <- function(n) {
     hues = seq(15, 375, length = n + 1)
@@ -221,7 +232,7 @@ plot_metrics_2funds <- function(metrics = NULL,
   cols[pairs] <- gg_color_hue(length(pairs))
   cols[ref.tickers] <- "black"
 
-  p <- ggplot(df, aes(y = .data[[ylabel]], x = .data[[xlabel]], group = Pair, color = Pair))
+  p <- ggplot(df, aes(y = .data[[ylabel]], x = .data[[xlabel]], group = Pair, color = Pair, text = text))
 
   if (x.metric == "allocation" & ! is.null(ref.tickers)) {
     p <- p + geom_hline(data = df.ref, yintercept = df.ref[[ylabel]], lty = 2)
@@ -239,6 +250,9 @@ plot_metrics_2funds <- function(metrics = NULL,
     theme(legend.title = element_blank()) +
     labs(title = paste(metric.info$title[y.metric], "vs.", metric.info$title[x.metric]),
          y = ylabel, x = xlabel)
+
+  if (plotly) p <- ggplotly(p, tooltip = "text")
+  df <- df[names(df) != "text"]
 
   if (return == "plot") return(p)
   if (return == "data") return(df)

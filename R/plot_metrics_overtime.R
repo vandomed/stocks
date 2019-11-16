@@ -28,9 +28,12 @@
 #' @param benchmark,y.benchmark,x.benchmark Character string specifying which
 #' fund to use as benchmark for metrics (if you request \code{alpha},
 #' \code{alpha.annualized}, \code{beta}, or \code{r.squared}).
-#' @param ggplotly Logical value for whether to convert the
-#' \code{\link[ggplot2]{ggplot}} to a \code{\link[plotly]{ggplotly}} object
+#' @param plotly Logical value for whether to convert the
+#' \code{\link[ggplot2]{ggplot}} to a \code{\link[plotly]{plotly}} object
 #' internally.
+#' @param title Character string. Only really useful if you're going to set
+#' \code{plotly = TRUE}, otherwise you can change the title, axes, etc.
+#' afterwards.
 #' @param return Character string specifying what to return. Choices are
 #' \code{"plot"}, \code{"data"}, and \code{"both"}.
 #'
@@ -68,7 +71,7 @@ plot_metrics_overtime <- function(metrics = NULL,
                                   benchmark = "SPY",
                                   y.benchmark = benchmark,
                                   x.benchmark = benchmark,
-                                  ggplotly = FALSE,
+                                  plotly = FALSE,
                                   return = "plot") {
 
   # Extract info from formula
@@ -259,7 +262,7 @@ plot_metrics_overtime <- function(metrics = NULL,
 
   }
 
-  if (ggplotly) p <- ggplotly(p, tooltip = "text")
+  if (plotly) p <- ggplotly(p, tooltip = "text")
   df <- df[names(df) != "text"]
 
   if (return == "plot") return(p)

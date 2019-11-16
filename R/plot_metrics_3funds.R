@@ -30,6 +30,12 @@
 #' \code{alpha.annualized}, \code{beta}, or \code{r.squared}).
 #' @param ref.tickers Character vector of ticker symbols to include on the
 #' graph.
+#' @param plotly Logical value for whether to convert the
+#' \code{\link[ggplot2]{ggplot}} to a \code{\link[plotly]{plotly}} object
+#' internally.
+#' @param title Character string. Only really useful if you're going to set
+#' \code{plotly = TRUE}, otherwise you can change the title, axes, etc.
+#' afterwards.
 #' @param return Character string specifying what to return. Choices are
 #' \code{"plot"}, \code{"data"}, and \code{"both"}.
 #'
@@ -65,6 +71,8 @@ plot_metrics_3funds <- function(metrics = NULL,
                                 y.benchmark = benchmark,
                                 x.benchmark = benchmark,
                                 ref.tickers = "SPY",
+                                plotly = FALSE,
+                                title = NULL,
                                 return = "plot") {
 
   # Extract info from formula
@@ -231,6 +239,9 @@ plot_metrics_3funds <- function(metrics = NULL,
 
   # Prep for ggplot
   df <- as.data.frame(df)
+  df$text <- paste(df$`Allocation 1 (%)`, "% ", df$`Fund 1`, ", ", df$`Allocation 2 (%)`, "% ", df$`Fund 2`, ", ", df$`Allocation 3 (%)`, "% ", df$`Fund 3`,
+                   "<br>", metric.info$title[y.metric], ": ", round(df[[ylabel]], metric.info$decimals[y.metric]), metric.info$units[y.metric],
+                   "<br>", metric.info$title[x.metric], ": ", round(df[[xlabel]], metric.info$decimals[x.metric]), metric.info$units[x.metric], sep = "")
   df.points <- subset(df, Trio %in% ref.tickers | `Allocation 1 (%)` == 100 |
                         `Allocation 2 (%)` %in% c(0, 100) | `Allocation 3 (%)` %in% c(0, 100))
   if ("allocation" %in% all.metrics) {
@@ -246,7 +257,7 @@ plot_metrics_3funds <- function(metrics = NULL,
   cols[ref.tickers] <- "black"
 
   # Create plot
-  p <- ggplot(df, aes(y = .data[[ylabel]], x = .data[[xlabel]], group = Trio, color = Trio))
+  p <- ggplot(df, aes(y = .data[[ylabel]], x = .data[[xlabel]], group = Trio, color = Trio, text = text))
 
   if (x.metric == "allocation" & ! is.null(ref.tickers)) {
     p <- p + geom_hline(data = df.ref, yintercept = df.ref[[ylabel]], lty = 2)
@@ -267,6 +278,9 @@ plot_metrics_3funds <- function(metrics = NULL,
     theme(legend.title = element_blank()) +
     labs(title = paste(metric.info$title[y.metric], "vs.", metric.info$title[x.metric]),
          y = ylabel, x = xlabel)
+
+  if (plotly) p <- ggplotly(p, tooltip = "text")
+  df <- df[names(df) != "text"]
 
   if (return == "plot") return(p)
   if (return == "data") return(df)

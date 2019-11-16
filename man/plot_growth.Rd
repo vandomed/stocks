@@ -4,40 +4,45 @@
 \alias{plot_growth}
 \title{Plot Investment Growth}
 \usage{
-plot_growth(prices = NULL, tickers = NULL, ..., gains = NULL,
-  initial = 10000, ggplotly = FALSE, return = "plot")
+plot_growth(prices, tickers = NULL, ..., gains = NULL,
+  initial = 10000, plotly = FALSE, title = "Balance over Time",
+  return = "plot")
 }
 \arguments{
-\item{prices}{Data frame with one column of prices for each investment and a 
+\item{prices}{Data frame with one column of prices for each investment and a
 date variable named Date.}
 
-\item{tickers}{Character vector of ticker symbols that Yahoo! Finance 
+\item{tickers}{Character vector of ticker symbols that Yahoo! Finance
 recognizes, if you want to download data on the fly.}
 
-\item{...}{Arguments to pass along with \code{tickers} to 
+\item{...}{Arguments to pass along with \code{tickers} to
 \code{\link{load_gains}}.}
 
-\item{gains}{Data frame with one column of gains for each investment and a 
+\item{gains}{Data frame with one column of gains for each investment and a
 date variable named Date.}
 
 \item{initial}{Numeric value specifying value to scale initial prices to.}
 
-\item{ggplotly}{Logical value for whether to convert the 
-\code{\link[ggplot2]{ggplot}} to a \code{\link[plotly]{ggplotly}} object 
+\item{plotly}{Logical value for whether to convert the
+\code{\link[ggplot2]{ggplot}} to a \code{\link[plotly]{plotly}} object
 internally.}
 
-\item{return}{Character string specifying what to return. Choices are 
+\item{title}{Character string. Only really useful if you're going to set
+\code{plotly = TRUE}, otherwise you can change the title, axes, etc.
+afterwards.}
+
+\item{return}{Character string specifying what to return. Choices are
 \code{"plot"}, \code{"data"}, and \code{"both"}.}
 }
 \value{
-Depending on \code{return} and \code{ggplotly}, a 
-\code{\link[ggplot2]{ggplot}}/\code{\link[plotly]{ggplotly}} object, a data 
+Depending on \code{return} and \code{plotly}, a
+\code{\link[ggplot2]{ggplot}}/\code{\link[plotly]{plotly}} object, a data
 frame with the source data, or a list containing both.
 
 A \code{\link[ggplot2]{ggplot}} object.
 }
 \description{
-Useful for comparing the performance of several investments, over their full 
+Useful for comparing the performance of several investments, over their full
 histories or mutual lifetimes.
 }
 \examples{

@@ -7,7 +7,8 @@
 plot_metrics_3funds(metrics = NULL, formula = mean ~ sd,
   tickers = NULL, ..., step1 = 5, step2 = step1, gains = NULL,
   prices = NULL, benchmark = "SPY", y.benchmark = benchmark,
-  x.benchmark = benchmark, ref.tickers = "SPY", return = "plot")
+  x.benchmark = benchmark, ref.tickers = "SPY", plotly = FALSE,
+  title = NULL, return = "plot")
 }
 \arguments{
 \item{metrics}{Data frame with Fund column and column for each metric you
@@ -45,6 +46,14 @@ fund to use as benchmark for metrics (if you request \code{alpha},
 
 \item{ref.tickers}{Character vector of ticker symbols to include on the
 graph.}
+
+\item{plotly}{Logical value for whether to convert the
+\code{\link[ggplot2]{ggplot}} to a \code{\link[plotly]{plotly}} object
+internally.}
+
+\item{title}{Character string. Only really useful if you're going to set
+\code{plotly = TRUE}, otherwise you can change the title, axes, etc.
+afterwards.}
 
 \item{return}{Character string specifying what to return. Choices are
 \code{"plot"}, \code{"data"}, and \code{"both"}.}

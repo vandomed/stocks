@@ -7,7 +7,7 @@
 plot_metrics_overtime(metrics = NULL, formula = cagr ~ .,
   type = "hop.year", minimum.n = 3, tickers = NULL, ...,
   gains = NULL, prices = NULL, benchmark = "SPY",
-  y.benchmark = benchmark, x.benchmark = benchmark, ggplotly = FALSE,
+  y.benchmark = benchmark, x.benchmark = benchmark, plotly = FALSE,
   return = "plot")
 }
 \arguments{
@@ -43,12 +43,16 @@ prices for each investment.}
 fund to use as benchmark for metrics (if you request \code{alpha},
 \code{alpha.annualized}, \code{beta}, or \code{r.squared}).}
 
-\item{ggplotly}{Logical value for whether to convert the
-\code{\link[ggplot2]{ggplot}} to a \code{\link[plotly]{ggplotly}} object
+\item{plotly}{Logical value for whether to convert the
+\code{\link[ggplot2]{ggplot}} to a \code{\link[plotly]{plotly}} object
 internally.}
 
 \item{return}{Character string specifying what to return. Choices are
 \code{"plot"}, \code{"data"}, and \code{"both"}.}
+
+\item{title}{Character string. Only really useful if you're going to set
+\code{plotly = TRUE}, otherwise you can change the title, axes, etc.
+afterwards.}
 }
 \value{
 Depending on \code{return}, a \code{\link[ggplot2]{ggplot}}, a data frame
