@@ -8,7 +8,7 @@ plot_metrics_overtime(metrics = NULL, formula = cagr ~ .,
   type = "hop.year", minimum.n = 3, tickers = NULL, ...,
   gains = NULL, prices = NULL, benchmark = "SPY",
   y.benchmark = benchmark, x.benchmark = benchmark, plotly = FALSE,
-  return = "plot")
+  title = NULL, return = "plot")
 }
 \arguments{
 \item{metrics}{"Long" data frame with Fund column, Date column, and column
@@ -47,12 +47,12 @@ fund to use as benchmark for metrics (if you request \code{alpha},
 \code{\link[ggplot2]{ggplot}} to a \code{\link[plotly]{plotly}} object
 internally.}
 
-\item{return}{Character string specifying what to return. Choices are
-\code{"plot"}, \code{"data"}, and \code{"both"}.}
-
 \item{title}{Character string. Only really useful if you're going to set
 \code{plotly = TRUE}, otherwise you can change the title, axes, etc.
 afterwards.}
+
+\item{return}{Character string specifying what to return. Choices are
+\code{"plot"}, \code{"data"}, and \code{"both"}.}
 }
 \value{
 Depending on \code{return}, a \code{\link[ggplot2]{ggplot}}, a data frame

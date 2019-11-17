@@ -276,7 +276,7 @@ plot_metrics_3funds <- function(metrics = NULL,
     xlim(range(c(0, df[[xlabel]])) * 1.01) +
     scale_colour_manual(values = cols) +
     theme(legend.title = element_blank()) +
-    labs(title = paste(metric.info$title[y.metric], "vs.", metric.info$title[x.metric]),
+    labs(title = ifelse(! is.null(title), title, paste(metric.info$title[y.metric], "vs.", metric.info$title[x.metric])),
          y = ylabel, x = xlabel)
 
   if (plotly) p <- ggplotly(p, tooltip = "text")

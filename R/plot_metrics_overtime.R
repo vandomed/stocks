@@ -72,6 +72,7 @@ plot_metrics_overtime <- function(metrics = NULL,
                                   y.benchmark = benchmark,
                                   x.benchmark = benchmark,
                                   plotly = FALSE,
+                                  title = NULL,
                                   return = "plot") {
 
   # Extract info from formula
@@ -237,7 +238,7 @@ plot_metrics_overtime <- function(metrics = NULL,
       geom_path() +
       xlim(range(c(0, df[[xlabel]])) * 1.01) +
       theme(legend.title = element_blank()) +
-      labs(title = paste(metric.info$title[y.metric], "over Time"),
+      labs(title = ifelse(! is.null(title), title, paste(metric.info$title[y.metric], "over Time")),
            y = "End date", x = xlabel)
 
   } else {
@@ -257,7 +258,7 @@ plot_metrics_overtime <- function(metrics = NULL,
       ylim(range(c(0, df[[ylabel]])) * 1.01) +
       xlim(range(c(0, df[[xlabel]])) * 1.01) +
       theme(legend.title = element_blank()) +
-      labs(title = paste(metric.info$title[y.metric], "vs.", metric.info$title[x.metric]),
+      labs(title = ifelse(! is.null(title), title, paste(metric.info$title[y.metric], "vs.", metric.info$title[x.metric])),
            y = ylabel, x = xlabel)
 
   }

@@ -65,7 +65,7 @@ plot_metrics <- function(metrics = NULL,
                          benchmark = "SPY",
                          y.benchmark = benchmark,
                          x.benchmark = benchmark,
-                         ggplotly = FALSE,
+                         plotly = FALSE,
                          title = NULL,
                          return = "plot") {
 
@@ -185,7 +185,7 @@ plot_metrics <- function(metrics = NULL,
                         x = reorder(Fund, .data[[ylabel]]),
                         text = text)) +
       geom_col() +
-      labs(title = ifelse(! hasArg(title), paste(metric.info$title[y.metric], "for Various Funds"), title),
+      labs(title = ifelse(! is.null(title), title, paste(metric.info$title[y.metric], "for Various Funds")),
            y = ylabel, x = NULL)
 
   } else if (is.null(y.metric)) {
@@ -197,7 +197,7 @@ plot_metrics <- function(metrics = NULL,
                         text = text)) +
       geom_col() +
       coord_flip() +
-      labs(title = ifelse(is.null(title), paste(metric.info$title[x.metric], "for Various Funds"), title),
+      labs(title = ifelse(! is.null(title), title, paste(metric.info$title[x.metric], "for Various Funds")),
            y = ylabel, x = NULL)
 
   } else {
@@ -212,12 +212,12 @@ plot_metrics <- function(metrics = NULL,
       geom_label_repel() +
       ylim(range(c(0, df[[ylabel]])) * 1.02) +
       xlim(range(c(0, df[[xlabel]])) * 1.02) +
-      labs(title = ifelse(! hasArg(title), paste(metric.info$title[y.metric], "vs.", metric.info$title[x.metric]), title),
+      labs(title = ifelse(! is.null(title), title, paste(metric.info$title[y.metric], "vs.", metric.info$title[x.metric])),
            y = ylabel, x = xlabel)
 
   }
 
-  if (ggplotly) p <- ggplotly(p, tooltip = "text")
+  if (plotly) p <- ggplotly(p, tooltip = "text")
   df <- df[names(df) != "text"]
 
   if (return == "plot") return(p)

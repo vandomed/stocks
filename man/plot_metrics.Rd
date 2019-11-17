@@ -7,7 +7,7 @@
 \usage{
 plot_metrics(metrics = NULL, formula = cagr ~ mdd, tickers = NULL,
   ..., gains = NULL, prices = NULL, benchmark = "SPY",
-  y.benchmark = benchmark, x.benchmark = benchmark, ggplotly = FALSE,
+  y.benchmark = benchmark, x.benchmark = benchmark, plotly = FALSE,
   title = NULL, return = "plot")
 }
 \arguments{
@@ -40,16 +40,16 @@ for y-axis metric.}
 \item{x.benchmark}{Character string specifying which fund to use as benchmark
 for x-axis metric.}
 
+\item{plotly}{Logical value for whether to convert the
+\code{\link[ggplot2]{ggplot}} to a \code{\link[plotly]{plotly}} object
+internally.}
+
 \item{title}{Character string. Only really useful if you're going to set
 \code{plotly = TRUE}, otherwise you can change the title, axes, etc.
 afterwards.}
 
 \item{return}{Character string specifying what to return. Choices are
 \code{"plot"}, \code{"data"}, and \code{"both"}.}
-
-\item{plotly}{Logical value for whether to convert the
-\code{\link[ggplot2]{ggplot}} to a \code{\link[plotly]{plotly}} object
-internally.}
 }
 \value{
 Depending on \code{return}, a \code{\link[ggplot2]{ggplot}}, a data frame
