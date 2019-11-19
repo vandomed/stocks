@@ -56,9 +56,9 @@ calc_metrics_2funds <- function(gains = NULL,
     benchmark <- NULL
   }
 
-  # # Drop reference tickers that also appear in tickers
-  # ref.tickers <- setdiff(ref.tickers, tickers)
-  # if (length(ref.tickers) == 0) ref.tickers <- NULL
+  # Drop reference tickers that also appear in tickers
+  ref.tickers <- setdiff(ref.tickers, tickers)
+  if (length(ref.tickers) == 0) ref.tickers <- NULL
 
   # Determine gains if not pre-specified
   if (is.null(gains)) {
@@ -71,9 +71,8 @@ calc_metrics_2funds <- function(gains = NULL,
 
     } else if (! is.null(tickers)) {
 
-      gains <- load_gains(tickers = c(unique(c(benchmark, ref.tickers)), tickers),
+      gains <- load_gains(tickers = unique(c(benchmark, ref.tickers, tickers)),
                           mutual.start = TRUE, mutual.end = TRUE, ...)
-      tickers <- setdiff(names(gains), c("Date", benchmark))
 
     } else {
 
@@ -83,9 +82,8 @@ calc_metrics_2funds <- function(gains = NULL,
 
   }
 
-  # Create/update tickers (should not include Date or benchmark/reference tickers)
-  if (is.null(tickers)) tickers <- names(gains)
-  tickers <- setdiff(tickers, c("Date", benchmark, ref.tickers))
+  # If tickers is NULL, set to all funds other than benchmark/reference tickers
+  if (is.null(tickers)) tickers <- setdiff(names(gains), c("Date", benchmark, ref.tickers))
 
   # Drop NA's
   gains <- gains[complete.cases(gains), , drop = FALSE]

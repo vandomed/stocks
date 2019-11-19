@@ -102,8 +102,8 @@ plot_metrics_2funds <- function(metrics = NULL,
   }
 
   # Drop reference tickers that also appear in tickers
-  #ref.tickers <- setdiff(ref.tickers, tickers)
-  #if (length(ref.tickers) == 0) ref.tickers <- NULL
+  ref.tickers <- setdiff(ref.tickers, tickers)
+  if (length(ref.tickers) == 0) ref.tickers <- NULL
 
   # Calculate performance metrics if not pre-specified
   if (is.null(metrics)) {
@@ -119,9 +119,9 @@ plot_metrics_2funds <- function(metrics = NULL,
 
       } else if (! is.null(tickers)) {
 
-        gains <- load_gains(tickers = c(unique(c(y.benchmark, x.benchmark, ref.tickers)), tickers),
+        gains <- load_gains(tickers = unique(c(y.benchmark, x.benchmark, ref.tickers, tickers)),
                             mutual.start = TRUE, mutual.end = TRUE, ...)
-        tickers <- setdiff(names(gains), c("Date", y.benchmark, x.benchmark))
+        #tickers <- setdiff(names(gains), c("Date", y.benchmark, x.benchmark))
 
       } else {
 
@@ -131,9 +131,8 @@ plot_metrics_2funds <- function(metrics = NULL,
 
     }
 
-    # Create/update tickers (should not include Date or benchmark/reference tickers)
-    if (is.null(tickers)) tickers <- names(gains)
-    tickers <- setdiff(tickers, c("Date", y.benchmark, x.benchmark, ref.tickers))
+    # If tickers is NULL, set to all funds other than benchmark/reference tickers
+    if (is.null(tickers)) tickers <- setdiff(names(gains), c("Date", y.benchmark, x.benchmark, ref.tickers))
 
     # Drop NA's
     gains <- gains[complete.cases(gains), , drop = FALSE]

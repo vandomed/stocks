@@ -89,8 +89,8 @@ calc_metrics_3funds <- function(gains = NULL,
 
   }
 
-  # If tickers is NULL, set to all funds in gains
-  if (is.null(tickers)) tickers <- setdiff(names(gains), "Date")
+  # If tickers is NULL, set to all funds other than benchmark/reference tickers
+  if (is.null(tickers)) tickers <- setdiff(names(gains), c("Date", benchmark, ref.tickers))
 
   # Drop NA's
   gains <- gains[complete.cases(gains), , drop = FALSE]

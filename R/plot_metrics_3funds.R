@@ -134,9 +134,12 @@ plot_metrics_3funds <- function(metrics = NULL,
 
     }
 
-    # Create/update tickers (should not include Date or benchmark/reference tickers)
-    if (is.null(tickers)) tickers <- names(gains)
-    tickers <- setdiff(tickers, c("Date", y.benchmark, x.benchmark, ref.tickers))
+    # If tickers is NULL, set to all funds other than benchmark/reference tickers
+    if (is.null(tickers)) tickers <- setdiff(names(gains), c("Date", y.benchmark, x.benchmark, ref.tickers))
+
+    # # Create/update tickers (should not include Date or benchmark/reference tickers)
+    # if (is.null(tickers)) tickers <- setdiff(names(gains), c("Date", y.benchmark, x.benchmark, ref.tickers))
+    # #tickers <- setdiff(tickers, c("Date", y.benchmark, x.benchmark, ref.tickers))
 
     # Drop NA's
     gains <- gains[complete.cases(gains), , drop = FALSE]
