@@ -83,8 +83,8 @@ plot_growth <- function(prices,
     geom_line(na.rm = TRUE) +
     scale_y_continuous(labels = comma) +
     ylim(0, max(df$Balance) * 1.02) +
-    labs(title = title, y = "Balance ($)", x = "Date") +
-    theme(legend.title = element_blank())
+    theme(legend.position = "none") +
+    labs(title = title, y = "Balance ($)", x = "Date")
 
   if (plotly) p <- ggplotly(p, tooltip = "text")
 

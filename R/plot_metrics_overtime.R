@@ -215,14 +215,14 @@ plot_metrics_overtime <- function(metrics = NULL,
 
     df$text <- paste("Fund: ", df$Fund,
                      "<br>End date: ", df$Date,
-                     "<br>", ylabel, ": ", round(df[[ylabel]], metric.info$decimals[y.metric]), sep = "")
+                     "<br>", ylabel, ": ", formatC(df[[ylabel]], metric.info$decimals[y.metric], format = "f"), sep = "")
     p <- ggplot(df, aes(y = .data[[ylabel]],
                         x = Date,
                         group = Fund, color = Fund, text = text)) +
       geom_point() +
       geom_path() +
       ylim(range(c(0, df[[ylabel]])) * 1.01) +
-      theme(legend.title = element_blank()) +
+      theme(legend.position = "none") +
       labs(title = paste(metric.info$title[y.metric], "over Time"),
            y = metric.info$label[y.metric], x = "End date")
 
@@ -230,14 +230,14 @@ plot_metrics_overtime <- function(metrics = NULL,
 
     df$text <- paste("Fund: ", df$Fund,
                      "<br>End date: ", df$Date,
-                     "<br>", xlabel, ": ", round(df[[xlabel]], metric.info$decimals[x.metric]), sep = "")
+                     "<br>", xlabel, ": ", formatC(df[[xlabel]], metric.info$decimals[x.metric], format = "f"), sep = "")
     p <- ggplot(df, aes(y = Date,
                         x = .data[[xlabel]],
                         group = Fund, color = Fund, text = text)) +
       geom_point() +
       geom_path() +
       xlim(range(c(0, df[[xlabel]])) * 1.01) +
-      theme(legend.title = element_blank()) +
+      theme(legend.position = "none") +
       labs(title = ifelse(! is.null(title), title, paste(metric.info$title[y.metric], "over Time")),
            y = "End date", x = xlabel)
 
@@ -245,8 +245,8 @@ plot_metrics_overtime <- function(metrics = NULL,
 
     df$text <- paste("Fund: ", df$Fund,
                      "<br>End date: ", df$Date,
-                     "<br>", xlabel, ": ", round(df[[xlabel]], metric.info$decimals[x.metric]),
-                     "<br>", ylabel, ": ", round(df[[ylabel]], metric.info$decimals[y.metric]), sep = "")
+                     "<br>", xlabel, ": ", formatC(df[[xlabel]], metric.info$decimals[x.metric], format = "f"),
+                     "<br>", ylabel, ": ", formatC(df[[ylabel]], metric.info$decimals[y.metric], format = "f"), sep = "")
     p <- ggplot(df, aes(y = .data[[ylabel]],
                         x = .data[[xlabel]],
                         group = Fund, color = Fund, text = text)) +
@@ -257,7 +257,7 @@ plot_metrics_overtime <- function(metrics = NULL,
                 arrow = arrow(angle = 15, type = "closed", length = unit(0.1, "inches"))) +
       ylim(range(c(0, df[[ylabel]])) * 1.01) +
       xlim(range(c(0, df[[xlabel]])) * 1.01) +
-      theme(legend.title = element_blank()) +
+      theme(legend.position = "none") +
       labs(title = ifelse(! is.null(title), title, paste(metric.info$title[y.metric], "vs.", metric.info$title[x.metric])),
            y = ylabel, x = xlabel)
 

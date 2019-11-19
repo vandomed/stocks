@@ -90,8 +90,8 @@ load_prices <- function(tickers,
       message(paste("No available data for", x))
       return(NULL)
     }
-    y <- data.table::as.data.table(y)
-    cbind(data.table::data.table(Date = y$index), y[, 7])
+    y <- as.data.table(y)
+    cbind(data.table(Date = y$index), y[, 7])
 
   })
 
@@ -103,7 +103,7 @@ load_prices <- function(tickers,
 
   # If mutual.start = TRUE, drop rows prior to youngest fund's start date
   if (mutual.start | mutual.end) {
-    complete.locs <- which(complete.cases(prices[, -1]))
+    complete.locs <- which(complete.cases(prices[-1]))
     start.row <- ifelse(mutual.start, data.table::first(complete.locs), 1)
     end.row <- ifelse(mutual.end, data.table::last(complete.locs), nrow(prices))
     prices <- prices[start.row: end.row, , drop = FALSE]
@@ -122,11 +122,14 @@ load_prices <- function(tickers,
     }
   }
   if (! is.null(preto.days)) {
-    last.keep <- which.max(prices$Date >= to.initial) - preto.days
-    if (length(last.keep) > 0) {
-      prices <- prices[1: last.keep, , drop = FALSE]
-    }
+    prices <- tail(prices, preto.days + 1)
   }
+  # if (! is.null(preto.days)) {
+  #   last.keep <- which.max(prices$Date >= to.initial) - preto.days
+  #   if (length(last.keep) > 0) {
+  #     prices <- prices[1: last.keep, , drop = FALSE]
+  #   }
+  # }
 
   # Convert to prices on last day of month/year if requested
   if (time.scale == "monthly") {

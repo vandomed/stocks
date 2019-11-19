@@ -2,7 +2,7 @@
 % Please edit documentation in R/calc_metrics_3funds.R
 \name{calc_metrics_3funds}
 \alias{calc_metrics_3funds}
-\title{Calculate Performance Metrics for Three-Fund Portfolios with Varying 
+\title{Calculate Performance Metrics for Three-Fund Portfolios with Varying
 Allocations}
 \usage{
 calc_metrics_3funds(gains = NULL, metrics = c("mean", "sd"),
@@ -10,28 +10,28 @@ calc_metrics_3funds(gains = NULL, metrics = c("mean", "sd"),
   benchmark = "SPY", ref.tickers = "SPY")
 }
 \arguments{
-\item{gains}{Data frame with a date variable named Date and one column of 
+\item{gains}{Data frame with a date variable named Date and one column of
 gains for each investment.}
 
-\item{metrics}{Character vector specifying metrics to calculate. See 
+\item{metrics}{Character vector specifying metrics to calculate. See
 \code{?calc_metrics} for choices.}
 
-\item{tickers}{Character vector of ticker symbols, where the first three are 
+\item{tickers}{Character vector of ticker symbols, where the first three are
 are a three-fund set, the next three are another, and so on.}
 
-\item{...}{Arguments to pass along with \code{tickers} to 
+\item{...}{Arguments to pass along with \code{tickers} to
 \code{\link{load_gains}}.}
 
-\item{step1}{Numeric value controlling allocation increments for first fund 
+\item{step1}{Numeric value controlling allocation increments for first fund
 of each set.}
 
-\item{step2}{Numeric value controlling allocation increments for the second 
+\item{step2}{Numeric value controlling allocation increments for the second
 and third fund in each set.}
 
-\item{prices}{Data frame with a date variable named Date and one column of 
+\item{prices}{Data frame with a date variable named Date and one column of
 prices for each investment.}
 
-\item{benchmark}{Character string specifying which fund to use as a 
+\item{benchmark}{Character string specifying which fund to use as a
 benchmark for metrics that require one.}
 
 \item{ref.tickers}{Character vector of ticker symbols to include.}

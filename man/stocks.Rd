@@ -16,7 +16,7 @@ growth, maximum drawdown, Sharpe/Sortino ratio), and creating graphs.
 Package: \tab stocks \cr
 Type: \tab Package \cr
 Version: \tab 2.0.0 \cr
-Date: \tab 2019-11-17 \cr
+Date: \tab 2019-11-18 \cr
 License: \tab GPL-3 \cr
 }
 

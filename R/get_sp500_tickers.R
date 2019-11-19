@@ -31,10 +31,12 @@ get_sp500_tickers <- function(date = Sys.Date()) {
     dplyr::slice(1)
 
   # Get ticker symbols
-  (df$url %>%
-      read_html() %>%
-      html_nodes(xpath = '//*[@id="mw-content-text"]/div/table[1]') %>%
-      html_table(fill = TRUE) %>%
-      as.data.frame())[[1]]
+  tickers <- (df$url %>%
+    read_html() %>%
+    html_node("table") %>%
+    html_table())[[1]]
+
+  # Replace .'s with -'s for when we download data from Yahoo! Finance
+  gsub("[.]", "-", x = tickers)
 
 }

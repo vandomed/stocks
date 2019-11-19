@@ -9,7 +9,7 @@
 #' Package: \tab stocks \cr
 #' Type: \tab Package \cr
 #' Version: \tab 2.0.0 \cr
-#' Date: \tab 2019-11-17 \cr
+#' Date: \tab 2019-11-18 \cr
 #' License: \tab GPL-3 \cr
 #' }
 #'
@@ -41,7 +41,7 @@
 #'
 #'
 #' @importFrom accelerometry movingaves
-#' @importFrom data.table as.data.table first last melt
+#' @importFrom data.table as.data.table data.table first last melt
 #' @importFrom dplyr %>% bind_rows group_by mutate mutate_at row_number slice tibble ungroup
 #' @import ggplot2
 #' @importFrom ggrepel geom_label_repel

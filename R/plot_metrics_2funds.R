@@ -217,11 +217,12 @@ plot_metrics_2funds <- function(metrics = NULL,
   }
 
   # Prep for ggplot
-  #df <- df[c("Pair", "Label", unique(c("Allocation (%)", xlabel, ylabel)))]
   df <- as.data.frame(df)
-  df$text <- paste(df$`Allocation 1 (%)`, "% ", df$`Fund 1`, ", ", df$`Allocation 2 (%)`, "% ", df$`Fund 2`,
-                   "<br>", metric.info$title[y.metric], ": ", round(df[[ylabel]], metric.info$decimals[y.metric]), metric.info$units[y.metric],
-                   "<br>", metric.info$title[x.metric], ": ", round(df[[xlabel]], metric.info$decimals[x.metric]), metric.info$units[x.metric], sep = "")
+  df$text <- paste(ifelse(is.na(df$`Fund 1`), df$Pair, paste(df$`Allocation 1 (%)`, "% ", df$`Fund 1`, ", ",
+                                                             df$`Allocation 2 (%)`, "% ", df$`Fund 2`, sep = "")),
+                   "<br>", metric.info$title[y.metric], ": ", formatC(df[[ylabel]], metric.info$decimals[y.metric], format = "f"), metric.info$units[y.metric],
+                   "<br>", metric.info$title[x.metric], ": ", formatC(df[[xlabel]], metric.info$decimals[x.metric], format = "f"), metric.info$units[x.metric], sep = "")
+
   df.points <- subset(df, Pair %in% ref.tickers | `Allocation (%)` %in% seq(0, 100, step))
   gg_color_hue <- function(n) {
     hues = seq(15, 375, length = n + 1)
@@ -241,13 +242,13 @@ plot_metrics_2funds <- function(metrics = NULL,
   }
 
   p <- p +
-    geom_point(data = df.points, show.legend = FALSE) +
-    geom_path(show.legend = FALSE) +
-    geom_label_repel(aes(label = Label), subset(df, ! is.na(Label)), show.legend = FALSE) +
+    geom_point(data = df.points) +
+    geom_path() +
+    geom_label_repel(aes(label = Label), subset(df, ! is.na(Label))) +
     ylim(range(c(0, df[[ylabel]])) * 1.01) +
     xlim(range(c(0, df[[xlabel]])) * 1.01) +
     scale_colour_manual(values = cols) +
-    theme(legend.title = element_blank()) +
+    theme(legend.position = "none") +
     labs(title = ifelse(! is.null(title), title, paste(metric.info$title[y.metric], "vs.", metric.info$title[x.metric])),
          y = ylabel, x = xlabel)
 

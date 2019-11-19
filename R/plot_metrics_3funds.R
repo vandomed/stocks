@@ -158,18 +158,18 @@ plot_metrics_3funds <- function(metrics = NULL,
     }
 
     # Calculate metrics for each trio
-    weights <- sapply(seq(0, 1, step1 / 100), function(x) {
-      c2 <- seq(0, 1 - x, step2 / 100)
-      rbind(x, c2, 1 - x - c2)
+    weights <- sapply(seq(0, 100, step1), function(x) {
+      c2 <- seq(0, 100 - x, step2)
+      rbind(x, c2, 100 - x - c2)
     })
     weights <- do.call(cbind, weights)
-    w1 <- weights[1, ] * 100
-    w2 <- weights[2, ] * 100
-    w3 <- weights[3, ] * 100
+    w1 <- weights[1, ]
+    w2 <- weights[2, ]
+    w3 <- weights[3, ]
 
     df <- lapply(seq(1, length(tickers), 3), function(x) {
       gains.trio <- as.matrix(gains[tickers[x: (x + 2)]])
-      wgains.trio <- gains.trio %*% weights
+      wgains.trio <- gains.trio %*% weights / 100
       df.trio <- tibble(
         Trio = paste(colnames(gains.trio), collapse = "-"),
         `Fund 1` = colnames(gains.trio)[1],
@@ -239,11 +239,15 @@ plot_metrics_3funds <- function(metrics = NULL,
 
   # Prep for ggplot
   df <- as.data.frame(df)
-  df$text <- paste(df$`Allocation 1 (%)`, "% ", df$`Fund 1`, ", ", df$`Allocation 2 (%)`, "% ", df$`Fund 2`, ", ", df$`Allocation 3 (%)`, "% ", df$`Fund 3`,
-                   "<br>", metric.info$title[y.metric], ": ", round(df[[ylabel]], metric.info$decimals[y.metric]), metric.info$units[y.metric],
-                   "<br>", metric.info$title[x.metric], ": ", round(df[[xlabel]], metric.info$decimals[x.metric]), metric.info$units[x.metric], sep = "")
+  df$text <- paste(ifelse(is.na(df$`Fund 1`), df$Trio, paste(df$`Allocation 1 (%)`, "% ", df$`Fund 1`, ", ",
+                                                             df$`Allocation 2 (%)`, "% ", df$`Fund 2`, ", ",
+                                                             df$`Allocation 3 (%)`, "% ", df$`Fund 3`, sep = "")),
+                   "<br>", metric.info$title[y.metric], ": ", formatC(df[[ylabel]], metric.info$decimals[y.metric], format = "f"), metric.info$units[y.metric],
+                   "<br>", metric.info$title[x.metric], ": ", formatC(df[[xlabel]], metric.info$decimals[x.metric], format = "f"), metric.info$units[x.metric], sep = "")
+  # df.points <- subset(df, Trio %in% ref.tickers | `Allocation 1 (%)` == 100 |
+  #                       `Allocation 2 (%)` %in% c(0, 100) | `Allocation 3 (%)` %in% c(0, 100))
   df.points <- subset(df, Trio %in% ref.tickers | `Allocation 1 (%)` == 100 |
-                        `Allocation 2 (%)` %in% c(0, 100) | `Allocation 3 (%)` %in% c(0, 100))
+                        `Allocation 2 (%)` == 100 | `Allocation 3 (%)` == 100)
   if ("allocation" %in% all.metrics) {
     df.points <- subset(df.points, ! Trio %in% ref.tickers)
   }
@@ -266,16 +270,16 @@ plot_metrics_3funds <- function(metrics = NULL,
   }
 
   p <- p +
-    geom_point(data = df.points, show.legend = FALSE) +
-    geom_path(aes(group = interaction(Trio, `Allocation 1 (%)`)), show.legend = FALSE) +
+    geom_point(data = df.points) +
+    geom_path(aes(group = interaction(Trio, `Allocation 1 (%)`))) +
     geom_path(data = subset(df, `Allocation 1 (%)` == 0), color = "black") +
     geom_path(data = subset(df, `Allocation 2 (%)` == 0), color = "black") +
     geom_path(data = subset(df, `Allocation 3 (%)` == 0), color = "black") +
-    geom_label_repel(aes(label = Label), subset(df, ! is.na(Label)), show.legend = FALSE) +
+    geom_label_repel(aes(label = Label), subset(df, ! is.na(Label))) +
     ylim(range(c(0, df[[ylabel]])) * 1.01) +
     xlim(range(c(0, df[[xlabel]])) * 1.01) +
     scale_colour_manual(values = cols) +
-    theme(legend.title = element_blank()) +
+    theme(legend.position = "none") +
     labs(title = ifelse(! is.null(title), title, paste(metric.info$title[y.metric], "vs.", metric.info$title[x.metric])),
          y = ylabel, x = xlabel)
 

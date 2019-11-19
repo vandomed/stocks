@@ -180,7 +180,7 @@ plot_metrics <- function(metrics = NULL,
 
     # For y.metric only
     df$text <- paste("Fund: ", df$Fund, "<br>",
-                     metric.info$title[y.metric], ": ", round(df[[ylabel]], metric.info$decimals[y.metric]), metric.info$units[y.metric], sep = "")
+                     metric.info$title[y.metric], ": ", formatC(df[[ylabel]], metric.info$decimals[y.metric], format = "f"), metric.info$units[y.metric], sep = "")
     p <- ggplot(df, aes(y = .data[[ylabel]],
                         x = reorder(Fund, .data[[ylabel]]),
                         text = text)) +
@@ -192,7 +192,7 @@ plot_metrics <- function(metrics = NULL,
 
     # For x.metric only
     df$text <- paste("Fund: ", df$Fund, "<br>", metric.info$title[x.metric], ": ",
-                     round(df[[xlabel]], metric.info$decimals[x.metric]), metric.info$units[x.metric], sep = "")
+                     formatC(df[[xlabel]], metric.info$decimals[x.metric], format = "f"), metric.info$units[x.metric], sep = "")
     p <- ggplot(df, aes(y = .data[[xlabel]], x = reorder(Fund, .data[[xlabel]]),
                         text = text)) +
       geom_col() +
@@ -203,8 +203,8 @@ plot_metrics <- function(metrics = NULL,
   } else {
 
     df$text <- paste("Fund: ", df$Fund,
-                     "<br>", metric.info$title[y.metric], ": ", round(df[[ylabel]], metric.info$decimals[y.metric]), metric.info$units[y.metric],
-                     "<br>", metric.info$title[x.metric], ": ", round(df[[xlabel]], metric.info$decimals[x.metric]), metric.info$units[x.metric], sep = "")
+                     "<br>", metric.info$title[y.metric], ": ", formatC(df[[ylabel]], metric.info$decimals[y.metric], format = "f"), metric.info$units[y.metric],
+                     "<br>", metric.info$title[x.metric], ": ", formatC(df[[xlabel]], metric.info$decimals[x.metric], format = "f"), metric.info$units[x.metric], sep = "")
     p <- ggplot(df, aes(y = .data[[ylabel]],
                         x = .data[[xlabel]],
                         group = Fund, label = Fund, text = text)) +
