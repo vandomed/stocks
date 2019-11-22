@@ -2,7 +2,7 @@
 % Please edit documentation in R/plot_metrics_2funds.R
 \name{plot_metrics_2funds}
 \alias{plot_metrics_2funds}
-\title{Plot One Performance Metric vs. Another for Two-Fund Portfolios}
+\title{Plot One Performance Metric vs. Another for 2-Fund Portfolios}
 \usage{
 plot_metrics_2funds(metrics = NULL, formula = mean ~ sd,
   tickers = NULL, ..., step = 10, gains = NULL, prices = NULL,
@@ -60,19 +60,28 @@ Depending on \code{return}, a \code{\link[ggplot2]{ggplot}} object, a data
 frame, or a list containing both.
 }
 \description{
-Useful for visualizing the behavior of two-fund portfolios, often by plotting
+Useful for visualizing the behavior of 2-fund portfolios, e.g. by plotting
 a measure of growth vs. a measure of volatility.
 }
 \examples{
 \dontrun{
 # Plot mean vs. SD for UPRO/VBLTX, and compare to SPY
-plot_metrics_2funds(formula = mean ~ sd, tickers = c("UPRO", "VBLTX"))
+plot_metrics_2funds(
+  formula = mean ~ sd,
+  tickers = c("UPRO", "VBLTX")
+)
 
-# Plot CAGR vs. MDD for AAPL/GOOG and FB/TWTR
-plot_metrics_2funds(formula = cagr ~ mdd, tickers = c("AAPL", "GOOG", "FB", "TWTR"))
+# Plot CAGR vs. max drawdown for AAPL/GOOG and FB/TWTR
+plot_metrics_2funds(
+  formula = cagr ~ mdd,
+  tickers = c("AAPL", "GOOG", "FB", "TWTR")
+)
 
 # Plot Sharpe ratio vs. allocation for SPY/TLT
-plot_metrics_2funds(formula = sharpe ~ allocation, tickers = c("SPY", "TLT"))
+plot_metrics_2funds(
+  formula = sharpe ~ allocation,
+  tickers = c("SPY", "TLT")
+)
 }
 
 }

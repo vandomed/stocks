@@ -2,12 +2,11 @@
 % Please edit documentation in R/calc_metrics_3funds.R
 \name{calc_metrics_3funds}
 \alias{calc_metrics_3funds}
-\title{Calculate Performance Metrics for Three-Fund Portfolios with Varying
-Allocations}
+\title{Calculate Performance Metrics for 3-Fund Portfolios with Varying Allocations}
 \usage{
 calc_metrics_3funds(gains = NULL, metrics = c("mean", "sd"),
   tickers = NULL, ..., step1 = 5, step2 = step1, prices = NULL,
-  benchmark = "SPY", ref.tickers = "SPY")
+  benchmark = "SPY", ref.tickers = NULL)
 }
 \arguments{
 \item{gains}{Data frame with a date variable named Date and one column of
@@ -17,7 +16,7 @@ gains for each investment.}
 \code{?calc_metrics} for choices.}
 
 \item{tickers}{Character vector of ticker symbols, where the first three are
-are a three-fund set, the next three are another, and so on.}
+are a 3-fund set, the next three are another, and so on.}
 
 \item{...}{Arguments to pass along with \code{tickers} to
 \code{\link{load_gains}}.}
@@ -37,22 +36,23 @@ benchmark for metrics that require one.}
 \item{ref.tickers}{Character vector of ticker symbols to include.}
 }
 \value{
-Depending on \code{return}, a \code{\link[ggplot2]{ggplot}} object, a data
-frame, or a list containing both.
+Data frame with performance metrics for each portfolio at each allocation.
 }
 \description{
-Useful for assessing the characteristics of three-fund portfolios.
+Useful for assessing the characteristics of 3-fund portfolios.
 }
 \examples{
 \dontrun{
-# Plot mean vs. SD for UPRO/VBLTX/VWEHX
-plot_metrics_3funds(mean ~ sd, tickers = c("UPRO", "VBLTX", "VWEHX"))
+# Calculate CAGR and max drawdown for UPRO/VBLTX/VWEHX
+df <- calc_metrics_3funds(metrics = c("cagr", "mdd"), tickers = c("UPRO", "VBLTX", "VWEHX"))
+head(df)
 
-# Plot CAGR vs. MDD for FB/AAPL/NFLX and SPY/TLT/JNK
-plot_metrics_3funds(cagr ~ mdd, tickers = c("FB", "AAPL", "NFLX", "SPY", "TLT", "JNK"))
+# To plot, just pipe into plot_metrics_3funds
+df \%>\%
+  plot_metrics_3funds()
 
-# Plot Sharpe ratio vs. allocation for the same sets
-plot_metrics_3funds(sharpe ~ allocation, tickers = c("FB", "AAPL", "NFLX", "SPY", "TLT", "JNK"))
+# Or bypass calc_metrics_3funds altogether
+plot_metrics_3funds(formula = cagr ~ mdd, tickers = c("UPRO", "VBLTX", "VWEHX"))
 }
 
 

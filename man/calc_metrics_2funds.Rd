@@ -2,7 +2,7 @@
 % Please edit documentation in R/calc_metrics_2funds.R
 \name{calc_metrics_2funds}
 \alias{calc_metrics_2funds}
-\title{Calculate Performance Metrics for Two-Fund Portfolios with Varying
+\title{Calculate Performance Metrics for 2-Fund Portfolios with Varying
 Allocations}
 \usage{
 calc_metrics_2funds(gains = NULL, metrics = c("mean", "sd"),
@@ -17,7 +17,7 @@ gains for each investment.}
 \code{?calc_metrics} for choices.}
 
 \item{tickers}{Character vector of ticker symbols, where the first two are
-are a two-fund pair, the next two are another, and so on.}
+are a 2-fund pair, the next two are another, and so on.}
 
 \item{...}{Arguments to pass along with \code{tickers} to
 \code{\link{load_gains}}.}
@@ -31,22 +31,30 @@ benchmark for metrics that require one.}
 \item{ref.tickers}{Character vector of ticker symbols to include.}
 }
 \value{
-Depending on \code{return}, a \code{\link[ggplot2]{ggplot}} object, a data
-frame, or a list containing both.
+Data frame with performance metrics for each portfolio at each allocation.
 }
 \description{
-Useful for assessing the characteristics of two-fund portfolios.
+Useful for assessing the characteristics of 2-fund portfolios.
 }
 \examples{
 \dontrun{
-# Plot mean vs. SD for UPRO/VBLTX, and compare to SPY
-plot_metrics_2funds(mean ~ sd, c("UPRO", "VBLTX"))
+# Calculate CAGR and max drawdown for UPRO/VBLTX
+df <- calc_metrics_2funds(
+  metrics = c("cagr", "mdd"),
+  tickers = c("UPRO", "VBLTX")
+)
+head(df)
 
-# Plot CAGR vs. MDD for AAPL/GOOG and FB/TWTR
-plot_metrics_2funds(cagr ~ mdd, tickers = c("AAPL", "GOOG", "FB", "TWTR"))
+# To plot, just pipe into plot_metrics_2funds
+df \%>\%
+  plot_metrics_2funds()
 
-# Plot Sharpe ratio vs. allocation for SPY/TLT
-plot_metrics_2funds(sharpe ~ allocation, tickers = c("SPY", "TLT"))
+# Or bypass calc_metrics_2funds altogether
+plot_metrics_2funds(
+  formula = cagr ~ mdd,
+  tickers = c("UPRO", "VBLTX")
+)
 }
+
 
 }

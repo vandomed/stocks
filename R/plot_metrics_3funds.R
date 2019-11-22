@@ -1,7 +1,7 @@
-#' Plot One Performance Metric vs. Another for Three-Fund Portfolios
+#' Plot One Performance Metric vs. Another for 3-Fund Portfolios
 #'
-#' Useful for visualizing the behavior of three-fund portfolios, often by
-#' plotting a measure of growth vs. a measure of volatility.
+#' Useful for visualizing the behavior of one or several 3-fund portfolios,
+#' e.g. by plotting a measure of growth vs. a measure of volatility.
 #'
 #'
 #' @param metrics Data frame with Fund column and column for each metric you
@@ -14,7 +14,7 @@
 #' \code{mean ~ sd} unless either is not available, in which case the first two
 #' performance metrics that appear as columns in \code{metrics} are used.
 #' @param tickers Character vector of ticker symbols, where the first three are
-#' are a three-fund set, the next three are another, and so on.
+#' are a 3-fund set, the next three are another, and so on.
 #' @param ... Arguments to pass along with \code{tickers} to
 #' \code{\link{load_gains}}.
 #' @param step1 Numeric value controlling allocation increments for first fund
@@ -48,14 +48,22 @@
 #' @examples
 #' \dontrun{
 #' # Plot mean vs. SD for UPRO/VBLTX/VWEHX
-#' plot_metrics_3funds(formula = mean ~ sd, tickers = c("UPRO", "VBLTX", "VWEHX"))
+#' plot_metrics_3funds(
+#'   formula = mean ~ sd,
+#'   tickers = c("UPRO", "VBLTX", "VWEHX")
+#' )
 #'
-#' # Plot CAGR vs. MDD for FB/AAPL/NFLX and SPY/TLT/JNK
-#' plot_metrics_3funds(formula = cagr ~ mdd, tickers = c("FB", "AAPL", "NFLX", "SPY", "TLT", "JNK"))
+#' # Plot CAGR vs. max drawdown for FB/AAPL/NFLX and SPY/TLT/JNK
+#' plot_metrics_3funds(
+#'   formula = cagr ~ mdd,
+#'   tickers = c("FB", "AAPL", "NFLX", "SPY", "TLT", "JNK")
+#' )
 #'
 #' # Plot Sharpe ratio vs. allocation for the same sets
-#' plot_metrics_3funds(formula = sharpe ~ allocation,
-#'                     tickers = c("FB", "AAPL", "NFLX", "SPY", "TLT", "JNK"))
+#' plot_metrics_3funds(
+#'   formula = sharpe ~ allocation,
+#'   tickers = c("FB", "AAPL", "NFLX", "SPY", "TLT", "JNK")
+#' )
 #' }
 #'
 #'
@@ -70,7 +78,7 @@ plot_metrics_3funds <- function(metrics = NULL,
                                 benchmark = "SPY",
                                 y.benchmark = benchmark,
                                 x.benchmark = benchmark,
-                                ref.tickers = "SPY",
+                                ref.tickers = NULL,
                                 plotly = FALSE,
                                 title = NULL,
                                 return = "plot") {
@@ -148,7 +156,7 @@ plot_metrics_3funds <- function(metrics = NULL,
     min.diffdates <- min(diff(unlist(head(gains$Date, 10))))
     units.year <- ifelse(min.diffdates == 1, 252, ifelse(min.diffdates <= 30, 12, 1))
 
-    # Extract gains for benchmark index
+    # Extract benchmark gains
     if (! is.null(y.benchmark)) {
       y.benchmark.gains <- gains[[y.benchmark]]
     } else {
@@ -242,9 +250,9 @@ plot_metrics_3funds <- function(metrics = NULL,
 
   # Prep for ggplot
   df <- as.data.frame(df)
-  df$text <- paste(ifelse(is.na(df$`Fund 1`), df$Trio, paste(df$`Allocation 1 (%)`, "% ", df$`Fund 1`, ", ",
-                                                             df$`Allocation 2 (%)`, "% ", df$`Fund 2`, ", ",
-                                                             df$`Allocation 3 (%)`, "% ", df$`Fund 3`, sep = "")),
+  df$tooltip <- paste(ifelse(is.na(df$`Fund 1`), df$Trio, paste(df$`Allocation 1 (%)`, "% ", df$`Fund 1`, ", ",
+                                                                df$`Allocation 2 (%)`, "% ", df$`Fund 2`, ", ",
+                                                                df$`Allocation 3 (%)`, "% ", df$`Fund 3`, sep = "")),
                    "<br>", metric.info$title[y.metric], ": ", formatC(df[[ylabel]], metric.info$decimals[y.metric], format = "f"), metric.info$units[y.metric],
                    "<br>", metric.info$title[x.metric], ": ", formatC(df[[xlabel]], metric.info$decimals[x.metric], format = "f"), metric.info$units[x.metric], sep = "")
   # df.points <- subset(df, Trio %in% ref.tickers | `Allocation 1 (%)` == 100 |
@@ -264,7 +272,7 @@ plot_metrics_3funds <- function(metrics = NULL,
   cols[ref.tickers] <- "black"
 
   # Create plot
-  p <- ggplot(df, aes(y = .data[[ylabel]], x = .data[[xlabel]], group = Trio, color = Trio, text = text))
+  p <- ggplot(df, aes(y = .data[[ylabel]], x = .data[[xlabel]], group = Trio, color = Trio, text = tooltip))
 
   if (x.metric == "allocation" & ! is.null(ref.tickers)) {
     p <- p + geom_hline(data = df.ref, yintercept = df.ref[[ylabel]], lty = 2)
@@ -286,8 +294,7 @@ plot_metrics_3funds <- function(metrics = NULL,
     labs(title = ifelse(! is.null(title), title, paste(metric.info$title[y.metric], "vs.", metric.info$title[x.metric])),
          y = ylabel, x = xlabel)
 
-  if (plotly) p <- ggplotly(p, tooltip = "text")
-  df <- df[names(df) != "text"]
+  if (plotly) p <- ggplotly(p, tooltip = "tooltip")
 
   if (return == "plot") return(p)
   if (return == "data") return(df)

@@ -9,7 +9,7 @@
 #' Package: \tab stocks \cr
 #' Type: \tab Package \cr
 #' Version: \tab 2.0.0 \cr
-#' Date: \tab 2019-11-18 \cr
+#' Date: \tab 2019-11-21 \cr
 #' License: \tab GPL-3 \cr
 #' }
 #'
@@ -53,12 +53,12 @@
 #' @import quantmod
 #' @importFrom Rcpp evalCpp
 #' @importFrom rbenchmark benchmark
-#' @importFrom rvest html_nodes html_table
+#' @importFrom rvest html_node html_nodes html_table
 #' @importFrom scales comma hue_pal
 #' @import stats
 #' @importFrom tidyr as_tibble pivot_longer
 #' @importFrom TTR ROC
-#' @importFrom utils head
+#' @importFrom utils head tail
 #' @importFrom xml2 read_html
 #' @importFrom zoo rollapply
 #' @useDynLib stocks, .registration=TRUE
@@ -67,6 +67,6 @@ NULL
 utils::globalVariables(
   c(".", "Allocation (%)", "Allocation 1 (%)", "Allocation 2 (%)",
     "Allocation 3 (%)", "Balance", "Date", "Fund", "Gain", "Label",
-    "metric.info", "n", ".N", "Pair", "Period",
-    ".SD", "sp500.dates", "text", "Trio")
+    "metric.info", "n", ".N", "Pair", "Period", "Set",
+    ".SD", "sp500.dates", "text", "tooltip", "Trio")
 )

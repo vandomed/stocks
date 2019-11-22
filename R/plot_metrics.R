@@ -1,7 +1,10 @@
 #' Plot One Performance Metric (Sorted Bar Plot) or One vs. Another
-#' (Scatterplot)
+#' (Scatterplot) for a Group of Individual Funds
 #'
-#' Useful for comparing funds on one or more metrics.
+#' Useful for visualizing the performance of individual funds. For 2- and 3-fund
+#' portfolios, see \code{plot_metrics_2funds} and \code{plot_metrics_3funds}.
+#' To visualize any combination of single funds and 2- and 3-fund portfolios,
+#' see \code{link{plot_metrics_123}}.
 #'
 #'
 #' @param metrics "Long" data frame with Fund column and column for each metric
@@ -47,7 +50,7 @@
 #'
 #' @examples
 #' \dontrun{
-#' # Plot CAGR vs. MDD for SPY and BRK-B, downloading data on the fly
+#' # Plot CAGR vs. max drawdown for SPY and BRK-B, downloading data on the fly
 #' plot_metrics(formula = cagr ~ mdd, tickers = c("SPY", "BRK-B"))
 #'
 #' # Plot Sharpe ratio for FANG stocks, in more explicit steps with piping
@@ -179,11 +182,11 @@ plot_metrics <- function(metrics = NULL,
   if (is.null(x.metric)) {
 
     # For y.metric only
-    df$text <- paste("Fund: ", df$Fund, "<br>",
-                     metric.info$title[y.metric], ": ", formatC(df[[ylabel]], metric.info$decimals[y.metric], format = "f"), metric.info$units[y.metric], sep = "")
+    df$tooltip <- paste("Fund: ", df$Fund, "<br>",
+                        metric.info$title[y.metric], ": ", formatC(df[[ylabel]], metric.info$decimals[y.metric], format = "f"), metric.info$units[y.metric], sep = "")
     p <- ggplot(df, aes(y = .data[[ylabel]],
                         x = reorder(Fund, .data[[ylabel]]),
-                        text = text)) +
+                        text = tooltip)) +
       geom_col() +
       labs(title = ifelse(! is.null(title), title, paste(metric.info$title[y.metric], "for Various Funds")),
            y = ylabel, x = NULL)
@@ -191,10 +194,10 @@ plot_metrics <- function(metrics = NULL,
   } else if (is.null(y.metric)) {
 
     # For x.metric only
-    df$text <- paste("Fund: ", df$Fund, "<br>", metric.info$title[x.metric], ": ",
-                     formatC(df[[xlabel]], metric.info$decimals[x.metric], format = "f"), metric.info$units[x.metric], sep = "")
+    df$tooltip <- paste("Fund: ", df$Fund, "<br>", metric.info$title[x.metric], ": ",
+                        formatC(df[[xlabel]], metric.info$decimals[x.metric], format = "f"), metric.info$units[x.metric], sep = "")
     p <- ggplot(df, aes(y = .data[[xlabel]], x = reorder(Fund, .data[[xlabel]]),
-                        text = text)) +
+                        text = tooltip)) +
       geom_col() +
       coord_flip() +
       labs(title = ifelse(! is.null(title), title, paste(metric.info$title[x.metric], "for Various Funds")),
@@ -202,12 +205,12 @@ plot_metrics <- function(metrics = NULL,
 
   } else {
 
-    df$text <- paste("Fund: ", df$Fund,
-                     "<br>", metric.info$title[y.metric], ": ", formatC(df[[ylabel]], metric.info$decimals[y.metric], format = "f"), metric.info$units[y.metric],
-                     "<br>", metric.info$title[x.metric], ": ", formatC(df[[xlabel]], metric.info$decimals[x.metric], format = "f"), metric.info$units[x.metric], sep = "")
+    df$tooltip <- paste("Fund: ", df$Fund,
+                        "<br>", metric.info$title[y.metric], ": ", formatC(df[[ylabel]], metric.info$decimals[y.metric], format = "f"), metric.info$units[y.metric],
+                        "<br>", metric.info$title[x.metric], ": ", formatC(df[[xlabel]], metric.info$decimals[x.metric], format = "f"), metric.info$units[x.metric], sep = "")
     p <- ggplot(df, aes(y = .data[[ylabel]],
                         x = .data[[xlabel]],
-                        group = Fund, label = Fund, text = text)) +
+                        group = Fund, label = Fund, text = tooltip)) +
       geom_point() +
       geom_label_repel() +
       ylim(range(c(0, df[[ylabel]])) * 1.02) +
@@ -217,8 +220,7 @@ plot_metrics <- function(metrics = NULL,
 
   }
 
-  if (plotly) p <- ggplotly(p, tooltip = "text")
-  df <- df[names(df) != "text"]
+  if (plotly) p <- ggplotly(p, tooltip = "tooltip")
 
   if (return == "plot") return(p)
   if (return == "data") return(df)

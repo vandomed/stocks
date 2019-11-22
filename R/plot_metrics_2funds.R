@@ -1,6 +1,6 @@
-#' Plot One Performance Metric vs. Another for Two-Fund Portfolios
+#' Plot One Performance Metric vs. Another for 2-Fund Portfolios
 #'
-#' Useful for visualizing the behavior of two-fund portfolios, often by plotting
+#' Useful for visualizing the behavior of 2-fund portfolios, e.g. by plotting
 #' a measure of growth vs. a measure of volatility.
 #'
 #'
@@ -46,13 +46,22 @@
 #' @examples
 #' \dontrun{
 #' # Plot mean vs. SD for UPRO/VBLTX, and compare to SPY
-#' plot_metrics_2funds(formula = mean ~ sd, tickers = c("UPRO", "VBLTX"))
+#' plot_metrics_2funds(
+#'   formula = mean ~ sd,
+#'   tickers = c("UPRO", "VBLTX")
+#' )
 #'
-#' # Plot CAGR vs. MDD for AAPL/GOOG and FB/TWTR
-#' plot_metrics_2funds(formula = cagr ~ mdd, tickers = c("AAPL", "GOOG", "FB", "TWTR"))
+#' # Plot CAGR vs. max drawdown for AAPL/GOOG and FB/TWTR
+#' plot_metrics_2funds(
+#'   formula = cagr ~ mdd,
+#'   tickers = c("AAPL", "GOOG", "FB", "TWTR")
+#' )
 #'
 #' # Plot Sharpe ratio vs. allocation for SPY/TLT
-#' plot_metrics_2funds(formula = sharpe ~ allocation, tickers = c("SPY", "TLT"))
+#' plot_metrics_2funds(
+#'   formula = sharpe ~ allocation,
+#'   tickers = c("SPY", "TLT")
+#' )
 #' }
 #'
 #' @export
@@ -141,7 +150,7 @@ plot_metrics_2funds <- function(metrics = NULL,
     min.diffdates <- min(diff(unlist(head(gains$Date, 10))))
     units.year <- ifelse(min.diffdates == 1, 252, ifelse(min.diffdates <= 30, 12, 1))
 
-    # Extract gains for benchmark index
+    # Extract benchmark gains
     if (! is.null(y.benchmark)) {
       y.benchmark.gains <- gains[[y.benchmark]]
     } else {
@@ -217,10 +226,10 @@ plot_metrics_2funds <- function(metrics = NULL,
 
   # Prep for ggplot
   df <- as.data.frame(df)
-  df$text <- paste(ifelse(is.na(df$`Fund 1`), df$Pair, paste(df$`Allocation 1 (%)`, "% ", df$`Fund 1`, ", ",
-                                                             df$`Allocation 2 (%)`, "% ", df$`Fund 2`, sep = "")),
-                   "<br>", metric.info$title[y.metric], ": ", formatC(df[[ylabel]], metric.info$decimals[y.metric], format = "f"), metric.info$units[y.metric],
-                   "<br>", metric.info$title[x.metric], ": ", formatC(df[[xlabel]], metric.info$decimals[x.metric], format = "f"), metric.info$units[x.metric], sep = "")
+  df$tooltip <- paste(ifelse(is.na(df$`Fund 1`), df$Pair, paste(df$`Allocation 1 (%)`, "% ", df$`Fund 1`, ", ",
+                                                                df$`Allocation 2 (%)`, "% ", df$`Fund 2`, sep = "")),
+                      "<br>", metric.info$title[y.metric], ": ", formatC(df[[ylabel]], metric.info$decimals[y.metric], format = "f"), metric.info$units[y.metric],
+                      "<br>", metric.info$title[x.metric], ": ", formatC(df[[xlabel]], metric.info$decimals[x.metric], format = "f"), metric.info$units[x.metric], sep = "")
 
   df.points <- subset(df, Pair %in% ref.tickers | `Allocation (%)` %in% seq(0, 100, step))
   gg_color_hue <- function(n) {
@@ -232,7 +241,7 @@ plot_metrics_2funds <- function(metrics = NULL,
   cols[pairs] <- gg_color_hue(length(pairs))
   cols[ref.tickers] <- "black"
 
-  p <- ggplot(df, aes(y = .data[[ylabel]], x = .data[[xlabel]], group = Pair, color = Pair, text = text))
+  p <- ggplot(df, aes(y = .data[[ylabel]], x = .data[[xlabel]], group = Pair, color = Pair, text = tooltip))
 
   if (x.metric == "allocation" & ! is.null(ref.tickers)) {
     p <- p + geom_hline(data = df.ref, yintercept = df.ref[[ylabel]], lty = 2)
@@ -251,8 +260,7 @@ plot_metrics_2funds <- function(metrics = NULL,
     labs(title = ifelse(! is.null(title), title, paste(metric.info$title[y.metric], "vs.", metric.info$title[x.metric])),
          y = ylabel, x = xlabel)
 
-  if (plotly) p <- ggplotly(p, tooltip = "text")
-  df <- df[names(df) != "text"]
+  if (plotly) p <- ggplotly(p, tooltip = "tooltip")
 
   if (return == "plot") return(p)
   if (return == "data") return(df)

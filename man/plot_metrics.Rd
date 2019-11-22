@@ -3,7 +3,7 @@
 \name{plot_metrics}
 \alias{plot_metrics}
 \title{Plot One Performance Metric (Sorted Bar Plot) or One vs. Another
-(Scatterplot)}
+(Scatterplot) for a Group of Individual Funds}
 \usage{
 plot_metrics(metrics = NULL, formula = cagr ~ mdd, tickers = NULL,
   ..., gains = NULL, prices = NULL, benchmark = "SPY",
@@ -56,11 +56,14 @@ Depending on \code{return}, a \code{\link[ggplot2]{ggplot}}, a data frame
 with the source data, or a list containing both.
 }
 \description{
-Useful for comparing funds on one or more metrics.
+Useful for visualizing the performance of individual funds. For 2- and 3-fund
+portfolios, see \code{plot_metrics_2funds} and \code{plot_metrics_3funds}.
+To visualize any combination of single funds and 2- and 3-fund portfolios,
+see \code{link{plot_metrics_123}}.
 }
 \examples{
 \dontrun{
-# Plot CAGR vs. MDD for SPY and BRK-B, downloading data on the fly
+# Plot CAGR vs. max drawdown for SPY and BRK-B, downloading data on the fly
 plot_metrics(formula = cagr ~ mdd, tickers = c("SPY", "BRK-B"))
 
 # Plot Sharpe ratio for FANG stocks, in more explicit steps with piping
