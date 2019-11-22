@@ -162,14 +162,12 @@ plot_metrics_123 <- function(metrics = NULL,
         df.x <- tibble(
           Set = x,
           Funds = 1,
+          `Fund 1` = x, `Fund 2` = NA, `Fund 3` = NA,
           `Allocation 1 (%)` = 100, `Allocation 2 (%)` = NA, `Allocation 3 (%)` = NA,
           Label = paste("100%", x)
         )
         df.x[[ylabel]] <- calc_metric(gains = gains.x, metric = y.metric, units.year = units.year, benchmark.gains = y.benchmark.gains)
         df.x[[xlabel]] <- calc_metric(gains = gains.x, metric = x.metric, units.year = units.year, benchmark.gains = y.benchmark.gains)
-        df.x$tooltip <- paste(df.x$Set,
-                             "<br>", metric.info$title[y.metric], ": ", formatC(df.x[[ylabel]], metric.info$decimals[y.metric], format = "f"), metric.info$units[y.metric],
-                             "<br>", metric.info$title[x.metric], ": ", formatC(df.x[[xlabel]], metric.info$decimals[x.metric], format = "f"), metric.info$units[x.metric], sep = "")
         return(df.x)
 
       }
@@ -185,6 +183,7 @@ plot_metrics_123 <- function(metrics = NULL,
         df.x <- tibble(
           Set = rep(paste(x, collapse = "-"), ncol(wgains)),
           Funds = 2,
+          `Fund 1` = x[1], `Fund 2` = x[2], `Fund 3` = NA,
           `Allocation 1 (%)` = c1, `Allocation 2 (%)` = c2, `Allocation 3 (%)` = NA,
           Label = ifelse(c1 == 100, paste("100%", x[1]), ifelse(c2 == 100, paste("100%", x[2]), NA_character_))
         )
@@ -194,9 +193,6 @@ plot_metrics_123 <- function(metrics = NULL,
         df.x[[xlabel]] <- apply(wgains, 2, function(y) {
           calc_metric(gains = y, metric = x.metric, units.year = units.year, benchmark.gains = x.benchmark.gains)
         })
-        df.x$tooltip <- paste(c1, "% ", x[1], ", ", c2, "% ", x[2],
-                             "<br>", metric.info$title[y.metric], ": ", formatC(df.x[[ylabel]], metric.info$decimals[y.metric], format = "f"), metric.info$units[y.metric],
-                             "<br>", metric.info$title[x.metric], ": ", formatC(df.x[[xlabel]], metric.info$decimals[x.metric], format = "f"), metric.info$units[x.metric], sep = "")
         return(df.x)
 
       }
@@ -214,6 +210,7 @@ plot_metrics_123 <- function(metrics = NULL,
       df.x <- tibble(
         Set = rep(paste(x, collapse = "-"), ncol(wgains)),
         Funds = 3,
+        `Fund 1` = x[1], `Fund 2` = x[2], `Fund 3` = x[3],
         `Allocation 1 (%)` = c1, `Allocation 2 (%)` = c2, `Allocation 3 (%)` = c3,
         Label = ifelse(c1 == 100, paste("100%", x[1]),
                 ifelse(c2 == 100, paste("100%", x[2]),
@@ -225,10 +222,6 @@ plot_metrics_123 <- function(metrics = NULL,
       df.x[[xlabel]] <- apply(wgains, 2, function(y) {
         calc_metric(gains = y, metric = x.metric, units.year = units.year, benchmark.gains = x.benchmark.gains)
       })
-      df.x$tooltip <- paste(c1, "% ", x[1], ", ", c2, "% ", x[2], ", ", c3, "% ", x[3],
-                           "<br>", metric.info$title[y.metric], ": ", formatC(df.x[[ylabel]], metric.info$decimals[y.metric], format = "f"), metric.info$units[y.metric],
-                           "<br>", metric.info$title[x.metric], ": ", formatC(df.x[[xlabel]], metric.info$decimals[x.metric], format = "f"), metric.info$units[x.metric], sep = "")
-
       return(df.x)
 
     }))
@@ -238,6 +231,14 @@ plot_metrics_123 <- function(metrics = NULL,
   }
 
   # Prep for ggplot
+  df$tooltip <- paste(
+    ifelse(df$Funds == 1, df$Set,
+    ifelse(df$Funds == 2, paste(df$`Allocation 1 (%)`, "% ", df$`Fund 1`, ", ", df$`Allocation 2 (%)`, "% ", df$`Fund 2`),
+    paste(df$`Allocation 1 (%)`, "% ", df$`Fund 1`, ", ", df$`Allocation 2 (%)`, "% ", df$`Fund 2`, ", ", df$`Allocation 3 (%)`, "% ", df$`Fund 3`))),
+   "<br>", metric.info$title[y.metric], ": ", formatC(df[[ylabel]], metric.info$decimals[y.metric], format = "f"), metric.info$units[y.metric],
+   "<br>", metric.info$title[x.metric], ": ", formatC(df[[xlabel]], metric.info$decimals[x.metric], format = "f"), metric.info$units[x.metric], sep = ""
+  )
+
   gg_color_hue <- function(n) {
     hues = seq(15, 375, length = n + 1)
     hcl(h = hues, l = 65, c = 100)[1: n]

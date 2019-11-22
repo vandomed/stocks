@@ -29,8 +29,11 @@
 #'
 #' @examples
 #' \dontrun{
-#' # Calculate CAGR and max drawdown for BRK-B, SPY/TLT, and VWEHX/VBLTX/VFINX
-#' df <- calc_metrics_123(tickers = list("BRK-B", c("SPY", "TLT"), c("VWEHX", "VBLTX", "VFINX")))
+#' # Calculate CAGR vs. max drawdown for BRK-B, SPY/TLT, and VWEHX/VBLTX/VFINX
+#' df <- calc_metrics_123(
+#'   tickers = list("BRK-B", c("SPY", "TLT"), c("VWEHX", "VBLTX", "VFINX")),
+#'   metrics = c("cagr", "mdd")
+#' )
 #' head(df)
 #'
 #' # To plot, just pipe into plot_metrics_123
@@ -115,16 +118,14 @@ calc_metrics_123 <- function(gains = NULL,
       df.x <- tibble(
         Set = x,
         Funds = 1,
+        `Fund 1` = x, `Fund 2` = NA, `Fund 3` = NA,
         `Allocation 1 (%)` = 100, `Allocation 2 (%)` = NA, `Allocation 3 (%)` = NA,
         Label = paste("100%", x)
       )
 
-      # Have to loop through all metrics here!
-      df.x[[ylabel]] <- calc_metric(gains = gains.x, metric = y.metric, units.year = units.year, benchmark.gains = y.benchmark.gains)
-      df.x[[xlabel]] <- calc_metric(gains = gains.x, metric = x.metric, units.year = units.year, benchmark.gains = y.benchmark.gains)
-      df.x$tooltip <- paste(df.x$Set,
-                            "<br>", metric.info$title[y.metric], ": ", formatC(df.x[[ylabel]], metric.info$decimals[y.metric], format = "f"), metric.info$units[y.metric],
-                            "<br>", metric.info$title[x.metric], ": ", formatC(df.x[[xlabel]], metric.info$decimals[x.metric], format = "f"), metric.info$units[x.metric], sep = "")
+      for (mtrc in metrics) {
+        df.x[[metric.info$label[mtrc]]] <- calc_metric(gains = gains.x, metric = mtrc, units.year = units.year, benchmark.gains = benchmark.gains)
+      }
       return(df.x)
 
     }
@@ -140,18 +141,15 @@ calc_metrics_123 <- function(gains = NULL,
       df.x <- tibble(
         Set = rep(paste(x, collapse = "-"), ncol(wgains)),
         Funds = 2,
+        `Fund 1` = x[1], `Fund 2` = x[2], `Fund 3` = NA,
         `Allocation 1 (%)` = c1, `Allocation 2 (%)` = c2, `Allocation 3 (%)` = NA,
         Label = ifelse(c1 == 100, paste("100%", x[1]), ifelse(c2 == 100, paste("100%", x[2]), NA_character_))
       )
-      df.x[[ylabel]] <- apply(wgains, 2, function(y) {
-        calc_metric(gains = y, metric = y.metric, units.year = units.year, benchmark.gains = benchmark.gains)
-      })
-      df.x[[xlabel]] <- apply(wgains, 2, function(y) {
-        calc_metric(gains = y, metric = x.metric, units.year = units.year, benchmark.gains = benchmark.gains)
-      })
-      df.x$tooltip <- paste(c1, "% ", x[1], ", ", c2, "% ", x[2],
-                            "<br>", metric.info$title[y.metric], ": ", formatC(df.x[[ylabel]], metric.info$decimals[y.metric], format = "f"), metric.info$units[y.metric],
-                            "<br>", metric.info$title[x.metric], ": ", formatC(df.x[[xlabel]], metric.info$decimals[x.metric], format = "f"), metric.info$units[x.metric], sep = "")
+      for (mtrc in metrics) {
+        df.x[[metric.info$label[mtrc]]] <- apply(wgains, 2, function(y) {
+          calc_metric(gains = y, metric = mtrc, units.year = units.year, benchmark.gains = benchmark.gains)
+        })
+      }
       return(df.x)
 
     }
@@ -169,21 +167,17 @@ calc_metrics_123 <- function(gains = NULL,
     df.x <- tibble(
       Set = rep(paste(x, collapse = "-"), ncol(wgains)),
       Funds = 3,
+      `Fund 1` = x[1], `Fund 2` = x[2], `Fund 3` = x[3],
       `Allocation 1 (%)` = c1, `Allocation 2 (%)` = c2, `Allocation 3 (%)` = c3,
       Label = ifelse(c1 == 100, paste("100%", x[1]),
                      ifelse(c2 == 100, paste("100%", x[2]),
                             ifelse(c3 == 100, paste("100%", x[3]), NA_character_)))
     )
-    df.x[[ylabel]] <- apply(wgains, 2, function(y) {
-      calc_metric(gains = y, metric = y.metric, units.year = units.year, benchmark.gains = benchmark.gains)
-    })
-    df.x[[xlabel]] <- apply(wgains, 2, function(y) {
-      calc_metric(gains = y, metric = x.metric, units.year = units.year, benchmark.gains = benchmark.gains)
-    })
-    df.x$tooltip <- paste(c1, "% ", x[1], ", ", c2, "% ", x[2], ", ", c3, "% ", x[3],
-                         "<br>", metric.info$title[y.metric], ": ", formatC(df.x[[ylabel]], metric.info$decimals[y.metric], format = "f"), metric.info$units[y.metric],
-                         "<br>", metric.info$title[x.metric], ": ", formatC(df.x[[xlabel]], metric.info$decimals[x.metric], format = "f"), metric.info$units[x.metric], sep = "")
-
+    for (mtrc in metrics) {
+      df.x[[metric.info$label[mtrc]]] <- apply(wgains, 2, function(y) {
+        calc_metric(gains = y, metric = mtrc, units.year = units.year, benchmark.gains = benchmark.gains)
+      })
+    }
     return(df.x)
 
   }))

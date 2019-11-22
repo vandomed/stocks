@@ -44,8 +44,11 @@ strategies of varying complexities.
 }
 \examples{
 \dontrun{
-# Calculate CAGR and max drawdown for BRK-B, SPY/TLT, and VWEHX/VBLTX/VFINX
-df <- calc_metrics_123(tickers = list("BRK-B", c("SPY", "TLT"), c("VWEHX", "VBLTX", "VFINX")))
+# Calculate CAGR vs. max drawdown for BRK-B, SPY/TLT, and VWEHX/VBLTX/VFINX
+df <- calc_metrics_123(
+  tickers = list("BRK-B", c("SPY", "TLT"), c("VWEHX", "VBLTX", "VFINX")),
+  metrics = c("cagr", "mdd")
+)
 head(df)
 
 # To plot, just pipe into plot_metrics_123
