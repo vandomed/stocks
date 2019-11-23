@@ -39,7 +39,7 @@
 #' }
 #'
 #' @export
-plot_growth <- function(prices,
+plot_growth <- function(prices = NULL,
                         tickers = NULL, ...,
                         gains = NULL,
                         initial = 10000,

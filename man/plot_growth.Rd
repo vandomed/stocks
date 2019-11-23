@@ -4,7 +4,7 @@
 \alias{plot_growth}
 \title{Plot Investment Growth}
 \usage{
-plot_growth(prices, tickers = NULL, ..., gains = NULL,
+plot_growth(prices = NULL, tickers = NULL, ..., gains = NULL,
   initial = 10000, plotly = FALSE, title = "Balance over Time",
   return = "plot")
 }
