@@ -33,9 +33,7 @@
 #' @param plotly Logical value for whether to convert the
 #' \code{\link[ggplot2]{ggplot}} to a \code{\link[plotly]{plotly}} object
 #' internally.
-#' @param title Character string. Only really useful if you're going to set
-#' \code{plotly = TRUE}, otherwise you can change the title, axes, etc.
-#' afterwards.
+#' @param title Character string.
 #' @param return Character string specifying what to return. Choices are
 #' \code{"plot"}, \code{"data"}, and \code{"both"}.
 #'
@@ -281,7 +279,7 @@ plot_metrics_3funds <- function(metrics = NULL,
   }
 
   p <- p +
-    geom_point(data = df.points) +
+    geom_point(data = df.points, col = "black") +
     geom_path(aes(group = interaction(Trio, `Allocation 1 (%)`))) +
     geom_path(data = subset(df, `Allocation 1 (%)` == 0), color = "black") +
     geom_path(data = subset(df, `Allocation 2 (%)` == 0), color = "black") +

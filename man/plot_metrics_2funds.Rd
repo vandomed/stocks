@@ -48,9 +48,7 @@ plot.}
 \code{\link[ggplot2]{ggplot}} to a \code{\link[plotly]{plotly}} object
 internally.}
 
-\item{title}{Character string. Only really useful if you're going to set
-\code{plotly = TRUE}, otherwise you can change the title, axes, etc.
-afterwards.}
+\item{title}{Character string.}
 
 \item{return}{Character string specifying what to return. Choices are
 \code{"plot"}, \code{"data"}, and \code{"both"}.}

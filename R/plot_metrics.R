@@ -30,9 +30,7 @@
 #' @param plotly Logical value for whether to convert the
 #' \code{\link[ggplot2]{ggplot}} to a \code{\link[plotly]{plotly}} object
 #' internally.
-#' @param title Character string. Only really useful if you're going to set
-#' \code{plotly = TRUE}, otherwise you can change the title, axes, etc.
-#' afterwards.
+#' @param title Character string.
 #' @param return Character string specifying what to return. Choices are
 #' \code{"plot"}, \code{"data"}, and \code{"both"}.
 #'

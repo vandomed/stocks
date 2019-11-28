@@ -1,7 +1,7 @@
 Get Rich with ‘stocks’
 ================
 Dane Van Domelen <br> <vandomed@gmail.com>
-2019-11-22
+2019-11-28
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 

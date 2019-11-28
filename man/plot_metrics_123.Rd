@@ -6,10 +6,10 @@
 Funds, 2-Fund Portfolios, and 3-Fund Portfolios}
 \usage{
 plot_metrics_123(metrics = NULL, formula = mean ~ sd, tickers = NULL,
-  ..., step.along = 2.5, step.between = 2.5, gains = NULL,
+  ..., step.along = 1, step.between = 2, gains = NULL,
   prices = NULL, benchmark = "SPY", y.benchmark = benchmark,
   x.benchmark = benchmark, plotly = FALSE, title = NULL,
-  return = "plot")
+  base_size = 16, label_size = 6, return = "plot")
 }
 \arguments{
 \item{metrics}{Data frame with Fund column and column for each metric you
@@ -49,9 +49,11 @@ fund to use as benchmark for metrics (if you request \code{alpha},
 \code{\link[ggplot2]{ggplot}} to a \code{\link[plotly]{plotly}} object
 internally.}
 
-\item{title}{Character string. Only really useful if you're going to set
-\code{plotly = TRUE}, otherwise you can change the title, axes, etc.
-afterwards.}
+\item{title}{Character string.}
+
+\item{base_size}{Numeric value.}
+
+\item{label_size}{Numeric value.}
 
 \item{return}{Character string specifying what to return. Choices are
 \code{"plot"}, \code{"data"}, and \code{"both"}.}

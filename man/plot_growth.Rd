@@ -5,8 +5,8 @@
 \title{Plot Investment Growth}
 \usage{
 plot_growth(prices = NULL, tickers = NULL, ..., gains = NULL,
-  initial = 10000, plotly = FALSE, title = "Balance over Time",
-  return = "plot")
+  initial = 10000, plotly = FALSE, title = "Growth Over Time",
+  base_size = 16, return = "plot")
 }
 \arguments{
 \item{prices}{Data frame with one column of prices for each investment and a
@@ -27,9 +27,9 @@ date variable named Date.}
 \code{\link[ggplot2]{ggplot}} to a \code{\link[plotly]{plotly}} object
 internally.}
 
-\item{title}{Character string. Only really useful if you're going to set
-\code{plotly = TRUE}, otherwise you can change the title, axes, etc.
-afterwards.}
+\item{title}{Character string.}
+
+\item{base_size}{Numeric value.}
 
 \item{return}{Character string specifying what to return. Choices are
 \code{"plot"}, \code{"data"}, and \code{"both"}.}

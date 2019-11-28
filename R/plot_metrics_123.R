@@ -38,9 +38,9 @@
 #' @param plotly Logical value for whether to convert the
 #' \code{\link[ggplot2]{ggplot}} to a \code{\link[plotly]{plotly}} object
 #' internally.
-#' @param title Character string. Only really useful if you're going to set
-#' \code{plotly = TRUE}, otherwise you can change the title, axes, etc.
-#' afterwards.
+#' @param title Character string.
+#' @param base_size Numeric value.
+#' @param label_size Numeric value.
 #' @param return Character string specifying what to return. Choices are
 #' \code{"plot"}, \code{"data"}, and \code{"both"}.
 #'
@@ -62,11 +62,29 @@
 #'
 #'
 #' @export
+# metrics = NULL
+# formula = sharpe ~ cagr
+# tickers = list(c("SPY", "VBLTX", "VWEHX"), c("UPRO", "VBLTX", "VWEHX"))
+# from = "2010-01-01"
+# base_size = 15
+# label_size = 5
+# step.between = 2
+# step.along = 1
+# plotly = TRUE
+#
+# gains = NULL
+# prices = NULL
+# benchmark = "SPY"
+# y.benchmark = benchmark
+# x.benchmark = benchmark
+# title = NULL
+# return = "plot"
+
 plot_metrics_123 <- function(metrics = NULL,
                              formula = mean ~ sd,
                              tickers = NULL, ...,
-                             step.along = 2.5,
-                             step.between = 2.5,
+                             step.along = 1,
+                             step.between = 2,
                              gains = NULL,
                              prices = NULL,
                              benchmark = "SPY",
@@ -74,6 +92,8 @@ plot_metrics_123 <- function(metrics = NULL,
                              x.benchmark = benchmark,
                              plotly = FALSE,
                              title = NULL,
+                             base_size = 16,
+                             label_size = 6,
                              return = "plot") {
 
   # Extract info from formula
@@ -164,7 +184,7 @@ plot_metrics_123 <- function(metrics = NULL,
           Funds = 1,
           `Fund 1` = x, `Fund 2` = NA, `Fund 3` = NA,
           `Allocation 1 (%)` = 100, `Allocation 2 (%)` = NA, `Allocation 3 (%)` = NA,
-          Label = paste("100%", x)
+          Label = x
         )
         df.x[[ylabel]] <- calc_metric(gains = gains.x, metric = y.metric, units.year = units.year, benchmark.gains = y.benchmark.gains)
         df.x[[xlabel]] <- calc_metric(gains = gains.x, metric = x.metric, units.year = units.year, benchmark.gains = y.benchmark.gains)
@@ -233,10 +253,10 @@ plot_metrics_123 <- function(metrics = NULL,
   # Prep for ggplot
   df$tooltip <- paste(
     ifelse(df$Funds == 1, df$Set,
-    ifelse(df$Funds == 2, paste(df$`Allocation 1 (%)`, "% ", df$`Fund 1`, ", ", df$`Allocation 2 (%)`, "% ", df$`Fund 2`),
-    paste(df$`Allocation 1 (%)`, "% ", df$`Fund 1`, ", ", df$`Allocation 2 (%)`, "% ", df$`Fund 2`, ", ", df$`Allocation 3 (%)`, "% ", df$`Fund 3`))),
-   "<br>", metric.info$title[y.metric], ": ", formatC(df[[ylabel]], metric.info$decimals[y.metric], format = "f"), metric.info$units[y.metric],
-   "<br>", metric.info$title[x.metric], ": ", formatC(df[[xlabel]], metric.info$decimals[x.metric], format = "f"), metric.info$units[x.metric], sep = ""
+    ifelse(df$Funds == 2, paste(df$`Allocation 1 (%)`, "% ", df$`Fund 1`, ", ", df$`Allocation 2 (%)`, "% ", df$`Fund 2`, sep = ""),
+    paste(df$`Allocation 1 (%)`, "% ", df$`Fund 1`, ", ", df$`Allocation 2 (%)`, "% ", df$`Fund 2`, ", ", df$`Allocation 3 (%)`, "% ", df$`Fund 3`, sep = ""))),
+    "<br>", metric.info$title[x.metric], ": ", formatC(df[[xlabel]], metric.info$decimals[x.metric], format = "f"), metric.info$units[x.metric],
+    "<br>", metric.info$title[y.metric], ": ", formatC(df[[ylabel]], metric.info$decimals[y.metric], format = "f"), metric.info$units[y.metric], sep = ""
   )
 
   gg_color_hue <- function(n) {
@@ -244,14 +264,12 @@ plot_metrics_123 <- function(metrics = NULL,
     hcl(h = hues, l = 65, c = 100)[1: n]
   }
   sets <- unique(df$Set)
-  ns <- (df %>% dplyr::group_by(Set) %>% dplyr::slice(1))$Funds
-  cols <- c()
-  cols[ns == 1] <- "black"
-  cols[ns != 1] <- gg_color_hue(sum(ns != 1))
+  ns <- sapply(sets, function(x) df$Funds[which.max(df$Set == x)])
+  cols <- ifelse(ns == 1, "black", gg_color_hue(sum(ns != 1)))
 
   # Create plot
-  p <- ggplot(df, aes(y = .data[[ylabel]], x = .data[[xlabel]], group = Set, color = Set, label = Label, text = tooltip))
-
+  p <- ggplot(df, aes(y = .data[[ylabel]], x = .data[[xlabel]],
+                      group = Set, colour = Set, label = Label, text = tooltip))
   for (ii in 1: length(ns)) {
 
     n <- ns[ii]
@@ -261,26 +279,29 @@ plot_metrics_123 <- function(metrics = NULL,
     }
 
     if (n == 2) {
-      p <- p + geom_path(data = subset(df, Set == paste(sets[ii], collapse = "-")))
+      p <- p + geom_path(data = subset(df, Set == sets[ii]))
       next
     }
 
     if (n == 3) {
+      df.subset <- subset(df, Set == sets[ii])
       p <- p +
-        geom_path(data = subset(df, Set == paste(sets[ii], collapse = "-")), mapping = aes(group = interaction(Set, `Allocation 1 (%)`))) +
-        geom_path(data = subset(df, `Allocation 1 (%)` == 0), col = "black") +
-        geom_path(data = subset(df, `Allocation 2 (%)` == 0), col = "black") +
-        geom_path(data = subset(df, `Allocation 3 (%)` == 0), col = "black")
+        geom_path(data = subset(df.subset, `Allocation 2 (%)` == 0), col = "black") +
+        geom_path(data = subset(df.subset, `Allocation 3 (%)` == 0), col = "black") +
+        geom_path(data = subset(df, Set == sets[ii] & `Allocation 1 (%)` != 0),
+                  mapping = aes(group = interaction(Set, `Allocation 1 (%)`)), alpha = 0.5) +
+        geom_path(data = subset(df.subset, `Allocation 1 (%)` == 0), col = "black")
     }
 
   }
 
   p <- p +
-    geom_point(data = subset(df, `Allocation 1 (%)` == 100 | `Allocation 2 (%)` == 100 | `Allocation 3 (%)` == 100)) +
-    geom_label_repel(data = subset(df, ! is.na(Label))) +
+    geom_point(data = subset(df, `Allocation 1 (%)` == 100 | `Allocation 2 (%)` == 100 | `Allocation 3 (%)` == 100), col = "black") +
+    geom_label_repel(data = subset(df, ! is.na(Label)), size = label_size) +
     ylim(range(c(0, df[[ylabel]])) * 1.01) +
     xlim(range(c(0, df[[xlabel]])) * 1.01) +
     scale_colour_manual(values = cols) +
+    theme_gray(base_size = base_size) +
     theme(legend.position = "none") +
     labs(title = ifelse(! is.null(title), title, paste(metric.info$title[y.metric], "vs.", metric.info$title[x.metric])),
          y = ylabel, x = xlabel)
@@ -289,6 +310,6 @@ plot_metrics_123 <- function(metrics = NULL,
 
   if (return == "plot") return(p)
   if (return == "data") return(df)
-  if (return == "both") return(list(plot = p, data = df))
+  return(list(plot = p, data = df))
 
 }

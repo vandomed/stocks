@@ -4,11 +4,12 @@
 \alias{plot_gains}
 \title{Plot Gains for One Investment vs. Another}
 \usage{
-plot_gains(formula = BRK.B ~ VFINX, ..., gains = NULL, prices = NULL,
-  poly_order = 1, return = "plot")
+plot_gains(formula = NULL, ..., gains = NULL, prices = NULL,
+  poly_order = 1, plotly = FALSE, title = NULL, base_size = 16,
+  return = "plot")
 }
 \arguments{
-\item{formula}{Formula, e.g. \code{SSO + UPRO tilde SPY} to plot gains for SSO
+\item{formula}{Formula, e.g. \code{SSO + UPRO ~ SPY} to plot gains for SSO
 and UPRO vs. SPY.}
 
 \item{...}{Arguments to pass along with \code{tickers} to
@@ -24,6 +25,15 @@ mentioned in \code{formula}.}
 \item{poly_order}{Numeric value specifying the polynomial order for linear
 regression, e.g. \code{1} for simple linear regression or \code{2} for
 linear regression with first- and second-order terms.}
+
+\item{plotly}{Logical value for whether to convert the
+\code{\link[ggplot2]{ggplot}} to a \code{\link[plotly]{plotly}} object
+internally. Note that legend displaying regression estimates will disappear
+if you choose this option.}
+
+\item{title}{Character string.}
+
+\item{base_size}{Numeric value.}
 
 \item{return}{Character string specifying what to return. Choices are
 \code{"plot"}, \code{"data"}, and \code{"both"}.}

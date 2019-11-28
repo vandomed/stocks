@@ -120,7 +120,7 @@ calc_metrics_123 <- function(gains = NULL,
         Funds = 1,
         `Fund 1` = x, `Fund 2` = NA, `Fund 3` = NA,
         `Allocation 1 (%)` = 100, `Allocation 2 (%)` = NA, `Allocation 3 (%)` = NA,
-        Label = paste("100%", x)
+        Label = x
       )
 
       for (mtrc in metrics) {

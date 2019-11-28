@@ -16,9 +16,8 @@
 #' @param plotly Logical value for whether to convert the
 #' \code{\link[ggplot2]{ggplot}} to a \code{\link[plotly]{plotly}} object
 #' internally.
-#' @param title Character string. Only really useful if you're going to set
-#' \code{plotly = TRUE}, otherwise you can change the title, axes, etc.
-#' afterwards.
+#' @param title Character string.
+#' @param base_size Numeric value.
 #' @param return Character string specifying what to return. Choices are
 #' \code{"plot"}, \code{"data"}, and \code{"both"}.
 #'
@@ -44,7 +43,8 @@ plot_growth <- function(prices = NULL,
                         gains = NULL,
                         initial = 10000,
                         plotly = FALSE,
-                        title = "Balance over Time",
+                        title = "Growth Over Time",
+                        base_size = 16,
                         return = "plot") {
 
   # Determine prices if not pre-specified
@@ -72,25 +72,25 @@ plot_growth <- function(prices = NULL,
     data.table::as.data.table() %>%
     data.table::melt(measure.vars = tickers,
                      variable.name = "Fund",
-                     value.name = "Balance") %>%
+                     value.name = "Balance ($)") %>%
     as.data.frame()
 
   # Create plot
-  df$text <- paste("Fund: ", df$Fund,
-                   "<br>", "Balance: $", comma(df$Balance, accuracy = 0.01),
-                   "<br>", "Date: ", df$Date, sep = "")
-  p <- ggplot(df, aes(y = Balance, x = Date, group = Fund, color = Fund, text = text)) +
+  df$tooltip <- paste(df$Fund,
+                      "<br>", "Date: ", df$Date,
+                      "<br>", "Balance: $", comma(df$`Balance ($)`, accuracy = 0.01), sep = "")
+  p <- ggplot(df, aes(y = `Balance ($)`, x = Date, group = Fund, color = Fund, text = tooltip)) +
     geom_line(na.rm = TRUE) +
-    scale_y_continuous(labels = comma) +
     ylim(0, max(df$Balance) * 1.02) +
-    theme(legend.position = "none") +
-    labs(title = title, y = "Balance ($)", x = "Date")
+    scale_y_continuous(labels = comma) +
+    theme_gray(base_size = base_size) +
+    theme(legend.title = element_blank()) +
+    labs(title = title)
 
-  if (plotly) p <- ggplotly(p, tooltip = "text")
+  if (plotly) p <- ggplotly(p, tooltip = "tooltip")
 
   if (return == "plot") return(p)
   if (return == "data") return(df)
-  if (return == "both") return(list(plot = p, data = df))
-  return(p)
+  return(list(plot = p, data = df))
 
 }

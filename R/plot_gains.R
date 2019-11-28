@@ -4,7 +4,7 @@
 #' how several investments behave relative to the same benchmark.
 #'
 #'
-#' @param formula Formula, e.g. \code{SSO + UPRO tilde SPY} to plot gains for SSO
+#' @param formula Formula, e.g. \code{SSO + UPRO ~ SPY} to plot gains for SSO
 #' and UPRO vs. SPY.
 #' @param ... Arguments to pass along with \code{tickers} to
 #' \code{\link{load_gains}}.
@@ -16,6 +16,12 @@
 #' @param poly_order Numeric value specifying the polynomial order for linear
 #' regression, e.g. \code{1} for simple linear regression or \code{2} for
 #' linear regression with first- and second-order terms.
+#' @param plotly Logical value for whether to convert the
+#' \code{\link[ggplot2]{ggplot}} to a \code{\link[plotly]{plotly}} object
+#' internally. Note that legend displaying regression estimates will disappear
+#' if you choose this option.
+#' @param title Character string.
+#' @param base_size Numeric value.
 #' @param return Character string specifying what to return. Choices are
 #' \code{"plot"}, \code{"data"}, and \code{"both"}.
 #'
@@ -38,10 +44,13 @@
 #' }
 #'
 #' @export
-plot_gains <- function(formula = BRK.B ~ VFINX, ...,
+plot_gains <- function(formula = NULL, ...,
                        gains = NULL,
                        prices = NULL,
                        poly_order = 1,
+                       plotly = FALSE,
+                       title = NULL,
+                       base_size = 16,
                        return = "plot") {
 
   # Extract info from formula
@@ -55,40 +64,41 @@ plot_gains <- function(formula = BRK.B ~ VFINX, ...,
     gains <- prices_gains(prices = prices)
   }
   if (is.null(gains)) {
-    gains <- load_gains(tickers = tickers, mutual.start = TRUE, mutual.end = TRUE, ...)
+    gains <- load_gains(tickers = c(x.ticker, y.tickers), mutual.start = TRUE, mutual.end = TRUE, ...)
   }
 
   # Transform for ggplot
-  gains <- gains %>%
-    mutate_at(
-      .vars = tickers,
-      .funs = function(x) x * 100
-    )
-  df <- gains[tickers] %>%
+  gains[tickers] <- round(gains[tickers] * 100, 2)
+  names(gains)[which(names(gains) == x.ticker)] <- paste(x.ticker, "gain (%)")
+  df <- gains %>%
     as.data.table() %>%
-    melt(measure.vars = y.tickers,
-         variable.name = "Fund",
-         value.name = "Gain")
+    melt(measure.vars = y.tickers, variable.name = "Fund", value.name = "Gain (%)") %>%
+    as.data.frame()
 
   # Create plot
-  p <- ggplot(df, aes(x = .data[[x.ticker]], y = Gain, group = Fund)) +
-    facet_wrap(~Fund) +
+  xvar <- paste(x.ticker, "gain (%)")
+  p <- ggplot(df, aes(x = !! ensym(xvar), y = `Gain (%)`, group = Fund, label = Date))
+  if (length(tickers) > 2) p <- p + facet_wrap(~Fund)
+  p <- p +
     geom_hline(yintercept = 0, lty = 2) +
     geom_vline(xintercept = 0, lty = 2) +
     geom_point() +
-    labs(title = paste("Scatterplot of Gains vs.", x.ticker),
-         y = "Gains (%)",
-         x = paste("Gains for", x.ticker, "(%)")) +
-    theme_bw() +
-    theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())
+    theme_gray(base_size = base_size) +
+    theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank()) +
+    labs(title = ifelse(! is.null(title), title,
+                 ifelse(length(y.tickers) == 1, paste("Gains Scatterplot,", y.tickers, "vs.", x.ticker),
+                        paste("Scatterplot of Gains vs.", x.ticker))),
+         y = ifelse(length(y.tickers) == 1, paste(y.tickers, "gain (%)"), "Gain (%)"))
 
   # Add regression line/curve if requested
   if (! is.null(poly_order)) {
 
+    x.gains <- gains[[xvar]]
+
     if (poly_order == 1) {
 
-      fits <- lapply(y.tickers, function(x) {
-        lm(paste(x, "~", x.ticker), data = gains)
+      fits <- lapply(y.tickers, function(y.ticker) {
+        lm(gains[[y.ticker]] ~ x.gains)
       })
 
       b0 <- sprintf("%.3f", sapply(fits, function(x) x$coef[1]))
@@ -103,13 +113,12 @@ plot_gains <- function(formula = BRK.B ~ VFINX, ...,
                     se = FALSE, show.legend = TRUE) +
         scale_colour_manual(values = hue_pal()(length(y.tickers)),
                             labels = labels, name = "Regression line")
-      p
 
     } else {
 
-      fits <- lapply(y.tickers, function(x)
-        lm(paste(x, " ~ poly(", x.ticker, ", ",
-                 poly_order, ", raw = TRUE)", sep = ""), data = gains))
+      fits <- lapply(y.tickers, function(y.ticker) {
+        lm(gains[[y.ticker]] ~ poly(x.gains, poly_order, raw = TRUE))
+      })
 
       b0 <- sprintf("%.3f", sapply(fits, function(x) x$coef[1]))
       r2 <- sprintf("%.2f", sapply(fits, function(x) summary(x)$r.squared))
@@ -127,11 +136,10 @@ plot_gains <- function(formula = BRK.B ~ VFINX, ...,
     }
 
   }
+  if (plotly) p <- ggplotly(p + theme(legend.position = "none"), tooltip = c("label", "x", "y"))
 
   if (return == "plot") return(p)
   if (return == "data") return(df)
-  if (return == "both") return(list(plot = p, data = df))
-  return(list(plot = p, regressions = fits))
-
+  return(list(plot = p, data = df))
 
 }
