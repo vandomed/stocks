@@ -8,7 +8,7 @@
 plot_metrics(metrics = NULL, formula = cagr ~ mdd, tickers = NULL,
   ..., gains = NULL, prices = NULL, benchmark = "SPY",
   y.benchmark = benchmark, x.benchmark = benchmark, plotly = FALSE,
-  title = NULL, return = "plot")
+  title = NULL, base_size = 16, label_size = 6, return = "plot")
 }
 \arguments{
 \item{metrics}{"Long" data frame with Fund column and column for each metric
@@ -45,6 +45,10 @@ for x-axis metric.}
 internally.}
 
 \item{title}{Character string.}
+
+\item{base_size}{Numeric value.}
+
+\item{label_size}{Numeric value.}
 
 \item{return}{Character string specifying what to return. Choices are
 \code{"plot"}, \code{"data"}, and \code{"both"}.}

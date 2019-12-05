@@ -34,6 +34,7 @@
 #' @param title Character string. Only really useful if you're going to set
 #' \code{plotly = TRUE}, otherwise you can change the title, axes, etc.
 #' afterwards.
+#' @param base_size Numeric value.
 #' @param return Character string specifying what to return. Choices are
 #' \code{"plot"}, \code{"data"}, and \code{"both"}.
 #'
@@ -73,6 +74,7 @@ plot_metrics_overtime <- function(metrics = NULL,
                                   x.benchmark = benchmark,
                                   plotly = FALSE,
                                   title = NULL,
+                                  base_size = 16,
                                   return = "plot") {
 
   # Extract info from formula
@@ -257,6 +259,7 @@ plot_metrics_overtime <- function(metrics = NULL,
                 arrow = arrow(angle = 15, type = "closed", length = unit(0.1, "inches"))) +
       ylim(range(c(0, df[[ylabel]])) * 1.01) +
       xlim(range(c(0, df[[xlabel]])) * 1.01) +
+      theme_gray(base_size = base_size) +
       theme(legend.position = "none") +
       labs(title = ifelse(! is.null(title), title, paste(metric.info$title[y.metric], "vs.", metric.info$title[x.metric])),
            y = ylabel, x = xlabel)
@@ -268,6 +271,6 @@ plot_metrics_overtime <- function(metrics = NULL,
 
   if (return == "plot") return(p)
   if (return == "data") return(df)
-  if (return == "both") return(list(plot = p, data = df))
+  return(list(plot = p, data = df))
 
 }

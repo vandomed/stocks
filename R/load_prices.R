@@ -124,21 +124,6 @@ load_prices <- function(tickers,
   if (! is.null(preto.days)) {
     prices <- tail(prices, preto.days + 1)
   }
-  # if (! is.null(preto.days)) {
-  #   last.keep <- which.max(prices$Date >= to.initial) - preto.days
-  #   if (length(last.keep) > 0) {
-  #     prices <- prices[1: last.keep, , drop = FALSE]
-  #   }
-  # }
-
-  # Convert to prices on last day of month/year if requested
-  if (time.scale == "monthly") {
-    locs <- which(diff(data.table::month(prices$Date)) %in% c(1, -11))
-    prices <- prices[locs, , drop = FALSE]
-  } else if (time.scale == "yearly") {
-    locs <- which(diff(data.table::year(prices$Date)) == 1)
-    prices <- prices[locs, , drop = FALSE]
-  }
 
   # If intercepts and slopes specified, convert to gains, scale gains, and
   # convert back to prices
@@ -162,6 +147,15 @@ load_prices <- function(tickers,
     # Convert back to prices
     prices <- gains_prices(gains, initial = 1000, date1 = prices$Date[1])
 
+  }
+
+  # Convert to prices on last day of month/year if requested
+  if (time.scale == "monthly") {
+    locs <- which(diff(data.table::month(prices$Date)) %in% c(1, -11))
+    prices <- prices[locs, , drop = FALSE]
+  } else if (time.scale == "yearly") {
+    locs <- which(diff(data.table::year(prices$Date)) == 1)
+    prices <- prices[locs, , drop = FALSE]
   }
 
   # Scale prices to same initial value if requested

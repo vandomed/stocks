@@ -8,7 +8,7 @@ plot_metrics_overtime(metrics = NULL, formula = cagr ~ .,
   type = "hop.year", minimum.n = 3, tickers = NULL, ...,
   gains = NULL, prices = NULL, benchmark = "SPY",
   y.benchmark = benchmark, x.benchmark = benchmark, plotly = FALSE,
-  title = NULL, return = "plot")
+  title = NULL, base_size = 16, return = "plot")
 }
 \arguments{
 \item{metrics}{"Long" data frame with Fund column, Date column, and column
@@ -50,6 +50,8 @@ internally.}
 \item{title}{Character string. Only really useful if you're going to set
 \code{plotly = TRUE}, otherwise you can change the title, axes, etc.
 afterwards.}
+
+\item{base_size}{Numeric value.}
 
 \item{return}{Character string specifying what to return. Choices are
 \code{"plot"}, \code{"data"}, and \code{"both"}.}

@@ -34,6 +34,8 @@
 #' \code{\link[ggplot2]{ggplot}} to a \code{\link[plotly]{plotly}} object
 #' internally.
 #' @param title Character string.
+#' @param base_size Numeric value.
+#' @param label_size Numeric value.
 #' @param return Character string specifying what to return. Choices are
 #' \code{"plot"}, \code{"data"}, and \code{"both"}.
 #'
@@ -79,6 +81,8 @@ plot_metrics_3funds <- function(metrics = NULL,
                                 ref.tickers = NULL,
                                 plotly = FALSE,
                                 title = NULL,
+                                base_size = 16,
+                                label_size = 6,
                                 return = "plot") {
 
   # Extract info from formula
@@ -284,10 +288,11 @@ plot_metrics_3funds <- function(metrics = NULL,
     geom_path(data = subset(df, `Allocation 1 (%)` == 0), color = "black") +
     geom_path(data = subset(df, `Allocation 2 (%)` == 0), color = "black") +
     geom_path(data = subset(df, `Allocation 3 (%)` == 0), color = "black") +
-    geom_label_repel(aes(label = Label), subset(df, ! is.na(Label))) +
+    geom_label_repel(mapping = aes(label = Label), data = subset(df, ! is.na(Label)), size = label_size) +
     ylim(range(c(0, df[[ylabel]])) * 1.01) +
     xlim(range(c(0, df[[xlabel]])) * 1.01) +
     scale_colour_manual(values = cols) +
+    theme_gray(base_size = base_size) +
     theme(legend.position = "none") +
     labs(title = ifelse(! is.null(title), title, paste(metric.info$title[y.metric], "vs.", metric.info$title[x.metric])),
          y = ylabel, x = xlabel)
@@ -296,6 +301,6 @@ plot_metrics_3funds <- function(metrics = NULL,
 
   if (return == "plot") return(p)
   if (return == "data") return(df)
-  if (return == "both") return(list(plot = p, data = df))
+  return(list(plot = p, data = df))
 
 }

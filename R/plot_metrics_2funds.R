@@ -26,12 +26,14 @@
 #' @param benchmark,y.benchmark,x.benchmark Character string specifying which
 #' fund to use as benchmark for metrics (if you request \code{alpha},
 #' \code{alpha.annualized}, \code{beta}, or \code{r.squared}).
+#' @param ref.tickers Character vector of ticker symbols to include on the
+#' plot.
 #' @param plotly Logical value for whether to convert the
 #' \code{\link[ggplot2]{ggplot}} to a \code{\link[plotly]{plotly}} object
 #' internally.
 #' @param title Character string.
-#' @param ref.tickers Character vector of ticker symbols to include on the
-#' plot.
+#' @param base_size Numeric value.
+#' @param label_size Numeric value.
 #' @param return Character string specifying what to return. Choices are
 #' \code{"plot"}, \code{"data"}, and \code{"both"}.
 #'
@@ -75,6 +77,8 @@ plot_metrics_2funds <- function(metrics = NULL,
                                 ref.tickers = NULL,
                                 plotly = FALSE,
                                 title = NULL,
+                                base_size = 16,
+                                label_size = 6,
                                 return = "plot") {
 
   # Extract info from formula
@@ -250,10 +254,11 @@ plot_metrics_2funds <- function(metrics = NULL,
   p <- p +
     geom_point(data = df.points) +
     geom_path() +
-    geom_label_repel(aes(label = Label), subset(df, ! is.na(Label))) +
+    geom_label_repel(mapping = aes(label = Label), data = subset(df, ! is.na(Label)), size = label_size) +
     ylim(range(c(0, df[[ylabel]])) * 1.01) +
     xlim(range(c(0, df[[xlabel]])) * 1.01) +
     scale_colour_manual(values = cols) +
+    theme_gray(base_size = base_size) +
     theme(legend.position = "none") +
     labs(title = ifelse(! is.null(title), title, paste(metric.info$title[y.metric], "vs.", metric.info$title[x.metric])),
          y = ylabel, x = xlabel)
@@ -262,6 +267,6 @@ plot_metrics_2funds <- function(metrics = NULL,
 
   if (return == "plot") return(p)
   if (return == "data") return(df)
-  if (return == "both") return(list(plot = p, data = df))
+  return(list(plot = p, data = df))
 
 }

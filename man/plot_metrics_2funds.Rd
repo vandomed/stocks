@@ -8,7 +8,7 @@ plot_metrics_2funds(metrics = NULL, formula = mean ~ sd,
   tickers = NULL, ..., step = 10, gains = NULL, prices = NULL,
   benchmark = "SPY", y.benchmark = benchmark,
   x.benchmark = benchmark, ref.tickers = NULL, plotly = FALSE,
-  title = NULL, return = "plot")
+  title = NULL, base_size = 16, label_size = 6, return = "plot")
 }
 \arguments{
 \item{metrics}{Data frame with Fund column and column for each metric you
@@ -49,6 +49,10 @@ plot.}
 internally.}
 
 \item{title}{Character string.}
+
+\item{base_size}{Numeric value.}
+
+\item{label_size}{Numeric value.}
 
 \item{return}{Character string specifying what to return. Choices are
 \code{"plot"}, \code{"data"}, and \code{"both"}.}

@@ -1,7 +1,7 @@
 Get Rich with ‘stocks’
 ================
 Dane Van Domelen <br> <vandomed@gmail.com>
-2019-11-28
+2019-12-04
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
@@ -219,19 +219,20 @@ is a 3x daily S\&P 500 ETF and VBLTX and VWEHX are two bonds mutual
 funds offered by Vanguard.
 
 To visualize the behavior of this 3-fund portfolio, let’s plot mean
-vs. SD as the allocations vary.
+vs. SD as the allocations vary, and include SPY on the graph for
+reference.
 
 ``` r
 plot_metrics_3funds(formula = mean ~ sd, 
-                    tickers = c("VWEHX", "VBLTX", "UPRO"))
+                    tickers = c("VWEHX", "VBLTX", "UPRO"), 
+                    ref.tickers = "SPY")
 ```
 
 <img src="README-figures/unnamed-chunk-11-1.png" width="80%" />
 
-By default, SPY is included on the plot, so you can compare metrics to
-the S\&P. Notice that many points on the UPRO-VBLTX-VWEHX surface are
-higher and to the left of SPY, meaning this strategy has the potential
-to trump the S\&P in terms of risk-reward.
+Notice that many points on the UPRO-VBLTX-VWEHX surface are higher and
+to the left of SPY, meaning this strategy has the potential to trump the
+S\&P in terms of risk-reward.
 
 One idea would be to choose an allocation to match the volatility (i.e,
 SD) of SPY. At roughly 1% SD, it looks like the higher black curve,
@@ -240,7 +241,7 @@ returns. Still, I like having VWEHX in there for a second source of
 alpha.
 
 To see the actual numbers, you can either specify `return = "data"` (or
-`return = "both"`), or inptu the plot returned by `plot_metrics_3funds`
+`return = "both"`), or input the plot returned by `plot_metrics_3funds`
 to `plotly::ggplotly`.
 
 I’ll close it out with a hot stock tip: buy FANG.

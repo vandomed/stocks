@@ -31,6 +31,8 @@
 #' \code{\link[ggplot2]{ggplot}} to a \code{\link[plotly]{plotly}} object
 #' internally.
 #' @param title Character string.
+#' @param base_size Numeric value.
+#' @param label_size Numeric value.
 #' @param return Character string specifying what to return. Choices are
 #' \code{"plot"}, \code{"data"}, and \code{"both"}.
 #'
@@ -68,6 +70,8 @@ plot_metrics <- function(metrics = NULL,
                          x.benchmark = benchmark,
                          plotly = FALSE,
                          title = NULL,
+                         base_size = 16,
+                         label_size = 6,
                          return = "plot") {
 
   # Extract info from formula
@@ -203,16 +207,19 @@ plot_metrics <- function(metrics = NULL,
 
   } else {
 
-    df$tooltip <- paste("Fund: ", df$Fund,
-                        "<br>", metric.info$title[y.metric], ": ", formatC(df[[ylabel]], metric.info$decimals[y.metric], format = "f"), metric.info$units[y.metric],
-                        "<br>", metric.info$title[x.metric], ": ", formatC(df[[xlabel]], metric.info$decimals[x.metric], format = "f"), metric.info$units[x.metric], sep = "")
+    df$tooltip <- paste(
+      df$Fund,
+      "<br>", metric.info$title[x.metric], ": ", formatC(df[[xlabel]], metric.info$decimals[x.metric], format = "f"), metric.info$units[x.metric],
+      "<br>", metric.info$title[y.metric], ": ", formatC(df[[ylabel]], metric.info$decimals[y.metric], format = "f"), metric.info$units[y.metric], sep = ""
+    )
     p <- ggplot(df, aes(y = .data[[ylabel]],
                         x = .data[[xlabel]],
                         group = Fund, label = Fund, text = tooltip)) +
       geom_point() +
-      geom_label_repel() +
+      geom_label_repel(size = label_size) +
       ylim(range(c(0, df[[ylabel]])) * 1.02) +
       xlim(range(c(0, df[[xlabel]])) * 1.02) +
+      theme_gray(base_size = base_size) +
       labs(title = ifelse(! is.null(title), title, paste(metric.info$title[y.metric], "vs.", metric.info$title[x.metric])),
            y = ylabel, x = xlabel)
 
@@ -222,6 +229,6 @@ plot_metrics <- function(metrics = NULL,
 
   if (return == "plot") return(p)
   if (return == "data") return(df)
-  if (return == "both") return(list(plot = p, data = df))
+  return(list(plot = p, data = df))
 
 }
