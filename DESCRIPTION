@@ -5,7 +5,7 @@ Version: 2.0.0
 License: GPL-3
 LazyData: true
 URL: https://github.com/vandomed/stocks
-Date: 2019-12-04
+Date: 2019-12-07
 Author: Dane R. Van Domelen
 Maintainer: Dane R. Van Domelen <vandomed@gmail.com>
 Description: Functions for analyzing stocks or other investments. Main features are loading and aligning historical data for ticker symbols, calculating performance metrics for individual funds or portfolios (e.g. annualized growth, maximum drawdown, Sharpe/Sortino ratio), and creating graphs.

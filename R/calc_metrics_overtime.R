@@ -13,10 +13,12 @@
 #' recognizes, if you want to download data on the fly.
 #' @param ... Arguments to pass along with \code{tickers} to
 #' \code{\link{load_gains}}.
-#' @param type Character string specifying type of calculation. Choices are
-#' \code{"roll.n"} where n is a positive integer, \code{"hop.n"} where n is a
-#' positive integer, \code{"hop.month"}, and \code{"hop.year"}. The "roll"
-#' and "hop" options correspond to rolling and disjoint windows, respectively.
+#' @param type Character string or vector specifying type of calculation.
+#' Choices are (1) \code{"roll.n"} where n is a positive integer; (2)
+#' \code{"hop.n"} where n is a positive integer; (3) \code{"hop.month"}; (4)
+#' \code{"hop.year"}; and (5) vector of break-point dates, e.g.
+#' \code{c("2019-01-01", "2019-06-01")} for 3 periods. The "roll" and "hop"
+#' options correspond to rolling and disjoint windows, respectively.
 #' @param minimum.n Integer value specifying the minimum number of observations
 #' per period, e.g. if you want to exclude short partial months at the beginning
 #' or end of the analysis period.
@@ -33,8 +35,11 @@
 #' @examples
 #' \dontrun{
 #' # Calculate annual CAGR's, MDD's, and Sharpe ratios for FANG stocks
-#' calc_metrics_overtime(tickers = c("FB", "AAPL", "NFLX", "GOOG"),
-#'                       metrics = c("cagr", "mdd", "sharpe"), type = "hop.year")
+#' calc_metrics_overtime(
+#'   tickers = c("FB", "AAPL", "NFLX", "GOOG"),
+#'   metrics = c("cagr", "mdd", "sharpe"),
+#'   type = "hop.year"
+#' )
 #' }
 #'
 #'
@@ -101,10 +106,11 @@ calc_metrics_overtime <- function(gains = NULL,
   gains.long <- merge(
     gains[, c("Date", benchmark), with = FALSE],
     gains %>%
-      melt(measure.vars = tickers, variable.name = "Fund", value.name = "Gain"))
+      melt(measure.vars = tickers, variable.name = "Fund", value.name = "Gain")
+  )
 
   # Calculate metrics
-  if (substr(type, 1, 3) == "hop") {
+  if (substr(type[1], 1, 3) == "hop") {
 
     if (type == "hop.year") {
       gains.long$Period <- year(gains.long$Date)
@@ -126,7 +132,7 @@ calc_metrics_overtime <- function(gains = NULL,
     )
     names(df) <- c("Fund", "Period", "Date", metric.info$label[metrics])
 
-  } else if (substr(type, 1, 4) == "roll") {
+  } else if (substr(type[1], 1, 4) == "roll") {
 
     width <- as.numeric(substr(type, 6, 11))
 
@@ -142,7 +148,31 @@ calc_metrics_overtime <- function(gains = NULL,
     names(df) <- c("Fund", "Date", metric.info$label[metrics])
 
   } else {
-    stop("The input 'type' must be one of the following: 'roll.n' where n is a positive integer, 'hop.n' where n is a positive integer, 'hop.month', or 'hop.year'")
+
+    type <- as.Date(type)
+    if (any(is.na(type))) {
+      stop("The input 'type' must be one of the following: 'roll.n' where n is a positive integer, 'hop.n' where n is a positive integer, 'hop.month', 'hop.year', or a vector of date break-points.")
+    }
+
+    daterange <- range(gains.long$Date)
+    breaks <- c(daterange[1], type, daterange[2])
+    labels <- sapply(1: (length(breaks) - 1), function(x) {
+      paste(format(breaks[x], "%m/%d/%y"), "-", format(breaks[x + 1], "%m/%d/%y"), sep = "")
+    })
+    gains.long$Period <- cut(gains.long$Date, breaks = breaks, labels = labels,
+                             include.lowest = TRUE, right = TRUE)
+
+    # Drop periods with too few observations and add end date for each period
+    gains.long <- gains.long[, if (.N >= minimum.n) .SD, by = .(Fund, Period)]
+
+    df <- cbind(
+      gains.long[, .(Date = last(Date)), by = .(Fund, Period)],
+      sapply(metrics, function(x) {
+        gains.long[, calc_metric(Gain, x, units.year, get(benchmark)), by = .(Fund, Period)][[3]]
+      })
+    )
+    names(df) <- c("Fund", "Period", "Date", metric.info$label[metrics])
+
   }
 
   return(as.data.frame(df))

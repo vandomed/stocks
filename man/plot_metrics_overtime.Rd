@@ -19,9 +19,12 @@ for each metric you want to plot. Typically the result of a prior call to
 CAGR vs. MDD or \code{cagr ~ .} for CAGR over time. See \code{?calc_metrics}
 for list of performance metrics to choose from.}
 
-\item{type}{Character string specifying type of calculation. Choices are
-\code{"roll.n"} where n is a positive integer, \code{"hop.n"} where n is a
-positive integer, \code{hop.month}, and \code{hop.year}.}
+\item{type}{Character string or vector specifying type of calculation.
+Choices are (1) \code{"roll.n"} where n is a positive integer; (2)
+\code{"hop.n"} where n is a positive integer; (3) \code{"hop.month"}; (4)
+\code{"hop.year"}; and (5) vector of break-point dates, e.g.
+\code{c("2019-01-01", "2019-06-01")} for 3 periods. The "roll" and "hop"
+options correspond to rolling and disjoint windows, respectively.}
 
 \item{minimum.n}{Integer value specifying the minimum number of observations
 per period, e.g. if you want to exclude short partial months at the beginning
