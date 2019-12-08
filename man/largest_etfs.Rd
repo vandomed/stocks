@@ -3,6 +3,7 @@
 \docType{data}
 \name{largest_etfs}
 \alias{largest_etfs}
+\alias{largest.etfs}
 \title{Largest 100 Market Cap ETFs (as of 3/2/18) and Inception Dates}
 \source{
 \url{http://etfdb.com/compare/market-cap/}

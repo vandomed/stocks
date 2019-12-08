@@ -3,6 +3,7 @@
 \docType{data}
 \name{sector_spdr_etfs}
 \alias{sector_spdr_etfs}
+\alias{sector.spdr.etfs}
 \title{Sector SPDR ETFs}
 \source{
 \url{http://www.sectorspdr.com/sectorspdr/sectors/performance}

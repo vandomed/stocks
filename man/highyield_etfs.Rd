@@ -3,6 +3,7 @@
 \docType{data}
 \name{highyield_etfs}
 \alias{highyield_etfs}
+\alias{highyield.etfs}
 \title{High-Yield ETFs from ETFdb.com}
 \source{
 \url{https://etfdb.com/etfdb-category/high-yield-bonds/}

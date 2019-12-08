@@ -3,7 +3,7 @@
 \docType{data}
 \name{vanguard_products}
 \alias{vanguard_products}
-\alias{metric.info}
+\alias{vanguard.products}
 \title{Vanguard Products}
 \source{
 \url{https://investor.vanguard.com/mutual-funds/list#/mutual-funds/asset-class/month-end-returns}

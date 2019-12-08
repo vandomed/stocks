@@ -1,23 +1,27 @@
 #' High-Yield ETFs from ETFdb.com
 #' @name highyield_etfs
+#' @aliases highyield.etfs
 #' @docType data
 #' @source \url{https://etfdb.com/etfdb-category/high-yield-bonds/}
 NULL
 #'
 #' Largest 100 Market Cap ETFs (as of 3/2/18) and Inception Dates
 #' @name largest_etfs
+#' @aliases largest.etfs
 #' @docType data
 #' @source \url{http://etfdb.com/compare/market-cap/}
 NULL
 #'
 #' Sector SPDR ETFs
 #' @name sector_spdr_etfs
+#' @aliases sector.spdr.etfs
 #' @docType data
 #' @source \url{http://www.sectorspdr.com/sectorspdr/sectors/performance}
 NULL
 #'
 #' Vanguard Products
 #' @name vanguard_products
+#' @aliases vanguard.products
 #' @docType data
 #' @source \url{https://investor.vanguard.com/mutual-funds/list#/mutual-funds/asset-class/month-end-returns}
 #'
