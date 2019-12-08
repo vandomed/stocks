@@ -44,6 +44,13 @@
 #'
 #'
 #' @export
+# gains = NULL
+# metrics = c("mean", "sd")
+# tickers = c("VFINX", "VWEHX")
+# type = "2017-03-13"
+# minimum.n = 3
+# prices = NULL
+# benchmark = "SPY"
 calc_metrics_overtime <- function(gains = NULL,
                                   metrics = c("mean", "sd"),
                                   tickers = NULL, ...,
@@ -125,19 +132,19 @@ calc_metrics_overtime <- function(gains = NULL,
     gains.long <- gains.long[, if (.N >= minimum.n) .SD, by = .(Fund, Period)]
 
     df <- cbind(
-      gains.long[, .(Date = last(Date)), by = .(Fund, Period)],
+      gains.long[, .(`Start Date` = first(Date), `End Date` = last(Date)), by = .(Fund, Period)],
       sapply(metrics, function(x) {
         gains.long[, calc_metric(Gain, x, units.year, get(benchmark)), by = .(Fund, Period)][[3]]
       })
     )
-    names(df) <- c("Fund", "Period", "Date", metric.info$label[metrics])
+    names(df) <- c("Fund", "Period", "Start date", "End date", metric.info$label[metrics])
 
   } else if (substr(type[1], 1, 4) == "roll") {
 
     width <- as.numeric(substr(type, 6, 11))
 
     df <- cbind(
-      gains.long[, .(Date = Date[width: length(Date)]), by = Fund],
+      gains.long[, .(`Start date` = Date[1: (length(Date) - width + 1)], `End date` = Date[width: length(Date)]), by = Fund],
       sapply(metrics, function(x) {
         gains.long[, rolling_metric(
           gains = Gain, metric = x, width = width, units.year = units.year,
@@ -145,7 +152,7 @@ calc_metrics_overtime <- function(gains = NULL,
         ), by = Fund][[2]]
       })
     )
-    names(df) <- c("Fund", "Date", metric.info$label[metrics])
+    names(df) <- c("Fund", "Start date", "End date", metric.info$label[metrics])
 
   } else {
 
@@ -166,12 +173,12 @@ calc_metrics_overtime <- function(gains = NULL,
     gains.long <- gains.long[, if (.N >= minimum.n) .SD, by = .(Fund, Period)]
 
     df <- cbind(
-      gains.long[, .(Date = last(Date)), by = .(Fund, Period)],
+      gains.long[, .(`Start date` = first(Date), `End date` = last(Date)), by = .(Fund, Period)],
       sapply(metrics, function(x) {
         gains.long[, calc_metric(Gain, x, units.year, get(benchmark)), by = .(Fund, Period)][[3]]
       })
     )
-    names(df) <- c("Fund", "Period", "Date", metric.info$label[metrics])
+    names(df) <- c("Fund", "Period", "Start date", "End date", metric.info$label[metrics])
 
   }
 

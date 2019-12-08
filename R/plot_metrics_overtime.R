@@ -65,6 +65,19 @@
 #' }
 #'
 #' @export
+# metrics = NULL
+# formula = cagr ~ .
+# tickers = c("VFINX", "VWEHX")
+# type = "2017-03-13"
+# minimum.n = 3
+# tickers = NULL
+# gains = gains
+# prices = NULL
+# benchmark = x.benchmark = y.benchmark = "SPY"
+# plotly = TRUE
+# title = NULL
+# base_size = 16
+# return = "plot"
 plot_metrics_overtime <- function(metrics = NULL,
                                   formula = cagr ~ .,
                                   type = "hop.year",
@@ -171,9 +184,9 @@ plot_metrics_overtime <- function(metrics = NULL,
         gains.long$Period <- rep(rep(1: ceiling(nrow(gains) / width), each = width)[1: nrow(gains)], length(tickers))
       }
 
-      # Drop periods with too few observations and add end date for each period
+      # Drop periods with too few observations and add start/end date for each period
       gains.long <- gains.long[, if (.N >= minimum.n) .SD, by = .(Fund, Period)]
-      df <- gains.long[, .(Date = last(Date)), by = .(Fund, Period)]
+      df <- gains.long[, .(`Start date` = first(Date), `End date` = last(Date)), by = .(Fund, Period)]
 
       if (! is.null(y.metric)) {
         df[[ylabel]] <- gains.long[, calc_metric(
@@ -190,7 +203,7 @@ plot_metrics_overtime <- function(metrics = NULL,
     } else if (substr(type[1], 1, 4) == "roll") {
 
       width <- as.numeric(substr(type, 6, 11))
-      df <- gains.long[, .(Date = Date[width: length(Date)]), Fund]
+      df <- gains.long[, .(`Start date` = Date[1: (length(Date) - width + 1)], `End date` = Date[width: length(Date)]), Fund]
 
       if (! is.null(y.metric)) {
         df[[ylabel]] <- gains.long[, rolling_metric(
@@ -221,7 +234,7 @@ plot_metrics_overtime <- function(metrics = NULL,
 
       # Drop periods with too few observations and add end date for each period
       gains.long <- gains.long[, if (.N >= minimum.n) .SD, by = .(Fund, Period)]
-      df <- gains.long[, .(Date = last(Date)), by = .(Fund, Period)]
+      df <- gains.long[, .(`Start date` = first(Date), `End date` = last(Date)), by = .(Fund, Period)]
 
       if (! is.null(y.metric)) {
         df[[ylabel]] <- gains.long[, calc_metric(
@@ -243,47 +256,53 @@ plot_metrics_overtime <- function(metrics = NULL,
 
   # Create plot
   df <- as.data.frame(df)
-  df <- df[order(df$Fund, df$Date), c("Date", "Fund", c(ylabel, xlabel))]
+  df <- df[order(df$Fund, df$`End date`), ]
+  #df <- df[order(df$Fund, df$`End date`), c("Period", "Start date", "End date", "Fund", c(ylabel, xlabel))]
 
   if (is.null(x.metric)) {
 
-    df$text <- paste("Fund: ", df$Fund,
-                     "<br>End date: ", df$Date,
-                     "<br>", ylabel, ": ", formatC(df[[ylabel]], metric.info$decimals[y.metric], format = "f"), sep = "")
+    df$tooltip <- paste("Fund: ", df$Fund,
+                     "<br>Start date: ", df$`Start date`,
+                     "<br>End date: ", df$`End date`,
+                     "<br>", metric.info$title[y.metric], ": ", formatC(df[[ylabel]], metric.info$decimals[y.metric], format = "f"), metric.info$units[y.metric], sep = "")
     p <- ggplot(df, aes(y = .data[[ylabel]],
-                        x = Date,
-                        group = Fund, color = Fund, text = text)) +
+                        x = `End date`,
+                        group = Fund, color = Fund, text = tooltip)) +
       geom_point() +
       geom_path() +
       ylim(range(c(0, df[[ylabel]])) * 1.01) +
-      theme(legend.position = "none") +
+      theme_gray(base_size = base_size) +
+      theme(legend.title = element_blank()) +
       labs(title = paste(metric.info$title[y.metric], "over Time"),
-           y = metric.info$label[y.metric], x = "End date")
+           y = metric.info$label[y.metric])
 
   } else if (is.null(y.metric)) {
 
-    df$text <- paste("Fund: ", df$Fund,
-                     "<br>End date: ", df$Date,
-                     "<br>", xlabel, ": ", formatC(df[[xlabel]], metric.info$decimals[x.metric], format = "f"), sep = "")
-    p <- ggplot(df, aes(y = Date,
+    df$tooltip <- paste(df$Fund,
+                        "<br>Start date: ", df$`Start date`,
+                        "<br>End date: ", df$`End date`,
+                        "<br>", metric.info$title[x.metric], ": ", formatC(df[[xlabel]], metric.info$decimals[x.metric], format = "f"), metric.info$units[x.metric], sep = "")
+    p <- ggplot(df, aes(y = `End date`,
                         x = .data[[xlabel]],
-                        group = Fund, color = Fund, text = text)) +
+                        group = Fund, color = Fund, text = tooltip)) +
       geom_point() +
       geom_path() +
       xlim(range(c(0, df[[xlabel]])) * 1.01) +
-      theme(legend.position = "none") +
+      theme_gray(base_size = base_size) +
+      theme(legend.title = element_blank()) +
       labs(title = ifelse(! is.null(title), title, paste(metric.info$title[y.metric], "over Time")),
-           y = "End date", x = xlabel)
+           x = xlabel)
 
   } else {
 
-    df$text <- paste("Fund: ", df$Fund,
-                     "<br>End date: ", df$Date,
-                     "<br>", xlabel, ": ", formatC(df[[xlabel]], metric.info$decimals[x.metric], format = "f"),
-                     "<br>", ylabel, ": ", formatC(df[[ylabel]], metric.info$decimals[y.metric], format = "f"), sep = "")
+    df$tooltip <- paste(df$Fund,
+                        "<br>Start date: ", df$`Start date`,
+                        "<br>End date: ", df$`End date`,
+                        "<br>", metric.info$title[y.metric], ": ", formatC(df[[ylabel]], metric.info$decimals[y.metric], format = "f"), metric.info$units[y.metric],
+                        "<br>", metric.info$title[x.metric], ": ", formatC(df[[xlabel]], metric.info$decimals[x.metric], format = "f"), metric.info$units[x.metric], sep = "")
     p <- ggplot(df, aes(y = .data[[ylabel]],
                         x = .data[[xlabel]],
-                        group = Fund, color = Fund, text = text)) +
+                        group = Fund, color = Fund, text = tooltip)) +
       geom_path() +
       geom_point() +
       geom_point(data = df %>% group_by(Fund) %>% slice(1) %>% ungroup(), show.legend = FALSE) +
@@ -292,14 +311,14 @@ plot_metrics_overtime <- function(metrics = NULL,
       ylim(range(c(0, df[[ylabel]])) * 1.01) +
       xlim(range(c(0, df[[xlabel]])) * 1.01) +
       theme_gray(base_size = base_size) +
-      theme(legend.position = "none") +
+      theme(legend.title = element_blank()) +
       labs(title = ifelse(! is.null(title), title, paste(metric.info$title[y.metric], "vs.", metric.info$title[x.metric])),
            y = ylabel, x = xlabel)
 
   }
 
-  if (plotly) p <- ggplotly(p, tooltip = "text")
-  df <- df[names(df) != "text"]
+  if (plotly) p <- ggplotly(p, tooltip = "tooltip")
+  df <- df[names(df) != "tooltip"]
 
   if (return == "plot") return(p)
   if (return == "data") return(df)

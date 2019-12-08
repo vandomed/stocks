@@ -184,7 +184,7 @@ plot_metrics <- function(metrics = NULL,
   if (is.null(x.metric)) {
 
     # For y.metric only
-    df$tooltip <- paste("Fund: ", df$Fund, "<br>",
+    df$tooltip <- paste(df$Fund, "<br>",
                         metric.info$title[y.metric], ": ", formatC(df[[ylabel]], metric.info$decimals[y.metric], format = "f"), metric.info$units[y.metric], sep = "")
     p <- ggplot(df, aes(y = .data[[ylabel]],
                         x = reorder(Fund, .data[[ylabel]]),
