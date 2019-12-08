@@ -3,10 +3,10 @@
 \docType{data}
 \name{sector_spdr_etfs}
 \alias{sector_spdr_etfs}
-\title{Sector SPDR ETFs and Inception Dates}
+\title{Sector SPDR ETFs}
 \source{
 \url{http://www.sectorspdr.com/sectorspdr/sectors/performance}
 }
 \description{
-Sector SPDR ETFs and Inception Dates
+Sector SPDR ETFs
 }

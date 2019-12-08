@@ -9,4 +9,5 @@ src/*.dll
 Thumbs.db
 misc
 R/archived
+data/archived
 archived

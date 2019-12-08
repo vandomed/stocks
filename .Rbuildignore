@@ -9,5 +9,6 @@
 ^misc$
 ^archived$
 ^R\archived$
+^data\archived$
 ^generate_lists.R$
 ^largest100.csv$

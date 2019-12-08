@@ -3,10 +3,10 @@
 \docType{data}
 \name{highyield_etfs}
 \alias{highyield_etfs}
-\title{High-Yield ETFs from ETFdb.com and Inception Dates}
+\title{High-Yield ETFs from ETFdb.com}
 \source{
-\url{http://etfdb.com/etfdb-category/high-yield-bonds/#etfs&sort_name=assets_under_management&sort_order=desc&page=2}
+\url{https://etfdb.com/etfdb-category/high-yield-bonds/}
 }
 \description{
-High-Yield ETFs from ETFdb.com and Inception Dates
+High-Yield ETFs from ETFdb.com
 }
