@@ -66,7 +66,7 @@
 NULL
 utils::globalVariables(
   c(".", "Allocation (%)", "Allocation 1 (%)", "Allocation 2 (%)",
-    "Allocation 3 (%)", "Balance ($)", "End date", "Fund", "Gain (%)", "Label",
-    "metric.info", "n", ".N", "Pair", "Period", "Set",
+    "Allocation 3 (%)", "Balance ($)", "Date", "End date", "Fund", "Gain",
+    "Gain (%)", "Label", "metric.info", "n", ".N", "Pair", "Period", "Set",
     ".SD", "sp500.dates", "Start date", "text", "tooltip", "Trio")
 )

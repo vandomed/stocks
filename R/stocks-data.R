@@ -24,7 +24,7 @@ NULL
 #' @aliases vanguard.products
 #' @docType data
 #' @source \url{https://investor.vanguard.com/mutual-funds/list#/mutual-funds/asset-class/month-end-returns}
-#'
+NULL
 #'
 #' Lookup Table for Performance Metrics
 #' @name metric_info

@@ -7,11 +7,6 @@
 \title{Vanguard Products}
 \source{
 \url{https://investor.vanguard.com/mutual-funds/list#/mutual-funds/asset-class/month-end-returns}
-
-
-Lookup Table for Performance Metrics
-
-Original
 }
 \description{
 Vanguard Products
