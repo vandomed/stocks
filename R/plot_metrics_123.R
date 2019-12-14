@@ -297,7 +297,6 @@ plot_metrics_123 <- function(metrics = NULL,
 
   p <- p +
     geom_point(data = subset(df, `Allocation 1 (%)` == 100 | `Allocation 2 (%)` == 100 | `Allocation 3 (%)` == 100), col = "black") +
-    geom_label_repel(data = subset(df, ! is.na(Label)), size = label_size) +
     ylim(range(c(0, df[[ylabel]])) * 1.01) +
     xlim(range(c(0, df[[xlabel]])) * 1.01) +
     scale_colour_manual(values = cols) +
@@ -306,7 +305,12 @@ plot_metrics_123 <- function(metrics = NULL,
     labs(title = ifelse(! is.null(title), title, paste(metric.info$title[y.metric], "vs.", metric.info$title[x.metric])),
          y = ylabel, x = xlabel)
 
-  if (plotly) p <- ggplotly(p, tooltip = "tooltip")
+  if (plotly) {
+    p <- ggplotly(p, tooltip = "tooltip") %>%
+      style(hoverlabel = list(font = list(size = 15)))
+  } else {
+    p <- p + geom_label_repel(data = subset(df, ! is.na(Label)), size = label_size)
+  }
 
   if (return == "plot") return(p)
   if (return == "data") return(df)

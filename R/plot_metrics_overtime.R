@@ -261,10 +261,10 @@ plot_metrics_overtime <- function(metrics = NULL,
 
   if (is.null(x.metric)) {
 
-    df$tooltip <- paste("Fund: ", df$Fund,
-                     "<br>Start date: ", df$`Start date`,
-                     "<br>End date: ", df$`End date`,
-                     "<br>", metric.info$title[y.metric], ": ", formatC(df[[ylabel]], metric.info$decimals[y.metric], format = "f"), metric.info$units[y.metric], sep = "")
+    df$tooltip <- paste(df$Fund,
+                        "<br>Start date: ", df$`Start date`,
+                        "<br>End date: ", df$`End date`,
+                        "<br>", metric.info$title[y.metric], ": ", formatC(df[[ylabel]], metric.info$decimals[y.metric], format = "f"), metric.info$units[y.metric], sep = "")
     p <- ggplot(df, aes(y = .data[[ylabel]],
                         x = `End date`,
                         group = Fund, color = Fund, text = tooltip)) +
@@ -318,7 +318,7 @@ plot_metrics_overtime <- function(metrics = NULL,
   }
 
   if (plotly) p <- ggplotly(p, tooltip = "tooltip")
-  df <- df[names(df) != "tooltip"]
+  #df <- df[names(df) != "tooltip"]
 
   if (return == "plot") return(p)
   if (return == "data") return(df)

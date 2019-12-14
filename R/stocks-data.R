@@ -26,6 +26,20 @@ NULL
 #' @source \url{https://investor.vanguard.com/mutual-funds/list#/mutual-funds/asset-class/month-end-returns}
 NULL
 #'
+#' Vanguard Mutual Funds
+#' @name vanguard_funds
+#' @aliases vanguard.funds
+#' @docType data
+#' @source \url{https://investor.vanguard.com/mutual-funds/list#/mutual-funds/asset-class/month-end-returns}
+NULL
+#'
+#' Vanguard ETF's
+#' @name vanguard_etfs
+#' @aliases vanguard.etfs
+#' @docType data
+#' @source \url{https://investor.vanguard.com/mutual-funds/list#/mutual-funds/asset-class/month-end-returns}
+NULL
+#'
 #' Lookup Table for Performance Metrics
 #' @name metric_info
 #' @aliases metric.info

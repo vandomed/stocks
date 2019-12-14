@@ -9,7 +9,7 @@
 #' Package: \tab stocks \cr
 #' Type: \tab Package \cr
 #' Version: \tab 2.0.0 \cr
-#' Date: \tab 2019-12-08 \cr
+#' Date: \tab 2019-12-14 \cr
 #' License: \tab GPL-3 \cr
 #' }
 #'
@@ -48,7 +48,7 @@
 #' @importFrom grDevices hcl
 #' @importFrom lubridate month year
 #' @import methods
-#' @importFrom plotly ggplotly
+#' @importFrom plotly ggplotly style
 #' @importFrom purrr reduce
 #' @import quantmod
 #' @importFrom Rcpp evalCpp

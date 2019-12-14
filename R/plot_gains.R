@@ -136,7 +136,10 @@ plot_gains <- function(formula = NULL, ...,
     }
 
   }
-  if (plotly) p <- ggplotly(p + theme(legend.position = "none"), tooltip = c("label", "x", "y"))
+  if (plotly) {
+    p <- ggplotly(p + theme(legend.position = "none"), tooltip = c("label", "x", "y")) %>%
+      style(hoverlabel = list(font = list(size = 15)))
+  }
 
   if (return == "plot") return(p)
   if (return == "data") return(df)

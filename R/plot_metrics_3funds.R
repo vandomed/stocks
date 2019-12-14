@@ -297,7 +297,10 @@ plot_metrics_3funds <- function(metrics = NULL,
     labs(title = ifelse(! is.null(title), title, paste(metric.info$title[y.metric], "vs.", metric.info$title[x.metric])),
          y = ylabel, x = xlabel)
 
-  if (plotly) p <- ggplotly(p, tooltip = "tooltip")
+  if (plotly) {
+    p <- ggplotly(p, tooltip = "tooltip") %>%
+      style(hoverlabel = list(font = list(size = 15)))
+  }
 
   if (return == "plot") return(p)
   if (return == "data") return(df)
