@@ -190,17 +190,21 @@ plot_metrics <- function(metrics = NULL,
                         x = reorder(Fund, .data[[ylabel]]),
                         text = tooltip)) +
       geom_col() +
+      scale_x_continuous(limits = range(c(0, df[[ylabel]])) * 1.02, expand = c(0, 0)) +
+      theme(axis.text = element_text(size = label_size)) +
       labs(title = ifelse(! is.null(title), title, paste(metric.info$title[y.metric], "for Various Funds")),
            y = ylabel, x = NULL)
 
   } else if (is.null(y.metric)) {
 
     # For x.metric only
-    df$tooltip <- paste("Fund: ", df$Fund, "<br>", metric.info$title[x.metric], ": ",
+    df$tooltip <- paste(df$Fund, "<br>", metric.info$title[x.metric], ": ",
                         formatC(df[[xlabel]], metric.info$decimals[x.metric], format = "f"), metric.info$units[x.metric], sep = "")
     p <- ggplot(df, aes(y = .data[[xlabel]], x = reorder(Fund, .data[[xlabel]]),
                         text = tooltip)) +
       geom_col() +
+      scale_y_continuous(limits = range(c(0, df[[xlabel]])) * 1.02, expand = c(0, 0)) +
+      theme(axis.text = element_text(size = label_size)) +
       coord_flip() +
       labs(title = ifelse(! is.null(title), title, paste(metric.info$title[x.metric], "for Various Funds")),
            y = ylabel, x = NULL)
