@@ -1,3 +1,8 @@
+#' Ticker Symbols for FANG Stocks (Facebook Apple, Netflix, Google)
+#' @name fang
+#' @docType data
+NULL
+#'
 #' High-Yield ETFs from ETFdb.com
 #' @name highyield_etfs
 #' @aliases highyield.etfs

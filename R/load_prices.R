@@ -24,6 +24,9 @@
 #' requires data leading up to that date (e.g. trailing beta).
 #' @param initial Numeric value specifying what value to scale initial prices
 #' to.
+#' @param mutual.lifetimes Logical value for whether to start on the first day
+#' and end on the last day of the funds' mutual lifetimes (within \code{from}
+#' and \code{to}).
 #' @param mutual.start Logical value for whether to start on the first day of
 #' the funds' mutual lifetimes.
 #' @param mutual.end Logical value for whether to end on the last day of the
@@ -62,8 +65,9 @@ load_prices <- function(tickers,
                         preto.days = NULL,
                         prefrom.days = NULL,
                         initial = NULL,
-                        mutual.start = FALSE,
-                        mutual.end = TRUE,
+                        mutual.lifetimes = TRUE,
+                        mutual.start = mutual.lifetimes,
+                        mutual.end = mutual.lifetimes,
                         anchor = FALSE,
                         drop.anyNA = FALSE) {
 

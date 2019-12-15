@@ -22,8 +22,14 @@
 #'
 #' @examples
 #' \dontrun{
-#' # Calculate performance metrics for FANG stocks
-#' calc_metrics(tickers = c("FB", "AAPL", "NFLX", "GOOG"))
+#' # Calculate performance metrics for FANG stocks since the beginning of 2019
+#' calc_metrics(tickers = fang, from = "2019-01-01")
+#'
+#' # Repeat, but use step-by-step approach with piping (need SPY to calculate
+#' # alpha and beta)
+#' c("SPY", fang) %>%
+#'   load_gains(from = "2019-01-01") %>%
+#'   calc_metrics()
 #' }
 #'
 #'
@@ -66,8 +72,7 @@ calc_metrics <- function(gains = NULL,
 
     } else if (! is.null(tickers)) {
 
-      gains <- load_gains(tickers = unique(c(benchmark, tickers)),
-                          mutual.start = TRUE, mutual.end = TRUE, ...)
+      gains <- load_gains(tickers = unique(c(benchmark, tickers)), ...)
       if (is.null(tickers)) tickers <- setdiff(names(gains), c("Date", setdiff(benchmark, tickers)))
 
     } else {
@@ -79,9 +84,6 @@ calc_metrics <- function(gains = NULL,
   } else {
     if (is.null(tickers)) tickers <- setdiff(names(gains), "Date")
   }
-
-  # Drop NA's
-  gains <- gains[complete.cases(gains), , drop = FALSE]
 
   # Figure out conversion factor in case CAGR or annualized alpha is requested
   min.diffdates <- min(diff(unlist(head(gains$Date, 10))))

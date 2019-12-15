@@ -70,19 +70,41 @@ disjoint windows, and disjoint windows on per-month or per-year basis.
 }
 \examples{
 \dontrun{
-# Plot net growth each year for BRK-B and SPY, using approach (1)
+# Plot net growth each year for BRK-B and SPY
 plot_metrics_overtime(formula = growth ~ ., type = "hop.year", tickers = c("BRK-B", "SPY"))
 
-# Plot Sharpe ratios each month for FANG stocks, using approach (2)
-gains <- load_gains(c("FB", "AAPL", "NFLX", "GOOG"))
-plot_metrics_overtime(formula = sharpe ~ ., gains = gains)
+# Create previous plot in step-by-step process with pipes
+c("BRK-B", "SPY") \%>\%
+  load_gains() \%>\%
+  calc_metrics_overtime("growth", type = "hop.year") \%>\%
+  plot_metrics_overtime(growth ~ .)
 
 # Plot betas from 100-day disjoint intervals for a 2x daily (SSO) and 3x
-# daily (UPRO) leveraged ETF, using approach (3) and piping
+# daily (UPRO) leveraged ETF
+plot_metrics_overtime(formula = beta ~ ., type = "hop.100", tickers = c("SSO", "UPRO"))
+
+# Create previous plot in step-by-step process with pipes
 c("SPY", "SSO", "UPRO") \%>\%
   load_gains() \%>\%
   calc_metrics_overtime(metrics = "beta", type = "hop.100") \%>\%
   plot_metrics_overtime(formula = beta ~ .)
+
+# Plot 50-day rolling alpha vs. beta for SSO and UPRO during 2018
+plot_metrics_overtime(
+  formula = alpha ~ beta,
+  type = "roll.50",
+  tickers = c("SSO", "UPRO"),
+  from = "2018-01-01", to = "2018-12-31"
+)
+
+# Create previous plot in step-by-step process with pipes
+c("SPY", "SSO", "UPRO") \%>\%
+  load_gains(from = "2018-01-01", to = "2018-12-31") \%>\%
+  calc_metrics_overtime(metrics = c("alpha", "beta"), type = "roll.50") \%>\%
+  plot_metrics_overtime(alpha ~ beta)
+
 }
+
+
 
 }

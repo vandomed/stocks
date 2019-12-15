@@ -50,11 +50,23 @@
 #'
 #' @examples
 #' \dontrun{
-#' # Plot CAGR vs. max drawdown for SPY and BRK-B, downloading data on the fly
+#' # Plot Sharpe ratio for FANG stocks
+#' plot_metrics(formula = sharpe ~ ., tickers = fang)
+#'
+#' # Create previous plot in step-by-step process with pipes
+#' fang %>%
+#'   load_gains() %>%
+#'   calc_metrics("sharpe") %>%
+#'   plot_metrics(. ~ sharpe)
+#'
+#' # Plot CAGR vs. max drawdown for SPY and BRK-B
 #' plot_metrics(formula = cagr ~ mdd, tickers = c("SPY", "BRK-B"))
 #'
-#' # Plot Sharpe ratio for FANG stocks, in more explicit steps with piping
-#' plot_metrics(formula = . ~ sharpe, tickers = c("FB", "AAPL", "NFLX", "GOOG"))
+#' # Create previous plot in step-by-step process with pipes
+#' c("SPY", "BRK-B") %>%
+#'   load_gains() %>%
+#'   calc_metrics("cagr", "mdd") %>%
+#'   plot_metrics(cagr ~ mdd)
 #' }
 #'
 #'
@@ -72,6 +84,7 @@ plot_metrics <- function(metrics = NULL,
                          title = NULL,
                          base_size = 16,
                          label_size = 6,
+                         ticklabel_size = 8,
                          return = "plot") {
 
   # Extract info from formula
@@ -123,8 +136,7 @@ plot_metrics <- function(metrics = NULL,
 
       } else if (! is.null(tickers)) {
 
-        gains <- load_gains(tickers = unique(c(y.benchmark, x.benchmark, tickers)),
-                            mutual.start = TRUE, mutual.end = TRUE, ...)
+        gains <- load_gains(tickers = unique(c(y.benchmark, x.benchmark, tickers)), ...)
         tickers <- setdiff(names(gains), c("Date", y.benchmark, x.benchmark))
 
       } else {
@@ -139,9 +151,6 @@ plot_metrics <- function(metrics = NULL,
     if (is.null(tickers)) {
       tickers <- setdiff(names(gains), c("Date", y.benchmark, x.benchmark))
     }
-
-    # Drop NA's
-    gains <- gains[complete.cases(gains), , drop = FALSE]
 
     # Figure out conversion factor in case CAGR or annualized alpha is requested
     min.diffdates <- min(diff(unlist(head(gains$Date, 10))))
@@ -177,8 +186,8 @@ plot_metrics <- function(metrics = NULL,
     df <- as.data.frame(metrics)
   }
 
-  # Drop benchmarks
-  df <- subset(df, ! Fund %in% c(y.benchmark, x.benchmark))
+  # Drop benchmarks and funds with missing metrics
+  df <- df[! df$Fund %in% c(y.benchmark, x.benchmark) & complete.cases(df[, c(xlabel, ylabel)]), ]
 
   # Create plot
   if (is.null(x.metric)) {
@@ -190,8 +199,8 @@ plot_metrics <- function(metrics = NULL,
                         x = reorder(Fund, .data[[ylabel]]),
                         text = tooltip)) +
       geom_col() +
-      scale_x_continuous(limits = range(c(0, df[[ylabel]])) * 1.02, expand = c(0, 0)) +
-      theme(axis.text = element_text(size = label_size)) +
+      scale_y_continuous(limits = range(c(0, df[[ylabel]])) * 1.02, expand = c(0, 0)) +
+      theme(axis.text = element_text(size = ticklabel_size)) +
       labs(title = ifelse(! is.null(title), title, paste(metric.info$title[y.metric], "for Various Funds")),
            y = ylabel, x = NULL)
 
@@ -203,11 +212,10 @@ plot_metrics <- function(metrics = NULL,
     p <- ggplot(df, aes(y = .data[[xlabel]], x = reorder(Fund, .data[[xlabel]]),
                         text = tooltip)) +
       geom_col() +
-      scale_y_continuous(limits = range(c(0, df[[xlabel]])) * 1.02, expand = c(0, 0)) +
-      theme(axis.text = element_text(size = label_size)) +
-      coord_flip() +
+      theme(axis.text = element_text(size = ticklabel_size)) +
+      coord_flip(ylim = range(c(0, df[[xlabel]])) * 1.02, expand = 0) +
       labs(title = ifelse(! is.null(title), title, paste(metric.info$title[x.metric], "for Various Funds")),
-           y = ylabel, x = NULL)
+           y = xlabel, x = NULL)
 
   } else {
 

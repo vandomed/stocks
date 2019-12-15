@@ -8,7 +8,8 @@
 plot_metrics(metrics = NULL, formula = cagr ~ mdd, tickers = NULL,
   ..., gains = NULL, prices = NULL, benchmark = "SPY",
   y.benchmark = benchmark, x.benchmark = benchmark, plotly = FALSE,
-  title = NULL, base_size = 16, label_size = 6, return = "plot")
+  title = NULL, base_size = 16, label_size = 6, ticklabel_size = 8,
+  return = "plot")
 }
 \arguments{
 \item{metrics}{"Long" data frame with Fund column and column for each metric
@@ -65,11 +66,23 @@ see \code{link{plot_metrics_123}}.
 }
 \examples{
 \dontrun{
-# Plot CAGR vs. max drawdown for SPY and BRK-B, downloading data on the fly
+# Plot Sharpe ratio for FANG stocks
+plot_metrics(formula = sharpe ~ ., tickers = fang)
+
+# Create previous plot in step-by-step process with pipes
+fang \%>\%
+  load_gains() \%>\%
+  calc_metrics("sharpe") \%>\%
+  plot_metrics(. ~ sharpe)
+
+# Plot CAGR vs. max drawdown for SPY and BRK-B
 plot_metrics(formula = cagr ~ mdd, tickers = c("SPY", "BRK-B"))
 
-# Plot Sharpe ratio for FANG stocks, in more explicit steps with piping
-plot_metrics(formula = . ~ sharpe, tickers = c("FB", "AAPL", "NFLX", "GOOG"))
+# Create previous plot in step-by-step process with pipes
+c("SPY", "BRK-B") \%>\%
+  load_gains() \%>\%
+  calc_metrics("cagr", "mdd") \%>\%
+  plot_metrics(cagr ~ mdd)
 }
 
 

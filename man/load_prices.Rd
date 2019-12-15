@@ -7,8 +7,8 @@
 load_prices(tickers, intercepts = NULL, slopes = NULL,
   from = "1950-01-01", to = Sys.Date(), time.scale = "daily",
   preto.days = NULL, prefrom.days = NULL, initial = NULL,
-  mutual.start = FALSE, mutual.end = TRUE, anchor = FALSE,
-  drop.anyNA = FALSE)
+  mutual.lifetimes = TRUE, mutual.start = mutual.lifetimes,
+  mutual.end = mutual.lifetimes, anchor = FALSE, drop.anyNA = FALSE)
 }
 \arguments{
 \item{tickers}{Character vector of ticker symbols that Yahoo! Finance
@@ -39,6 +39,10 @@ requires data leading up to that date (e.g. trailing beta).}
 
 \item{initial}{Numeric value specifying what value to scale initial prices
 to.}
+
+\item{mutual.lifetimes}{Logical value for whether to start on the first day
+and end on the last day of the funds' mutual lifetimes (within \code{from}
+and \code{to}).}
 
 \item{mutual.start}{Logical value for whether to start on the first day of
 the funds' mutual lifetimes.}

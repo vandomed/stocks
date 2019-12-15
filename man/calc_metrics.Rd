@@ -35,8 +35,14 @@ Useful for comparing funds on one or more metrics.
 }
 \examples{
 \dontrun{
-# Calculate performance metrics for FANG stocks
-calc_metrics(tickers = c("FB", "AAPL", "NFLX", "GOOG"))
+# Calculate performance metrics for FANG stocks since the beginning of 2019
+calc_metrics(tickers = fang, from = "2019-01-01")
+
+# Repeat, but use step-by-step approach with piping (need SPY to calculate
+# alpha and beta)
+c("SPY", fang) \%>\%
+  load_gains(from = "2019-01-01") \%>\%
+  calc_metrics()
 }
 
 
