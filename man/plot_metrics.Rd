@@ -51,6 +51,8 @@ internally.}
 
 \item{label_size}{Numeric value.}
 
+\item{ticklabel_size}{Numeric value.}
+
 \item{return}{Character string specifying what to return. Choices are
 \code{"plot"}, \code{"data"}, and \code{"both"}.}
 }

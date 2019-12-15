@@ -33,6 +33,7 @@
 #' @param title Character string.
 #' @param base_size Numeric value.
 #' @param label_size Numeric value.
+#' @param ticklabel_size Numeric value.
 #' @param return Character string specifying what to return. Choices are
 #' \code{"plot"}, \code{"data"}, and \code{"both"}.
 #'
