@@ -71,7 +71,7 @@
 plot_metrics_3funds <- function(metrics = NULL,
                                 formula = mean ~ sd,
                                 tickers = NULL, ...,
-                                step1 = 5,
+                                step1 = 2.5,
                                 step2 = step1,
                                 gains = NULL,
                                 prices = NULL,
@@ -171,9 +171,9 @@ plot_metrics_3funds <- function(metrics = NULL,
     }
 
     # Calculate metrics for each trio
-    weights <- sapply(seq(0, 100, step1), function(x) {
-      c2 <- seq(0, 100 - x, step2)
-      rbind(x, c2, 100 - x - c2)
+    weights <- sapply(seq(0, 100, step1), function(c1) {
+      c2 <- unique(c(seq(0, 100 - c1, step2), 100 - c1))
+      rbind(c1, c2, 100 - c1 - c2)
     })
     weights <- do.call(cbind, weights)
     w1 <- weights[1, ]

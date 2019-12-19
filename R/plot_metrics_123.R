@@ -219,7 +219,7 @@ plot_metrics_123 <- function(metrics = NULL,
 
       gains.x <- as.matrix(gains[x])
       weights <- do.call(cbind, sapply(seq(0, 100, step.between), function(c1) {
-        c2 <- seq(0, 100 - c1, step.along)
+        c2 <- unique(c(seq(0, 100 - c1, step.along), 100 - c1))
         rbind(c1, c2, 100 - c1 - c2)
       }))
       c1 <- weights[1, ]

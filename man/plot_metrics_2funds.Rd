@@ -5,8 +5,8 @@
 \title{Plot One Performance Metric vs. Another for 2-Fund Portfolios}
 \usage{
 plot_metrics_2funds(metrics = NULL, formula = mean ~ sd,
-  tickers = NULL, ..., step = 10, gains = NULL, prices = NULL,
-  benchmark = "SPY", y.benchmark = benchmark,
+  tickers = NULL, ..., points = seq(0, 100, 10), gains = NULL,
+  prices = NULL, benchmark = "SPY", y.benchmark = benchmark,
   x.benchmark = benchmark, ref.tickers = NULL, plotly = FALSE,
   title = NULL, base_size = 16, label_size = 6, return = "plot")
 }
@@ -28,8 +28,8 @@ are a two-fund pair, the next two are another, and so on.}
 \item{...}{Arguments to pass along with \code{tickers} to
 \code{\link{load_gains}}.}
 
-\item{step}{Numeric value controlling allocation increments for data points
-on the curve.}
+\item{points}{Numeric vector specifying allocations to include as points on
+the curve. Set to \code{NULL} for none (0 and 100 will still be included).}
 
 \item{gains}{Data frame with a date variable named Date and one column of
 gains for each investment.}

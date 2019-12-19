@@ -15,8 +15,8 @@
 #' performance metrics that appear as columns in \code{metrics} are used.
 #' @param tickers Character vector of ticker symbols, where the first two are
 #' are a two-fund pair, the next two are another, and so on.
-#' @param step Numeric value controlling allocation increments for data points
-#' on the curve.
+#' @param points Numeric vector specifying allocations to include as points on
+#' the curve. Set to \code{NULL} for none (0 and 100 will still be included).
 #' @param ... Arguments to pass along with \code{tickers} to
 #' \code{\link{load_gains}}.
 #' @param gains Data frame with a date variable named Date and one column of
@@ -68,7 +68,7 @@
 plot_metrics_2funds <- function(metrics = NULL,
                                 formula = mean ~ sd,
                                 tickers = NULL, ...,
-                                step = 10,
+                                points = seq(0, 100, 10),
                                 gains = NULL,
                                 prices = NULL,
                                 benchmark = "SPY",
@@ -233,7 +233,7 @@ plot_metrics_2funds <- function(metrics = NULL,
                       "<br>", metric.info$title[y.metric], ": ", formatC(df[[ylabel]], metric.info$decimals[y.metric], format = "f"), metric.info$units[y.metric],
                       "<br>", metric.info$title[x.metric], ": ", formatC(df[[xlabel]], metric.info$decimals[x.metric], format = "f"), metric.info$units[x.metric], sep = "")
 
-  df.points <- subset(df, Pair %in% ref.tickers | `Allocation (%)` %in% seq(0, 100, step))
+  df.points <- subset(df, Pair %in% ref.tickers | `Allocation (%)` %in% c(0, 100, points))
   gg_color_hue <- function(n) {
     hues = seq(15, 375, length = n + 1)
     hcl(h = hues, l = 65, c = 100)[1: n]
