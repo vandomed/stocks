@@ -5,7 +5,7 @@
 \title{Calculate Performance Metrics for 3-Fund Portfolios with Varying Allocations}
 \usage{
 calc_metrics_3funds(gains = NULL, metrics = c("mean", "sd"),
-  tickers = NULL, ..., step1 = 5, step2 = step1, prices = NULL,
+  tickers = NULL, ..., step1 = 2.5, step2 = step1, prices = NULL,
   benchmark = "SPY", ref.tickers = NULL)
 }
 \arguments{

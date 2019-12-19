@@ -45,7 +45,7 @@
 calc_metrics_3funds <- function(gains = NULL,
                                 metrics = c("mean", "sd"),
                                 tickers = NULL, ...,
-                                step1 = 5,
+                                step1 = 2.5,
                                 step2 = step1,
                                 prices = NULL,
                                 benchmark = "SPY",
