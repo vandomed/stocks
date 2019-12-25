@@ -144,10 +144,7 @@ plot_metrics_overtime <- function(metrics = NULL,
   }
 
   # Check that requested metrics are valid
-  invalid.requests <- setdiff(
-    all.metrics,
-    setdiff(names(metric.info[[1]]), "allocation")
-  )
+  invalid.requests <- all.metrics[! (all.metrics %in% metric.choices | grepl("growth.", all.metrics, fixed = TRUE))]
   if (length(invalid.requests) > 0) {
     stop(paste("The following metrics are not allowed (see ?calc_metrics for choices):",
                paste(invalid.requests, collapse = ", ")))

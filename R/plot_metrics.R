@@ -90,7 +90,9 @@ plot_metrics <- function(metrics = NULL,
 
   # Extract info from formula
   all.metrics <- all.vars(formula, functions = FALSE)
+  #if (! is.null(metrics) & ! )
   if (! is.null(metrics) & ! all(metric.info$label[all.metrics] %in% names(metrics))) {
+    all.metrics <- stocks:::label_metric(all.metrics)
     all.metrics <- names(metric.info$label[metric.info$label %in% intersect(names(metrics), metric.info$label)])
     if (length(all.metrics) == 1) {
       all.metrics <- c(all.metrics, ".")
@@ -114,10 +116,7 @@ plot_metrics <- function(metrics = NULL,
   }
 
   # Check that requested metrics are valid
-  invalid.requests <- setdiff(
-    all.metrics,
-    setdiff(names(metric.info[[1]]), "allocation")
-  )
+  invalid.requests <- all.metrics[! (all.metrics %in% c(metric.choices, "allocation") | grepl("growth.", all.metrics, fixed = TRUE))]
   if (length(invalid.requests) > 0) {
     stop(paste("The following metrics are not allowed (see ?calc_metrics for choices):",
                paste(invalid.requests, collapse = ", ")))

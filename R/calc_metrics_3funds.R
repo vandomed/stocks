@@ -48,7 +48,7 @@ calc_metrics_3funds <- function(gains = NULL,
                                 ref.tickers = NULL) {
 
   # Check that requested metrics are valid
-  invalid.requests <- setdiff(metrics, names(metric.info$label))
+  invalid.requests <- metrics[! (metrics %in% metric.choices | grepl("growth.", metrics, fixed = TRUE))]
   if (length(invalid.requests) > 0) {
     stop(paste("The following metrics are not allowed (see ?calc_metrics for choices):",
                paste(invalid.requests, collapse = ", ")))

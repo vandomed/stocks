@@ -54,7 +54,7 @@ calc_metrics_123 <- function(gains = NULL,
                              benchmark = "SPY") {
 
   # Check that requested metrics are valid
-  invalid.requests <- setdiff(metrics, names(metric.info$label))
+  invalid.requests <- metrics[! (metrics %in% c(metric.choices, "allocation") | grepl("growth.", metrics, fixed = TRUE))]
   if (length(invalid.requests) > 0) {
     stop(paste("The following metrics are not allowed (see ?calc_metrics for choices):",
                paste(invalid.requests, collapse = ", ")))
@@ -170,9 +170,12 @@ calc_metrics_123 <- function(gains = NULL,
                             ifelse(c3 == 100, paste("100%", x[3]), NA_character_)))
     )
     for (mtrc in metrics) {
-      df.x[[metric.info$label[mtrc]]] <- apply(wgains, 2, function(y) {
+      df.x[[metric_label(mtrc)]] <- apply(wgains, 2, function(y) {
         calc_metric(gains = y, metric = mtrc, units.year = units.year, benchmark.gains = benchmark.gains)
       })
+      # df.x[[metric.info$label[mtrc]]] <- apply(wgains, 2, function(y) {
+      #   calc_metric(gains = y, metric = mtrc, units.year = units.year, benchmark.gains = benchmark.gains)
+      # })
     }
     return(df.x)
 

@@ -12,26 +12,28 @@
 #'
 metric_title <- function(metric) {
 
-  if (metric == "mean") return("Mean")
-  if (metric == "sd") return ("SD")
-  if (grepl("[.]", metric)) {
-    initial <- strsplit(metric, "[.]")[[1]][2]
-    if (grepl("k", initial)) return(paste("Growth of $", initial, sep = ""))
-    return("Growth of $", comma(initial))
-  }
-  if (metric == "growth") return("Growth")
-  if (metric == "cagr") return("CAGR")
-  if (metric == "mdd") return("Max Drawdown")
-  if (metric == "sharpe") return ("Sharpe Ratio")
-  if (metric == "sortino") return("Sortino Ratio")
-  if (metric == "alpha") return("Alpha")
-  if (metric == "alpha.annualized") return("Annualized Alpha")
-  if (metric == "beta") return("Beta")
-  if (metric == "r.squared") return("R-squared")
-  if (metric == "pearson") return("Pearson Corr.")
-  if (metric == "spearman") return("Spearman Corr.")
-  if (metric == "auto.pearson") return("Pearson Autocorr.")
-  if (metric == "auto.spearman") return("Spearman Autocorr.")
-  if (metric == "allocation") return("Allocation")
+  sapply(metric, function(x) {
+    if (x == "mean") return("Mean")
+    if (x == "sd") return ("SD")
+    if (grepl("[.]", x)) {
+      initial <- strsplit(x, "[.]")[[1]][2]
+      if (grepl("k", initial)) return(paste("Growth of $", initial, sep = ""))
+      return("Growth of $", comma(initial))
+    }
+    if (x == "growth") return("Growth")
+    if (x == "cagr") return("CAGR")
+    if (x == "mdd") return("Max Drawdown")
+    if (x == "sharpe") return ("Sharpe Ratio")
+    if (x == "sortino") return("Sortino Ratio")
+    if (x == "alpha") return("Alpha")
+    if (x == "alpha.annualized") return("Annualized Alpha")
+    if (x == "beta") return("Beta")
+    if (x == "r.squared") return("R-squared")
+    if (x == "pearson") return("Pearson Corr.")
+    if (x == "spearman") return("Spearman Corr.")
+    if (x == "auto.pearson") return("Pearson Autocorr.")
+    if (x == "auto.spearman") return("Spearman Autocorr.")
+    if (x == "allocation") return("Allocation")
+  })
 
 }

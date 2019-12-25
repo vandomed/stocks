@@ -1,6 +1,7 @@
 #' Calculate Performance Metric
 #'
-#' Mainly a helper function for \code{\link{plot_metrics_overtime}}.
+#' Mainly a helper function for \code{\link{calc_metrics}} and
+#' \code{\link{calc_metrics_overtime}}, but could also be used independently.
 #'
 #'
 #' @param gains Numeric vector.
@@ -20,6 +21,23 @@
 #' Numeric value.
 #'
 #'
+#' @examples
+#' \dontrun{
+#' # Load daily gains for SPY in 2019 and calculate various metrics
+#' gains <- load_gains(tickers = "SPY", from = "2019-01-01", to = "2019-12-31")
+#' calc_metric(gains$SPY, "growth")
+#' calc_metric(gains$SPY, "cagr")
+#' calc_metric(gains$SPY, "mdd")
+#' calc_metric(gains$SPY, "sharpe")
+#' calc_metric(gains$SPY, "growth.10k")
+#'
+#' # Calculate alpha and beta for TLT in 2019, using SPY as a benchmark
+#' gains <- load_gains(tickers = c("SPY", "TLT"), from = "2019-01-01", to = "2019-12-31")
+#' calc_metric(gains = gains$TLT, metric = "alpha", benchmark.gains = gains$SPY)
+#' calc_metric(gains = gains$TLT, metric = "beta", benchmark.gains = gains$SPY)
+#' }
+#'
+#'
 #' @export
 calc_metric <- function(gains,
                         metric = "mean",
@@ -32,7 +50,7 @@ calc_metric <- function(gains,
   if (metric == "sd") {
     return(sd(gains) * 100)
   }
-  if (grepl("[.]", metric)) {
+  if (grepl("growth.", metric)) {
     initial <- strsplit(metric, "[.]")[[1]][2]
     if (grepl("k", initial)) {
       initial <- as.numeric(strsplit(initial, "k")[[1]][1]) * 1000
@@ -57,13 +75,13 @@ calc_metric <- function(gains,
     return(sortino(gains))
   }
   if (metric == "alpha") {
-    return(lm(gains ~ benchmark.gains)$coef[1] * 100)
+    return(as.numeric(lm(gains ~ benchmark.gains)$coef[1] * 100))
   }
   if (metric == "alpha.annualized") {
     return(convert_gain(lm(gains ~ benchmark.gains)$coef[1], 1, units.year) * 100)
   }
   if (metric == "beta") {
-    return(lm(gains ~ benchmark.gains)$coef[2])
+    return(as.numeric(lm(gains ~ benchmark.gains)$coef[2]))
   }
   if (metric == "r.squared") {
     return(summary(lm(gains ~ benchmark.gains))$r.squared)

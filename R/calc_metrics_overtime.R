@@ -60,10 +60,7 @@ calc_metrics_overtime <- function(gains = NULL,
                                   benchmark = "SPY") {
 
   # Check that requested metrics are valid
-  invalid.requests <- setdiff(
-    metrics,
-    setdiff(names(metric.info[[1]]), "allocation")
-  )
+  invalid.requests <- metrics[! (metrics %in% metric.choices | grepl("growth.", metrics, fixed = TRUE))]
   if (length(invalid.requests) > 0) {
     stop(paste("The following metrics are not allowed (see ?calc_metrics for choices):",
                paste(invalid.requests, collapse = ", ")))

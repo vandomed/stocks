@@ -27,5 +27,24 @@ Pearson/Spearman correlation with benchmark, and \code{"auto.pearson"} or
 Numeric value.
 }
 \description{
-Mainly a helper function for \code{\link{plot_metrics_overtime}}.
+Mainly a helper function for \code{\link{calc_metrics}} and
+\code{\link{calc_metrics_overtime}}, but could also be used independently.
+}
+\examples{
+\dontrun{
+# Load daily gains for SPY in 2019 and calculate various metrics
+gains <- load_gains(tickers = "SPY", from = "2019-01-01", to = "2019-12-31")
+calc_metric(gains$SPY, "growth")
+calc_metric(gains$SPY, "cagr")
+calc_metric(gains$SPY, "mdd")
+calc_metric(gains$SPY, "sharpe")
+calc_metric(gains$SPY, "growth.10k")
+
+# Calculate alpha and beta for TLT in 2019, using SPY as a benchmark
+gains <- load_gains(tickers = c("SPY", "TLT"), from = "2019-01-01", to = "2019-12-31")
+calc_metric(gains = gains$TLT, metric = "alpha", benchmark.gains = gains$SPY)
+calc_metric(gains = gains$TLT, metric = "beta", benchmark.gains = gains$SPY)
+}
+
+
 }

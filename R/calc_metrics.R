@@ -50,10 +50,7 @@ calc_metrics <- function(
   }
 
   # Check that requested metrics are valid
-  invalid.requests <- setdiff(
-    sapply(metrics, function(x) strsplit(x, ".", fixed = TRUE)[[1]][1]),
-    metric.choices
-  )
+  invalid.requests <- metrics[! (metrics %in% metric.choices | grepl("growth.", metrics, fixed = TRUE))]
   if (length(invalid.requests) > 0) {
     stop(paste("The following metrics are not allowed (see ?calc_metrics for choices):",
                paste(invalid.requests, collapse = ", ")))
