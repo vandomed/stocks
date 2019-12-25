@@ -17,12 +17,11 @@
 #' are a 3-fund set, the next three are another, and so on.
 #' @param ... Arguments to pass along with \code{tickers} to
 #' \code{\link{load_gains}}.
-#' @param step1 Numeric value controlling allocation increments between curves.
-#' @param step2 Numeric value controlling allocation increments along curves.
+#' @param step Numeric value specifying fund allocation increments.
 #' @param gains Data frame with a date variable named Date and one column of
-#' gains for each investment.
+#' gains for each fund.
 #' @param prices Data frame with a date variable named Date and one column of
-#' prices for each investment.
+#' prices for each fund.
 #' @param benchmark,y.benchmark,x.benchmark Character string specifying which
 #' fund to use as benchmark for metrics (if you request \code{alpha},
 #' \code{alpha.annualized}, \code{beta}, or \code{r.squared}).
@@ -66,11 +65,25 @@
 #'
 #'
 #' @export
+# metrics = NULL
+# formula = mean ~ sd
+# tickers = c("VFINX", "VWEHX", "VBLTX")
+# step = 1
+# gains = NULL
+# prices = NULL
+# benchmark = "SPY"
+# y.benchmark = benchmark
+# x.benchmark = benchmark
+# ref.tickers = NULL
+# plotly = FALSE
+# title = NULL
+# base_size = 16
+# label_size = 6
+# return = "plot"
 plot_metrics_3funds <- function(metrics = NULL,
                                 formula = mean ~ sd,
                                 tickers = NULL, ...,
-                                step1 = 2.5,
-                                step2 = step1,
+                                step = 1,
                                 gains = NULL,
                                 prices = NULL,
                                 benchmark = "SPY",
@@ -169,8 +182,8 @@ plot_metrics_3funds <- function(metrics = NULL,
     }
 
     # Calculate metrics for each trio
-    weights <- sapply(seq(0, 100, step1), function(c1) {
-      c2 <- unique(c(seq(0, 100 - c1, step2), 100 - c1))
+    weights <- sapply(seq(0, 100, step), function(c1) {
+      c2 <- unique(c(seq(0, 100 - c1, step), 100 - c1))
       rbind(c1, c2, 100 - c1 - c2)
     })
     weights <- do.call(cbind, weights)
@@ -209,13 +222,13 @@ plot_metrics_3funds <- function(metrics = NULL,
     df <- metrics
   }
 
-  # Jitter allocation slightly for visual purposes
-  if (x.metric == "allocation") {
-    df <- df %>%
-      group_by(Trio, `Allocation 1 (%)`) %>%
-      mutate(`Allocation (%)` = `Allocation 1 (%)` + step1 * 0.5 * row_number() / n()) %>%
-      ungroup()
-  }
+  # # Jitter allocation slightly for visual purposes
+  # if (x.metric == "allocation") {
+  #   df <- df %>%
+  #     group_by(Trio, `Allocation 1 (%)`) %>%
+  #     mutate(`Allocation (%)` = `Allocation 1 (%)` + step * 0.5 * row_number() / n()) %>%
+  #     ungroup()
+  # }
 
   # Extract metrics for 100% each ticker
   df$Label <- ifelse(
@@ -253,8 +266,8 @@ plot_metrics_3funds <- function(metrics = NULL,
   df$tooltip <- paste(ifelse(is.na(df$`Fund 1`), df$Trio, paste(df$`Allocation 1 (%)`, "% ", df$`Fund 1`, ", ",
                                                                 df$`Allocation 2 (%)`, "% ", df$`Fund 2`, ", ",
                                                                 df$`Allocation 3 (%)`, "% ", df$`Fund 3`, sep = "")),
-                   "<br>", metric.info$title[y.metric], ": ", formatC(df[[ylabel]], metric.info$decimals[y.metric], format = "f"), metric.info$units[y.metric],
-                   "<br>", metric.info$title[x.metric], ": ", formatC(df[[xlabel]], metric.info$decimals[x.metric], format = "f"), metric.info$units[x.metric], sep = "")
+                      "<br>", metric.info$title[y.metric], ": ", formatC(df[[ylabel]], metric.info$decimals[y.metric], format = "f"), metric.info$units[y.metric],
+                      "<br>", metric.info$title[x.metric], ": ", formatC(df[[xlabel]], metric.info$decimals[x.metric], format = "f"), metric.info$units[x.metric], sep = "")
   # df.points <- subset(df, Trio %in% ref.tickers | `Allocation 1 (%)` == 100 |
   #                       `Allocation 2 (%)` %in% c(0, 100) | `Allocation 3 (%)` %in% c(0, 100))
   df.points <- subset(df, Trio %in% ref.tickers | `Allocation 1 (%)` == 100 |
@@ -283,10 +296,10 @@ plot_metrics_3funds <- function(metrics = NULL,
   p <- p +
     geom_point(data = df.points, col = "black") +
     geom_path(aes(group = interaction(Trio, `Allocation 1 (%)`))) +
+    geom_path(aes(group = interaction(Trio, `Allocation 2 (%)`))) +
     geom_path(data = subset(df, `Allocation 1 (%)` == 0), color = "black") +
     geom_path(data = subset(df, `Allocation 2 (%)` == 0), color = "black") +
     geom_path(data = subset(df, `Allocation 3 (%)` == 0), color = "black") +
-    geom_label_repel(mapping = aes(label = Label), data = subset(df, ! is.na(Label)), size = label_size) +
     ylim(range(c(0, df[[ylabel]])) * 1.01) +
     xlim(range(c(0, df[[xlabel]])) * 1.01) +
     scale_colour_manual(values = cols) +
@@ -298,6 +311,8 @@ plot_metrics_3funds <- function(metrics = NULL,
   if (plotly) {
     p <- ggplotly(p, tooltip = "tooltip") %>%
       style(hoverlabel = list(font = list(size = 15)))
+  } else {
+    p <- p + geom_label_repel(mapping = aes(label = Label), data = subset(df, ! is.na(Label)), size = label_size)
   }
 
   if (return == "plot") return(p)

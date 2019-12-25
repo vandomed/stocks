@@ -6,10 +6,9 @@
 Funds, 2-Fund Portfolios, and 3-Fund Portfolios}
 \usage{
 plot_metrics_123(metrics = NULL, formula = mean ~ sd, tickers = NULL,
-  ..., step.along = 1, step.between = 2, gains = NULL,
-  prices = NULL, benchmark = "SPY", y.benchmark = benchmark,
-  x.benchmark = benchmark, plotly = FALSE, title = NULL,
-  base_size = 16, label_size = 6, return = "plot")
+  ..., step = 1, gains = NULL, prices = NULL, benchmark = "SPY",
+  y.benchmark = benchmark, x.benchmark = benchmark, plotly = FALSE,
+  title = NULL, base_size = 16, label_size = 6, return = "plot")
 }
 \arguments{
 \item{metrics}{Data frame with Fund column and column for each metric you
@@ -29,17 +28,13 @@ are a three-fund set, the next three are another, and so on.}
 \item{...}{Arguments to pass along with \code{tickers} to
 \code{\link{load_gains}}.}
 
-\item{step.along}{Numeric value controlling allocation increments along each
-curve. Only applies to 2- and 3-fund sets.}
-
-\item{step.between}{Numeric value controlling allocation increments between
-each curve. Only applies to 3-fund sets.}
+\item{step}{Numeric value specifying fund allocation increments.}
 
 \item{gains}{Data frame with a date variable named Date and one column of
-gains for each investment.}
+gains for each fund.}
 
 \item{prices}{Data frame with a date variable named Date and one column of
-prices for each investment.}
+prices for each fund.}
 
 \item{benchmark, y.benchmark, x.benchmark}{Character string specifying which
 fund to use as benchmark for metrics (if you request \code{alpha},

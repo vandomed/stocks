@@ -24,14 +24,11 @@
 #' are a three-fund set, the next three are another, and so on.
 #' @param ... Arguments to pass along with \code{tickers} to
 #' \code{\link{load_gains}}.
-#' @param step.along Numeric value controlling allocation increments along each
-#' curve. Only applies to 2- and 3-fund sets.
-#' @param step.between Numeric value controlling allocation increments between
-#' each curve. Only applies to 3-fund sets.
+#' @param step Numeric value specifying fund allocation increments.
 #' @param gains Data frame with a date variable named Date and one column of
-#' gains for each investment.
+#' gains for each fund.
 #' @param prices Data frame with a date variable named Date and one column of
-#' prices for each investment.
+#' prices for each fund.
 #' @param benchmark,y.benchmark,x.benchmark Character string specifying which
 #' fund to use as benchmark for metrics (if you request \code{alpha},
 #' \code{alpha.annualized}, \code{beta}, or \code{r.squared}).
@@ -83,8 +80,7 @@
 plot_metrics_123 <- function(metrics = NULL,
                              formula = mean ~ sd,
                              tickers = NULL, ...,
-                             step.along = 1,
-                             step.between = 2,
+                             step = 1,
                              gains = NULL,
                              prices = NULL,
                              benchmark = "SPY",
@@ -195,7 +191,7 @@ plot_metrics_123 <- function(metrics = NULL,
       if (length(x) == 2) {
 
         gains.x <- as.matrix(gains[x])
-        weights <- rbind(seq(0, 100, step.along), seq(100, 0, -step.along))
+        weights <- rbind(seq(0, 100, step), seq(100, 0, -step))
         c1 <- weights[1, ]
         c2 <- weights[2, ]
 
@@ -218,8 +214,8 @@ plot_metrics_123 <- function(metrics = NULL,
       }
 
       gains.x <- as.matrix(gains[x])
-      weights <- do.call(cbind, sapply(seq(0, 100, step.between), function(c1) {
-        c2 <- unique(c(seq(0, 100 - c1, step.along), 100 - c1))
+      weights <- do.call(cbind, sapply(seq(0, 100, step), function(c1) {
+        c2 <- unique(c(seq(0, 100 - c1, step), 100 - c1))
         rbind(c1, c2, 100 - c1 - c2)
       }))
       c1 <- weights[1, ]

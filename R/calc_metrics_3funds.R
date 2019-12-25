@@ -4,19 +4,16 @@
 #'
 #'
 #' @param gains Data frame with a date variable named Date and one column of
-#' gains for each investment.
+#' gains for each fund.
 #' @param metrics Character vector specifying metrics to calculate. See
 #' \code{?calc_metrics} for choices.
 #' @param tickers Character vector of ticker symbols, where the first three are
 #' are a 3-fund set, the next three are another, and so on.
 #' @param ... Arguments to pass along with \code{tickers} to
 #' \code{\link{load_gains}}.
-#' @param step1 Numeric value controlling allocation increments for first fund
-#' of each set.
-#' @param step2 Numeric value controlling allocation increments for the second
-#' and third fund in each set.
+#' @param step Numeric value specifying fund allocation increments.
 #' @param prices Data frame with a date variable named Date and one column of
-#' prices for each investment.
+#' prices for each fund.
 #' @param benchmark Character string specifying which fund to use as a
 #' benchmark for metrics that require one.
 #' @param ref.tickers Character vector of ticker symbols to include.
@@ -45,8 +42,7 @@
 calc_metrics_3funds <- function(gains = NULL,
                                 metrics = c("mean", "sd"),
                                 tickers = NULL, ...,
-                                step1 = 2.5,
-                                step2 = step1,
+                                step = 1,
                                 prices = NULL,
                                 benchmark = "SPY",
                                 ref.tickers = NULL) {
@@ -108,8 +104,8 @@ calc_metrics_3funds <- function(gains = NULL,
   }
 
   # Calculate metrics for each trio
-  weights <- sapply(seq(0, 100, step1), function(c1) {
-    c2 <- unique(c(seq(0, 100 - c1, step2), 100 - c1))
+  weights <- sapply(seq(0, 100, step), function(c1) {
+    c2 <- unique(c(seq(0, 100 - c1, step), 100 - c1))
     rbind(c1, c2, 100 - c1 - c2)
   })
   weights <- do.call(cbind, weights)

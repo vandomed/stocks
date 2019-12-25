@@ -52,6 +52,13 @@ NULL
 #' @source Original
 NULL
 #'
+#' Performance Metric Choices
+#' @name metric_choices
+#' @aliases metric.choices
+#' @docType data
+#' @source Original
+NULL
+#'
 #' Lookup Table for Wikipedia S&P 500 Pages
 #' @name sp500_dates
 #' @aliases sp500.dates

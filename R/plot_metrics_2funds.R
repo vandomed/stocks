@@ -20,9 +20,9 @@
 #' @param ... Arguments to pass along with \code{tickers} to
 #' \code{\link{load_gains}}.
 #' @param gains Data frame with a date variable named Date and one column of
-#' gains for each investment.
+#' gains for each fund.
 #' @param prices Data frame with a date variable named Date and one column of
-#' prices for each investment.
+#' prices for each fund.
 #' @param benchmark,y.benchmark,x.benchmark Character string specifying which
 #' fund to use as benchmark for metrics (if you request \code{alpha},
 #' \code{alpha.annualized}, \code{beta}, or \code{r.squared}).

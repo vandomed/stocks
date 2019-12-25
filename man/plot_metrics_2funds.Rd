@@ -32,10 +32,10 @@ are a two-fund pair, the next two are another, and so on.}
 the curve. Set to \code{NULL} for none (0 and 100 will still be included).}
 
 \item{gains}{Data frame with a date variable named Date and one column of
-gains for each investment.}
+gains for each fund.}
 
 \item{prices}{Data frame with a date variable named Date and one column of
-prices for each investment.}
+prices for each fund.}
 
 \item{benchmark, y.benchmark, x.benchmark}{Character string specifying which
 fund to use as benchmark for metrics (if you request \code{alpha},

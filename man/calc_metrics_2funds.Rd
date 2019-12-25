@@ -11,7 +11,7 @@ calc_metrics_2funds(gains = NULL, metrics = c("mean", "sd"),
 }
 \arguments{
 \item{gains}{Data frame with a date variable named Date and one column of
-gains for each investment.}
+gains for each fund.}
 
 \item{metrics}{Character vector specifying metrics to calculate. See
 \code{?calc_metrics} for choices.}
@@ -23,7 +23,7 @@ are a 2-fund pair, the next two are another, and so on.}
 \code{\link{load_gains}}.}
 
 \item{prices}{Data frame with a date variable named Date and one column of
-prices for each investment.}
+prices for each fund.}
 
 \item{benchmark}{Character string specifying which fund to use as a
 benchmark for metrics that require one.}

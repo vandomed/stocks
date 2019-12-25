@@ -5,12 +5,12 @@
 \title{Calculate Performance Metrics for 3-Fund Portfolios with Varying Allocations}
 \usage{
 calc_metrics_3funds(gains = NULL, metrics = c("mean", "sd"),
-  tickers = NULL, ..., step1 = 2.5, step2 = step1, prices = NULL,
-  benchmark = "SPY", ref.tickers = NULL)
+  tickers = NULL, ..., step = 1, prices = NULL, benchmark = "SPY",
+  ref.tickers = NULL)
 }
 \arguments{
 \item{gains}{Data frame with a date variable named Date and one column of
-gains for each investment.}
+gains for each fund.}
 
 \item{metrics}{Character vector specifying metrics to calculate. See
 \code{?calc_metrics} for choices.}
@@ -21,14 +21,10 @@ are a 3-fund set, the next three are another, and so on.}
 \item{...}{Arguments to pass along with \code{tickers} to
 \code{\link{load_gains}}.}
 
-\item{step1}{Numeric value controlling allocation increments for first fund
-of each set.}
-
-\item{step2}{Numeric value controlling allocation increments for the second
-and third fund in each set.}
+\item{step}{Numeric value specifying fund allocation increments.}
 
 \item{prices}{Data frame with a date variable named Date and one column of
-prices for each investment.}
+prices for each fund.}
 
 \item{benchmark}{Character string specifying which fund to use as a
 benchmark for metrics that require one.}

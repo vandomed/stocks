@@ -34,15 +34,15 @@
 #'
 #'
 #' @export
-calc_metrics <- function(gains = NULL,
-                         metrics = c("mean", "sd", "growth", "cagr", "mdd",
-                                     "sharpe", "sortino", "alpha",
-                                     "alpha.annualized", "beta", "r.squared",
-                                     "pearson", "spearman", "auto.pearson",
-                                     "auto.spearman"),
-                         prices = NULL,
-                         tickers = NULL, ...,
-                         benchmark = "SPY") {
+calc_metrics <- function(
+  gains = NULL,
+  metrics = c("mean", "sd", "growth.10k", "growth", "cagr", "mdd", "sharpe",
+              "sortino", "alpha", "alpha.annualized", "beta", "r.squared",
+              "pearson", "spearman", "auto.pearson", "auto.spearman"),
+  prices = NULL,
+  tickers = NULL, ...,
+  benchmark = "SPY"
+) {
 
   # Set benchmarks to NULL if not needed
   if (! any(c("alpha", "alpha.annualized", "beta", "r.squared", "pearson", "spearman") %in% metrics)) {
@@ -51,8 +51,8 @@ calc_metrics <- function(gains = NULL,
 
   # Check that requested metrics are valid
   invalid.requests <- setdiff(
-    metrics,
-    setdiff(names(metric.info[[1]]), "allocation")
+    sapply(metrics, function(x) strsplit(x, ".", fixed = TRUE)[[1]][1]),
+    metric.choices
   )
   if (length(invalid.requests) > 0) {
     stop(paste("The following metrics are not allowed (see ?calc_metrics for choices):",
@@ -103,7 +103,7 @@ calc_metrics <- function(gains = NULL,
       calc_metric(gains = y, metric = x, units.year = units.year, benchmark.gains = benchmark.gains)
     })
   }))
-  names(df) <- c("Fund", metric.info$label[metrics])
+  names(df) <- c("Fund", metric_label(metrics))
   rownames(df) <- NULL
 
   return(df)

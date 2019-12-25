@@ -5,8 +5,8 @@
 \title{Plot One Performance Metric vs. Another for 3-Fund Portfolios}
 \usage{
 plot_metrics_3funds(metrics = NULL, formula = mean ~ sd,
-  tickers = NULL, ..., step1 = 2.5, step2 = step1, gains = NULL,
-  prices = NULL, benchmark = "SPY", y.benchmark = benchmark,
+  tickers = NULL, ..., step = 1, gains = NULL, prices = NULL,
+  benchmark = "SPY", y.benchmark = benchmark,
   x.benchmark = benchmark, ref.tickers = NULL, plotly = FALSE,
   title = NULL, base_size = 16, label_size = 6, return = "plot")
 }
@@ -28,15 +28,13 @@ are a 3-fund set, the next three are another, and so on.}
 \item{...}{Arguments to pass along with \code{tickers} to
 \code{\link{load_gains}}.}
 
-\item{step1}{Numeric value controlling allocation increments between curves.}
-
-\item{step2}{Numeric value controlling allocation increments along curves.}
+\item{step}{Numeric value specifying fund allocation increments.}
 
 \item{gains}{Data frame with a date variable named Date and one column of
-gains for each investment.}
+gains for each fund.}
 
 \item{prices}{Data frame with a date variable named Date and one column of
-prices for each investment.}
+prices for each fund.}
 
 \item{benchmark, y.benchmark, x.benchmark}{Character string specifying which
 fund to use as benchmark for metrics (if you request \code{alpha},

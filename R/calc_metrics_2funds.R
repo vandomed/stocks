@@ -5,7 +5,7 @@
 #'
 #'
 #' @param gains Data frame with a date variable named Date and one column of
-#' gains for each investment.
+#' gains for each fund.
 #' @param metrics Character vector specifying metrics to calculate. See
 #' \code{?calc_metrics} for choices.
 #' @param tickers Character vector of ticker symbols, where the first two are
@@ -13,7 +13,7 @@
 #' @param ... Arguments to pass along with \code{tickers} to
 #' \code{\link{load_gains}}.
 #' @param prices Data frame with a date variable named Date and one column of
-#' prices for each investment.
+#' prices for each fund.
 #' @param benchmark Character string specifying which fund to use as a
 #' benchmark for metrics that require one.
 #' @param ref.tickers Character vector of ticker symbols to include.

@@ -10,11 +10,14 @@ calc_metric(gains, metric = "mean", units.year = 252,
 \arguments{
 \item{gains}{Numeric vector.}
 
-\item{metric}{Character string specifying metric to calculate. Choices are 
-\code{"mean"}, \code{"sd"}, \code{"growth"}, \code{"cagr"}, \code{"mdd"}, 
-\code{"sharpe"}, \code{"sortino"}, \code{"alpha"}, \code{"alpha.annualized"}, 
-\code{"beta"}, \code{"r.squared"}, \code{"pearson"}, \code{"spearman"}, 
-\code{"auto.pearson"}, and \code{"auto.spearman"}.}
+\item{metric}{Character string specifying metric to calculate. Choices are
+\code{"mean"}, \code{"sd"}, \code{"growth.x"} for growth of $x where x is the
+initial value, \code{"growth"} for percent growth, \code{"cagr"} for compound
+annualized growth rate, \code{"mdd"} for max drawdown, \code{"sharpe"},
+\code{"sortino"}, \code{"alpha"}, \code{"alpha.annualized"}, \code{"beta"},
+\code{"r.squared"}, \code{"pearson"} or \code{"spearman"} for
+Pearson/Spearman correlation with benchmark, and \code{"auto.pearson"} or
+\code{"auto.spearman"} for Pearson/Spearman autocorrelation.}
 
 \item{units.year}{Integer value.}
 

@@ -6,12 +6,11 @@
 2-Fund Portfolios, and 3-Fund Portfolios}
 \usage{
 calc_metrics_123(gains = NULL, metrics = c("mean", "sd"),
-  tickers = NULL, ..., step.along = 2.5, step.between = 2.5,
-  prices = NULL, benchmark = "SPY")
+  tickers = NULL, ..., step = 1, prices = NULL, benchmark = "SPY")
 }
 \arguments{
 \item{gains}{Data frame with a date variable named Date and one column of
-gains for each investment.}
+gains for each fund.}
 
 \item{metrics}{Character vector specifying metrics to calculate. See
 \code{?calc_metrics} for choices.}
@@ -22,14 +21,10 @@ are a 3-fund set, the next three are another, and so on.}
 \item{...}{Arguments to pass along with \code{tickers} to
 \code{\link{load_gains}}.}
 
-\item{step.along}{Numeric value controlling allocation increments along each
-curve. Only applies to 2- and 3-fund sets.}
-
-\item{step.between}{Numeric value controlling allocation increments between
-each curve. Only applies to 3-fund sets.}
+\item{step}{Numeric value specifying fund allocation increments.}
 
 \item{prices}{Data frame with a date variable named Date and one column of
-prices for each investment.}
+prices for each fund.}
 
 \item{benchmark}{Character string specifying which fund to use as a
 benchmark for metrics that require one.}
