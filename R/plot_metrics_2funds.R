@@ -83,12 +83,16 @@ plot_metrics_2funds <- function(metrics = NULL,
 
   # Extract info from formula
   all.metrics <- all.vars(formula, functions = FALSE)
-  if (! is.null(metrics) & ! all(metric.info$label[all.metrics] %in% names(metrics))) {
-    all.metrics <- names(metric.info$label[metric.info$label %in% intersect(names(metrics), metric.info$label)])
-    if (length(all.metrics) >= 2) {
+
+  # If metrics is specified but doesn't include the expected variables, set defaults
+  if (! is.null(metrics) & ! all(unlist(stocks:::metric_label(all.metrics)) %in% names(metrics))) {
+    all.metrics <- unlist(stocks:::label_metric(names(metrics)))
+    if (length(all.metrics) == 1) {
+      all.metrics <- c(all.metrics, ".")
+    } else if (length(all.metrics) >= 2) {
       all.metrics <- all.metrics[1: 2]
     } else {
-      stop("The input 'metrics' must have at least two columns with performance metrics")
+      stop("The input 'metrics' must have at least one column with a performance metric")
     }
   }
   y.metric <- x.metric <- NULL
@@ -97,8 +101,8 @@ plot_metrics_2funds <- function(metrics = NULL,
   all.metrics <- c(y.metric, x.metric)
 
   # Prep for calculating metrics and plotting
-  ylabel <- metric.info$label[y.metric]
-  xlabel <- metric.info$label[x.metric]
+  ylabel <- stocks:::metric_label(y.metric)
+  xlabel <- stocks:::metric_label(x.metric)
 
   # Set benchmarks to NULL if not needed
   if (! any(c("alpha", "alpha.annualized", "beta", "r.squared", "pearson", "spearman") %in% all.metrics)) {
@@ -230,8 +234,8 @@ plot_metrics_2funds <- function(metrics = NULL,
   df <- as.data.frame(df)
   df$tooltip <- paste(ifelse(is.na(df$`Fund 1`), df$Pair, paste(df$`Allocation 1 (%)`, "% ", df$`Fund 1`, ", ",
                                                                 df$`Allocation 2 (%)`, "% ", df$`Fund 2`, sep = "")),
-                      "<br>", metric.info$title[y.metric], ": ", formatC(df[[ylabel]], metric.info$decimals[y.metric], format = "f"), metric.info$units[y.metric],
-                      "<br>", metric.info$title[x.metric], ": ", formatC(df[[xlabel]], metric.info$decimals[x.metric], format = "f"), metric.info$units[x.metric], sep = "")
+                      "<br>", stocks:::metric_title(y.metric), ": ", formatC(df[[ylabel]], stocks:::metric_decimals(y.metric), format = "f"), stocks:::metric_units(y.metric),
+                      "<br>", stocks:::metric_title(x.metric), ": ", formatC(df[[xlabel]], stocks:::metric_decimals(x.metric), format = "f"), stocks:::metric_units(x.metric), sep = "")
 
   df.points <- subset(df, Pair %in% ref.tickers | `Allocation (%)` %in% c(0, 100, points))
   gg_color_hue <- function(n) {
@@ -260,7 +264,7 @@ plot_metrics_2funds <- function(metrics = NULL,
     scale_colour_manual(values = cols) +
     theme_gray(base_size = base_size) +
     theme(legend.position = "none") +
-    labs(title = ifelse(! is.null(title), title, paste(metric.info$title[y.metric], "vs.", metric.info$title[x.metric])),
+    labs(title = ifelse(! is.null(title), title, paste(stocks:::metric_title(y.metric), "vs.", stocks:::metric_title(x.metric))),
          y = ylabel, x = xlabel)
 
   if (plotly) {

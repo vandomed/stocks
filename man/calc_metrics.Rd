@@ -14,7 +14,14 @@ calc_metrics(gains = NULL, metrics = c("mean", "sd", "growth.10k",
 \item{gains}{Data frame with one column of gains for each investment and a
 date variable named Date.}
 
-\item{metrics}{Character vector specifying metrics to calculate.}
+\item{metrics}{Character vector specifying metrics to calculate. Choices are
+\code{"mean"}, \code{"sd"}, \code{"growth.x"} for growth of $x where x is the
+initial value, \code{"growth"} for percent growth, \code{"cagr"} for compound
+annualized growth rate, \code{"mdd"} for max drawdown, \code{"sharpe"},
+\code{"sortino"}, \code{"alpha"}, \code{"alpha.annualized"}, \code{"beta"},
+\code{"r.squared"}, \code{"pearson"} or \code{"spearman"} for
+Pearson/Spearman correlation with benchmark, and \code{"auto.pearson"} or
+\code{"auto.spearman"} for Pearson/Spearman autocorrelation.}
 
 \item{prices}{Data frame with one column of prices for each investment and a
 date variable named Date.}

@@ -87,19 +87,6 @@
 #'
 #'
 #' @export
-# metrics = NULL
-# formula = cagr ~ .
-# tickers = c("VFINX", "VWEHX")
-# type = "2017-03-13"
-# minimum.n = 3
-# tickers = NULL
-# gains = gains
-# prices = NULL
-# benchmark = x.benchmark = y.benchmark = "SPY"
-# plotly = TRUE
-# title = NULL
-# base_size = 16
-# return = "plot"
 plot_metrics_overtime <- function(metrics = NULL,
                                   formula = cagr ~ .,
                                   type = "hop.year",
@@ -117,8 +104,11 @@ plot_metrics_overtime <- function(metrics = NULL,
 
   # Extract info from formula
   all.metrics <- all.vars(formula, functions = FALSE)
-  if (! is.null(metrics) & ! all(metric.info$label[all.metrics] %in% names(metrics))) {
-    all.metrics <- names(metric.info$label[metric.info$label %in% intersect(names(metrics), metric.info$label)])
+
+  # If metrics is specified but doesn't include the expected variables, set defaults
+  all.metrics <- all.vars(formula, functions = FALSE)
+  if (! is.null(metrics) & ! all(unlist(stocks:::metric_label(all.metrics)) %in% names(metrics))) {
+    all.metrics <- unlist(stocks:::label_metric(names(metrics)))
     if (length(all.metrics) == 1) {
       all.metrics <- c(all.metrics, ".")
     } else if (length(all.metrics) >= 2) {
@@ -127,13 +117,14 @@ plot_metrics_overtime <- function(metrics = NULL,
       stop("The input 'metrics' must have at least one column with a performance metric")
     }
   }
+
   y.metric <- x.metric <- NULL
   if (all.metrics[1] != ".") y.metric <- all.metrics[1]
   if (all.metrics[2] != ".") x.metric <- all.metrics[2]
   all.metrics <- c(x.metric, y.metric)
 
-  ylabel <- metric.info$label[y.metric]
-  xlabel <- metric.info$label[x.metric]
+  xlabel <- stocks:::metric_label(x.metric)
+  ylabel <- stocks:::metric_label(y.metric)
 
   # Align benchmarks with metrics
   if (! any(c("alpha", "alpha.annualized", "beta", "r.squared", "pearson", "spearman") %in% y.metric)) {
@@ -276,14 +267,13 @@ plot_metrics_overtime <- function(metrics = NULL,
   # Create plot
   df <- as.data.frame(df)
   df <- df[order(df$Fund, df$`End date`), ]
-  #df <- df[order(df$Fund, df$`End date`), c("Period", "Start date", "End date", "Fund", c(ylabel, xlabel))]
 
   if (is.null(x.metric)) {
 
     df$tooltip <- paste(df$Fund,
                         "<br>Start date: ", df$`Start date`,
                         "<br>End date: ", df$`End date`,
-                        "<br>", metric.info$title[y.metric], ": ", formatC(df[[ylabel]], metric.info$decimals[y.metric], format = "f"), metric.info$units[y.metric], sep = "")
+                        "<br>", stocks:::metric_title(y.metric), ": ", formatC(df[[ylabel]], stocks:::metric_decimals(y.metric), format = "f"), stocks:::metric_units(y.metric), sep = "")
     p <- ggplot(df, aes(y = .data[[ylabel]],
                         x = `End date`,
                         group = Fund, color = Fund, text = tooltip)) +
@@ -292,15 +282,15 @@ plot_metrics_overtime <- function(metrics = NULL,
       ylim(range(c(0, df[[ylabel]])) * 1.01) +
       theme_gray(base_size = base_size) +
       theme(legend.title = element_blank()) +
-      labs(title = paste(metric.info$title[y.metric], "over Time"),
-           y = metric.info$label[y.metric])
+      labs(title = paste(stocks:::metric_title(y.metric), "over Time"),
+           y = stocks:::metric_label(y.metric))
 
   } else if (is.null(y.metric)) {
 
     df$tooltip <- paste(df$Fund,
                         "<br>Start date: ", df$`Start date`,
                         "<br>End date: ", df$`End date`,
-                        "<br>", metric.info$title[x.metric], ": ", formatC(df[[xlabel]], metric.info$decimals[x.metric], format = "f"), metric.info$units[x.metric], sep = "")
+                        "<br>", stocks:::metric_title(x.metric), ": ", formatC(df[[xlabel]], stocks:::metric_decimals(x.metric), format = "f"), stocks:::metric_units(x.metric), sep = "")
     p <- ggplot(df, aes(y = `End date`,
                         x = .data[[xlabel]],
                         group = Fund, color = Fund, text = tooltip)) +
@@ -309,7 +299,7 @@ plot_metrics_overtime <- function(metrics = NULL,
       xlim(range(c(0, df[[xlabel]])) * 1.01) +
       theme_gray(base_size = base_size) +
       theme(legend.title = element_blank()) +
-      labs(title = ifelse(! is.null(title), title, paste(metric.info$title[y.metric], "over Time")),
+      labs(title = ifelse(! is.null(title), title, paste(stocks:::metric_title(y.metric), "over Time")),
            x = xlabel)
 
   } else {
@@ -317,8 +307,8 @@ plot_metrics_overtime <- function(metrics = NULL,
     df$tooltip <- paste(df$Fund,
                         "<br>Start date: ", df$`Start date`,
                         "<br>End date: ", df$`End date`,
-                        "<br>", metric.info$title[y.metric], ": ", formatC(df[[ylabel]], metric.info$decimals[y.metric], format = "f"), metric.info$units[y.metric],
-                        "<br>", metric.info$title[x.metric], ": ", formatC(df[[xlabel]], metric.info$decimals[x.metric], format = "f"), metric.info$units[x.metric], sep = "")
+                        "<br>", stocks:::metric_title(y.metric), ": ", formatC(df[[ylabel]], stocks:::metric_decimals(y.metric), format = "f"), stocks:::metric_units(y.metric),
+                        "<br>", stocks:::metric_title(x.metric), ": ", formatC(df[[xlabel]], stocks:::metric_decimals(x.metric), format = "f"), stocks:::metric_units(x.metric), sep = "")
     p <- ggplot(df, aes(y = .data[[ylabel]],
                         x = .data[[xlabel]],
                         group = Fund, color = Fund, text = tooltip)) +
@@ -331,7 +321,7 @@ plot_metrics_overtime <- function(metrics = NULL,
       xlim(range(c(0, df[[xlabel]])) * 1.01) +
       theme_gray(base_size = base_size) +
       theme(legend.title = element_blank()) +
-      labs(title = ifelse(! is.null(title), title, paste(metric.info$title[y.metric], "vs.", metric.info$title[x.metric])),
+      labs(title = ifelse(! is.null(title), title, paste(stocks:::metric_title(y.metric), "vs.", stocks:::metric_title(x.metric))),
            y = ylabel, x = xlabel)
 
   }

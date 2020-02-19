@@ -12,7 +12,7 @@
 #'
 label_metric <- function(label) {
 
-  sapply(label, function(x) {
+  unlist(sapply(label, function(x) {
     if (x == "Mean (%)") return("mean")
     if (x == "SD (%)") return ("sd")
     if (grepl("Growth of", x)) return(paste("growth", strsplit(x, "[$]")[[1]][2], sep = "."))
@@ -30,6 +30,6 @@ label_metric <- function(label) {
     if (x == "Pearson Autocorr.") return("auto.pearson")
     if (x == "Spearman Autocorr.") return("auto.spearman")
     if (x == "Allocation (%)") return("allocation")
-  })
+  }))
 
 }

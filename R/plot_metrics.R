@@ -90,10 +90,10 @@ plot_metrics <- function(metrics = NULL,
 
   # Extract info from formula
   all.metrics <- all.vars(formula, functions = FALSE)
-  #if (! is.null(metrics) & ! )
-  if (! is.null(metrics) & ! all(metric.info$label[all.metrics] %in% names(metrics))) {
-    all.metrics <- stocks:::label_metric(all.metrics)
-    all.metrics <- names(metric.info$label[metric.info$label %in% intersect(names(metrics), metric.info$label)])
+
+  # If metrics is specified but doesn't include the expected variables, set defaults
+  if (! is.null(metrics) & ! all(unlist(stocks:::metric_label(all.metrics)) %in% names(metrics))) {
+    all.metrics <- unlist(stocks:::label_metric(names(metrics)))
     if (length(all.metrics) == 1) {
       all.metrics <- c(all.metrics, ".")
     } else if (length(all.metrics) >= 2) {
@@ -107,8 +107,8 @@ plot_metrics <- function(metrics = NULL,
   if (all.metrics[2] != ".") x.metric <- all.metrics[2]
   all.metrics <- c(y.metric, x.metric)
 
-  xlabel <- metric.info$label[x.metric]
-  ylabel <- metric.info$label[y.metric]
+  xlabel <- stocks:::metric_label(x.metric)
+  ylabel <- stocks:::metric_label(y.metric)
 
   # Set benchmarks to NULL if not needed
   if (! any(c("alpha", "alpha.annualized", "beta", "r.squared", "pearson", "spearman") %in% all.metrics)) {
@@ -194,35 +194,35 @@ plot_metrics <- function(metrics = NULL,
 
     # For y.metric only
     df$tooltip <- paste(df$Fund, "<br>",
-                        metric.info$title[y.metric], ": ", formatC(df[[ylabel]], metric.info$decimals[y.metric], format = "f"), metric.info$units[y.metric], sep = "")
+                        stocks:::metric_title(y.metric), ": ", formatC(df[[ylabel]], stocks:::metric_decimals(y.metric), format = "f"), stocks:::metric_units(y.metric), sep = "")
     p <- ggplot(df, aes(y = .data[[ylabel]],
                         x = reorder(Fund, .data[[ylabel]]),
                         text = tooltip)) +
       geom_col() +
       scale_y_continuous(limits = range(c(0, df[[ylabel]])) * 1.02, expand = c(0, 0)) +
       theme(axis.text = element_text(size = ticklabel_size)) +
-      labs(title = ifelse(! is.null(title), title, paste(metric.info$title[y.metric], "for Various Funds")),
+      labs(title = ifelse(! is.null(title), title, paste(metric_title(y.metric), "for Various Funds")),
            y = ylabel, x = NULL)
 
   } else if (is.null(y.metric)) {
 
     # For x.metric only
-    df$tooltip <- paste(df$Fund, "<br>", metric.info$title[x.metric], ": ",
-                        formatC(df[[xlabel]], metric.info$decimals[x.metric], format = "f"), metric.info$units[x.metric], sep = "")
+    df$tooltip <- paste(df$Fund, "<br>", stocks:::metric_title(x.metric), ": ",
+                        formatC(df[[xlabel]], stocks:::metric_decimals(x.metric), format = "f"), stocks:::metric_units(x.metric), sep = "")
     p <- ggplot(df, aes(y = .data[[xlabel]], x = reorder(Fund, .data[[xlabel]]),
                         text = tooltip)) +
       geom_col() +
       theme(axis.text = element_text(size = ticklabel_size)) +
       coord_flip(ylim = range(c(0, df[[xlabel]])) * 1.02, expand = 0) +
-      labs(title = ifelse(! is.null(title), title, paste(metric.info$title[x.metric], "for Various Funds")),
+      labs(title = ifelse(! is.null(title), title, paste(stocks:::metric_title(x.metric), "for Various Funds")),
            y = xlabel, x = NULL)
 
   } else {
 
     df$tooltip <- paste(
       df$Fund,
-      "<br>", metric.info$title[x.metric], ": ", formatC(df[[xlabel]], metric.info$decimals[x.metric], format = "f"), metric.info$units[x.metric],
-      "<br>", metric.info$title[y.metric], ": ", formatC(df[[ylabel]], metric.info$decimals[y.metric], format = "f"), metric.info$units[y.metric], sep = ""
+      "<br>", stocks:::metric_title(x.metric), ": ", formatC(df[[xlabel]], stocks:::metric_decimals(x.metric), format = "f"), stocks:::metric_units(x.metric),
+      "<br>", stocks:::metric_title(y.metric), ": ", formatC(df[[ylabel]], stocks:::metric_decimals(y.metric), format = "f"), stocks:::metric_units(y.metric), sep = ""
     )
     p <- ggplot(df, aes(y = .data[[ylabel]],
                         x = .data[[xlabel]],
@@ -232,7 +232,7 @@ plot_metrics <- function(metrics = NULL,
       ylim(range(c(0, df[[ylabel]])) * 1.02) +
       xlim(range(c(0, df[[xlabel]])) * 1.02) +
       theme_gray(base_size = base_size) +
-      labs(title = ifelse(! is.null(title), title, paste(metric.info$title[y.metric], "vs.", metric.info$title[x.metric])),
+      labs(title = ifelse(! is.null(title), title, paste(stocks:::metric_title(y.metric), "vs.", stocks:::metric_title(x.metric))),
            y = ylabel, x = xlabel)
 
   }

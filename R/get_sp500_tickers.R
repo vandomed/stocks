@@ -1,7 +1,7 @@
 #' Get S&P 500 Ticker Symbols as on a Particular Date
 #'
 #' Scrapes ticker symbols from the Wikipedia Revision history
-#' (\url{https://en.wikipedia.org/wiki/List_of_S%26P_500_companies}). Of course,
+#' \url{https://en.wikipedia.org/wiki/List_of_S\%26P_500_companies}. Of course,
 #' the data may be imperfect.
 #'
 #'
@@ -20,7 +20,6 @@
 #' # S&P 500 tickers at the beginning of 2019
 #' head(get_sp500_tickers("2019-01-01"))
 #' }
-#'
 #'
 #' @export
 get_sp500_tickers <- function(date = Sys.Date()) {

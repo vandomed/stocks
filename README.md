@@ -1,7 +1,7 @@
 Get Rich with ‘stocks’
 ================
 Dane Van Domelen <br> <vandomed@gmail.com>
-2019-12-04
+2020-02-18
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
@@ -72,10 +72,10 @@ metrics <- calc_metrics(gains)
 knitr::kable(metrics)
 ```
 
-| Fund | Mean (%) | SD (%) | Growth (%) | CAGR (%) | Max drawdown (%) | Sharpe ratio | Sortino ratio | Alpha (%) | Annualized alpha (%) |    Beta | R-squared | Pearson corr. | Spearman corr. | Pearson autocorr. | Spearman autocorr. |
-| :--- | -------: | -----: | ---------: | -------: | ---------------: | -----------: | ------------: | --------: | -------------------: | ------: | --------: | ------------: | -------------: | ----------------: | -----------------: |
-| SPY  |    0.039 |  1.168 |        281 |     8.49 |             55.2 |        0.034 |         0.042 |     0.000 |                  0.0 |   1.000 |     1.000 |         1.000 |          1.000 |           \-0.079 |            \-0.051 |
-| TLT  |    0.028 |  0.844 |        173 |     6.31 |             26.6 |        0.033 |         0.050 |     0.039 |                 10.4 | \-0.292 |     0.163 |       \-0.404 |        \-0.344 |           \-0.037 |            \-0.045 |
+| Fund | Mean (%) | SD (%) | Growth of $10k | Growth (%) | CAGR (%) | Max drawdown (%) | Sharpe ratio | Sortino ratio | Alpha | Annualized alpha |    Beta | R-squared | Pearson corr. | Spearman corr. | Pearson autocorr. | Spearman autocorr. |
+| :--- | -------: | -----: | -------------: | ---------: | -------: | ---------------: | -----------: | ------------: | ----: | ---------------: | ------: | --------: | ------------: | -------------: | ----------------: | -----------------: |
+| SPY  |    0.039 |  1.168 |          38093 |        281 |     8.49 |             55.2 |        0.034 |         0.042 | 0.000 |              0.0 |   1.000 |     1.000 |         1.000 |          1.000 |           \-0.079 |            \-0.051 |
+| TLT  |    0.028 |  0.844 |          27295 |        173 |     6.31 |             26.6 |        0.033 |         0.050 | 0.039 |             10.4 | \-0.292 |     0.163 |       \-0.404 |        \-0.344 |           \-0.037 |            \-0.045 |
 
 We see here that SPY has achieved stronger growth (8.5% vs. 6.3%), but
 with a much worse max drawdown (55.2% vs. 26.6%). TLT’s Sharpe ratio (a

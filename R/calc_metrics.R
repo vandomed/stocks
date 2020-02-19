@@ -5,7 +5,14 @@
 #'
 #' @param gains Data frame with one column of gains for each investment and a
 #' date variable named Date.
-#' @param metrics Character vector specifying metrics to calculate.
+#' @param metrics Character vector specifying metrics to calculate. Choices are
+#' \code{"mean"}, \code{"sd"}, \code{"growth.x"} for growth of $x where x is the
+#' initial value, \code{"growth"} for percent growth, \code{"cagr"} for compound
+#' annualized growth rate, \code{"mdd"} for max drawdown, \code{"sharpe"},
+#' \code{"sortino"}, \code{"alpha"}, \code{"alpha.annualized"}, \code{"beta"},
+#' \code{"r.squared"}, \code{"pearson"} or \code{"spearman"} for
+#' Pearson/Spearman correlation with benchmark, and \code{"auto.pearson"} or
+#' \code{"auto.spearman"} for Pearson/Spearman autocorrelation.
 #' @param tickers Character vector of ticker symbols that Yahoo! Finance
 #' recognizes, if you want to download data on the fly.
 #' @param ... Arguments to pass along with \code{tickers} to
@@ -100,7 +107,7 @@ calc_metrics <- function(
       calc_metric(gains = y, metric = x, units.year = units.year, benchmark.gains = benchmark.gains)
     })
   }))
-  names(df) <- c("Fund", metric_label(metrics))
+  names(df) <- c("Fund", stocks:::metric_label(metrics))
   rownames(df) <- NULL
 
   return(df)

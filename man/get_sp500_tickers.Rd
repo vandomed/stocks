@@ -13,7 +13,9 @@ get_sp500_tickers(date = Sys.Date())
 Character vector.
 }
 \description{
-Get S&P 500 Ticker Symbols as on a Particular Date
+Scrapes ticker symbols from the Wikipedia Revision history
+\url{https://en.wikipedia.org/wiki/List_of_S\%26P_500_companies}. Of course,
+the data may be imperfect.
 }
 \examples{
 \dontrun{
@@ -23,6 +25,5 @@ head(get_sp500_tickers())
 # S&P 500 tickers at the beginning of 2019
 head(get_sp500_tickers("2019-01-01"))
 }
-
 
 }

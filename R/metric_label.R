@@ -11,10 +11,10 @@
 #'
 #'
 metric_label <- function(metric) {
-  sapply(metric, function(x) {
+  unlist(sapply(metric, function(x) {
     if (x == "mean") return("Mean (%)")
     if (x == "sd") return ("SD (%)")
-    if (grepl("[.]", x)) {
+    if (grepl("growth.", x, fixed = TRUE)) {
       initial <- strsplit(x, "[.]")[[1]][2]
       if (grepl("k", initial)) return(paste("Growth of $", initial, sep = ""))
       return(paste("Growth of $", comma(as.numeric(initial)), sep = ""))
@@ -33,7 +33,7 @@ metric_label <- function(metric) {
     if (x == "auto.pearson") return("Pearson autocorr.")
     if (x == "auto.spearman") return("Spearman autocorr.")
     if (x == "allocation") return("Allocation (%)")
-  })
+  }))
 }
 # metric_label <- function(metric) {
 #

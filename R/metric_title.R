@@ -12,10 +12,10 @@
 #'
 metric_title <- function(metric) {
 
-  sapply(metric, function(x) {
+  unlist(sapply(metric, function(x) {
     if (x == "mean") return("Mean")
     if (x == "sd") return ("SD")
-    if (grepl("[.]", x)) {
+    if (grepl("growth.", x, fixed = TRUE)) {
       initial <- strsplit(x, "[.]")[[1]][2]
       if (grepl("k", initial)) return(paste("Growth of $", initial, sep = ""))
       return("Growth of $", comma(initial))
@@ -34,6 +34,6 @@ metric_title <- function(metric) {
     if (x == "auto.pearson") return("Pearson Autocorr.")
     if (x == "auto.spearman") return("Spearman Autocorr.")
     if (x == "allocation") return("Allocation")
-  })
+  }))
 
 }
