@@ -258,7 +258,6 @@ plot_metrics_2funds <- function(metrics = NULL,
   p <- p +
     geom_point(data = df.points) +
     geom_path() +
-    geom_label_repel(mapping = aes(label = Label), data = subset(df, ! is.na(Label)), size = label_size) +
     ylim(range(c(0, df[[ylabel]])) * 1.01) +
     xlim(range(c(0, df[[xlabel]])) * 1.01) +
     scale_colour_manual(values = cols) +
@@ -270,6 +269,8 @@ plot_metrics_2funds <- function(metrics = NULL,
   if (plotly) {
     p <- ggplotly(p, tooltip = "tooltip") %>%
       style(hoverlabel = list(font = list(size = 15)))
+  } else {
+    p <- p + geom_label_repel(mapping = aes(label = Label), data = subset(df, ! is.na(Label)), size = label_size)
   }
 
   if (return == "plot") return(p)

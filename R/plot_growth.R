@@ -80,6 +80,7 @@ plot_growth <- function(prices = NULL,
                       "<br>", "Date: ", df$Date,
                       "<br>", "Balance: $", comma(df$`Balance ($)`, accuracy = 0.01), sep = "")
   p <- ggplot(df, aes(y = `Balance ($)`, x = Date, group = Fund, color = Fund, text = tooltip)) +
+    geom_point(size = 1) +
     geom_line(na.rm = TRUE) +
     scale_y_continuous(limits = range(c(0, df$Balance)) * 1.02, expand = c(0, 0), labels = comma) +
     theme_gray(base_size = base_size) +
