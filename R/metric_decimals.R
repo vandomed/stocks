@@ -1,6 +1,6 @@
 #' Get Number of Decimals for Performance Metric
 #'
-#' For internal use only.
+#' Mainly a helper function.
 #'
 #'
 #' @param metric Character string.
@@ -10,6 +10,7 @@
 #' Character string.
 #'
 #'
+#' @export
 metric_decimals <- function(metric) {
 
   unlist(sapply(metric, function(x) {

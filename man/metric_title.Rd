@@ -13,5 +13,5 @@ metric_title(metric)
 Character string.
 }
 \description{
-For internal use only.
+Mainly a helper function.
 }

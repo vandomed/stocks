@@ -1,6 +1,6 @@
 #' Get Units for Performance Metric
 #'
-#' For internal use only.
+#' Mainly a helper function.
 #'
 #'
 #' @param metric Character string.
@@ -10,6 +10,7 @@
 #' Character string.
 #'
 #'
+#' @export
 metric_units <- function(metric) {
   ifelse(metric %in% c("mean", "sd", "cagr", "mdd", "allocation") | grepl("growth|alpha", metric), "%", "")
 }

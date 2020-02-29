@@ -1,11 +1,10 @@
-#' Plot One Performance Metric vs. Another for Any Combination of Individual
-#' Funds, 2-Fund Portfolios, and 3-Fund Portfolios
+#' Plot One Performance Metric vs. Another for Any Number of Single Funds,
+#' 2-Fund Portfolios, and 3-Fund Portfolios
 #'
 #'
 #' Integrates \code{plot_metrics}, \code{plot_metrics_2funds}, and
 #' \code{plot_metrics_3funds} into a single function, so you can visualize
-#' strategies of varying complexities on one figure. Supports a wide range of
-#' portfolio visualizations.
+#' strategies of varying complexities on one figure.
 #'
 #' If you prefer to have complete control over the plotting, you can set
 #' \code{return = "data"} to just get the source data.
@@ -76,7 +75,6 @@
 # x.benchmark = benchmark
 # title = NULL
 # return = "plot"
-
 plot_metrics_123 <- function(metrics = NULL,
                              formula = mean ~ sd,
                              tickers = NULL, ...,
@@ -96,8 +94,8 @@ plot_metrics_123 <- function(metrics = NULL,
   all.metrics <- all.vars(formula, functions = FALSE)
 
   # If metrics is specified but doesn't include the expected variables, set defaults
-  if (! is.null(metrics) & ! all(unlist(stocks:::metric_label(all.metrics)) %in% names(metrics))) {
-    all.metrics <- unlist(stocks:::label_metric(names(metrics)))
+  if (! is.null(metrics) & ! all(unlist(metric_label(all.metrics)) %in% names(metrics))) {
+    all.metrics <- unlist(label_metric(names(metrics)))
     if (length(all.metrics) == 1) {
       all.metrics <- c(all.metrics, ".")
     } else if (length(all.metrics) >= 2) {
@@ -111,8 +109,8 @@ plot_metrics_123 <- function(metrics = NULL,
   if (all.metrics[2] != ".") x.metric <- all.metrics[2]
   all.metrics <- c(y.metric, x.metric)
 
-  ylabel <- stocks:::metric_label(y.metric)
-  xlabel <- stocks:::metric_label(x.metric)
+  ylabel <- metric_label(y.metric)
+  xlabel <- metric_label(x.metric)
 
   # Set benchmarks to NULL if not needed
   if (! any(c("alpha", "alpha.annualized", "beta", "r.squared", "pearson", "spearman") %in% all.metrics)) {
@@ -255,8 +253,8 @@ plot_metrics_123 <- function(metrics = NULL,
     ifelse(df$Funds == 1, df$Set,
     ifelse(df$Funds == 2, paste(df$`Allocation 1 (%)`, "% ", df$`Fund 1`, ", ", df$`Allocation 2 (%)`, "% ", df$`Fund 2`, sep = ""),
     paste(df$`Allocation 1 (%)`, "% ", df$`Fund 1`, ", ", df$`Allocation 2 (%)`, "% ", df$`Fund 2`, ", ", df$`Allocation 3 (%)`, "% ", df$`Fund 3`, sep = ""))),
-    "<br>", stocks:::metric_title(x.metric), ": ", formatC(df[[xlabel]], stocks:::metric_decimals(x.metric), format = "f"), stocks:::metric_units(x.metric),
-    "<br>", stocks:::metric_title(y.metric), ": ", formatC(df[[ylabel]], stocks:::metric_decimals(y.metric), format = "f"), stocks:::metric_units(y.metric), sep = ""
+    "<br>", metric_title(x.metric), ": ", formatC(df[[xlabel]], metric_decimals(x.metric), format = "f"), metric_units(x.metric),
+    "<br>", metric_title(y.metric), ": ", formatC(df[[ylabel]], metric_decimals(y.metric), format = "f"), metric_units(y.metric), sep = ""
   )
 
   gg_color_hue <- function(n) {
@@ -268,8 +266,7 @@ plot_metrics_123 <- function(metrics = NULL,
   cols <- ifelse(ns == 1, "black", gg_color_hue(sum(ns != 1)))
 
   # Create plot
-  p <- ggplot(df, aes(y = .data[[ylabel]], x = .data[[xlabel]],
-                      group = Set, colour = Set, label = Label, text = tooltip))
+  p <- ggplot(df, aes(y = .data[[ylabel]], x = .data[[xlabel]], group = Set, colour = Set, label = Label, text = tooltip))
   for (ii in 1: length(ns)) {
 
     n <- ns[ii]
@@ -284,13 +281,15 @@ plot_metrics_123 <- function(metrics = NULL,
     }
 
     if (n == 3) {
+
       df.subset <- subset(df, Set == sets[ii])
       p <- p +
+        geom_path(data = subset(df.subset, `Allocation 1 (%)` != 0), mapping = aes(group = interaction(Set, `Allocation 1 (%)`))) +
+        geom_path(data = subset(df.subset, `Allocation 2 (%)` != 0), mapping = aes(group = interaction(Set, `Allocation 2 (%)`))) +
+        geom_path(data = subset(df.subset, `Allocation 1 (%)` == 0), col = "black") +
         geom_path(data = subset(df.subset, `Allocation 2 (%)` == 0), col = "black") +
-        geom_path(data = subset(df.subset, `Allocation 3 (%)` == 0), col = "black") +
-        geom_path(data = subset(df, Set == sets[ii] & `Allocation 1 (%)` != 0),
-                  mapping = aes(group = interaction(Set, `Allocation 1 (%)`)), alpha = 0.5) +
-        geom_path(data = subset(df.subset, `Allocation 1 (%)` == 0), col = "black")
+        geom_path(data = subset(df.subset, `Allocation 3 (%)` == 0), col = "black")
+
     }
 
   }
@@ -302,8 +301,7 @@ plot_metrics_123 <- function(metrics = NULL,
     scale_colour_manual(values = cols) +
     theme_gray(base_size = base_size) +
     theme(legend.position = "none") +
-    labs(title = ifelse(! is.null(title), title, paste(stocks:::metric_title(y.metric), "vs.", stocks:::metric_title(x.metric))),
-         y = ylabel, x = xlabel)
+    labs(title = ifelse(! is.null(title), title, paste(metric_title(y.metric), "vs.", metric_title(x.metric))), y = ylabel, x = xlabel)
 
   if (plotly) {
     p <- ggplotly(p, tooltip = "tooltip") %>%

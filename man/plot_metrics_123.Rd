@@ -2,8 +2,8 @@
 % Please edit documentation in R/plot_metrics_123.R
 \name{plot_metrics_123}
 \alias{plot_metrics_123}
-\title{Plot One Performance Metric vs. Another for Any Combination of Individual
-Funds, 2-Fund Portfolios, and 3-Fund Portfolios}
+\title{Plot One Performance Metric vs. Another for Any Number of Single Funds,
+2-Fund Portfolios, and 3-Fund Portfolios}
 \usage{
 plot_metrics_123(metrics = NULL, formula = mean ~ sd, tickers = NULL,
   ..., step = 1, gains = NULL, prices = NULL, benchmark = "SPY",
@@ -60,8 +60,7 @@ frame, or a list containing both.
 \description{
 Integrates \code{plot_metrics}, \code{plot_metrics_2funds}, and
 \code{plot_metrics_3funds} into a single function, so you can visualize
-strategies of varying complexities on one figure. Supports a wide range of
-portfolio visualizations.
+strategies of varying complexities on one figure.
 }
 \details{
 If you prefer to have complete control over the plotting, you can set

@@ -13,5 +13,5 @@ metric_units(metric)
 Character string.
 }
 \description{
-For internal use only.
+Mainly a helper function.
 }

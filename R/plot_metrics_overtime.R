@@ -107,8 +107,8 @@ plot_metrics_overtime <- function(metrics = NULL,
 
   # If metrics is specified but doesn't include the expected variables, set defaults
   all.metrics <- all.vars(formula, functions = FALSE)
-  if (! is.null(metrics) & ! all(unlist(stocks:::metric_label(all.metrics)) %in% names(metrics))) {
-    all.metrics <- unlist(stocks:::label_metric(names(metrics)))
+  if (! is.null(metrics) & ! all(unlist(metric_label(all.metrics)) %in% names(metrics))) {
+    all.metrics <- unlist(label_metric(names(metrics)))
     if (length(all.metrics) == 1) {
       all.metrics <- c(all.metrics, ".")
     } else if (length(all.metrics) >= 2) {
@@ -123,8 +123,8 @@ plot_metrics_overtime <- function(metrics = NULL,
   if (all.metrics[2] != ".") x.metric <- all.metrics[2]
   all.metrics <- c(x.metric, y.metric)
 
-  xlabel <- stocks:::metric_label(x.metric)
-  ylabel <- stocks:::metric_label(y.metric)
+  xlabel <- metric_label(x.metric)
+  ylabel <- metric_label(y.metric)
 
   # Align benchmarks with metrics
   if (! any(c("alpha", "alpha.annualized", "beta", "r.squared", "pearson", "spearman") %in% y.metric)) {
@@ -273,7 +273,7 @@ plot_metrics_overtime <- function(metrics = NULL,
     df$tooltip <- paste(df$Fund,
                         "<br>Start date: ", df$`Start date`,
                         "<br>End date: ", df$`End date`,
-                        "<br>", stocks:::metric_title(y.metric), ": ", formatC(df[[ylabel]], stocks:::metric_decimals(y.metric), format = "f"), stocks:::metric_units(y.metric), sep = "")
+                        "<br>", metric_title(y.metric), ": ", formatC(df[[ylabel]], metric_decimals(y.metric), format = "f"), metric_units(y.metric), sep = "")
     p <- ggplot(df, aes(y = .data[[ylabel]],
                         x = `End date`,
                         group = Fund, color = Fund, text = tooltip)) +
@@ -282,15 +282,15 @@ plot_metrics_overtime <- function(metrics = NULL,
       ylim(range(c(0, df[[ylabel]])) * 1.01) +
       theme_gray(base_size = base_size) +
       theme(legend.title = element_blank()) +
-      labs(title = paste(stocks:::metric_title(y.metric), "over Time"),
-           y = stocks:::metric_label(y.metric))
+      labs(title = paste(metric_title(y.metric), "over Time"),
+           y = metric_label(y.metric))
 
   } else if (is.null(y.metric)) {
 
     df$tooltip <- paste(df$Fund,
                         "<br>Start date: ", df$`Start date`,
                         "<br>End date: ", df$`End date`,
-                        "<br>", stocks:::metric_title(x.metric), ": ", formatC(df[[xlabel]], stocks:::metric_decimals(x.metric), format = "f"), stocks:::metric_units(x.metric), sep = "")
+                        "<br>", metric_title(x.metric), ": ", formatC(df[[xlabel]], metric_decimals(x.metric), format = "f"), metric_units(x.metric), sep = "")
     p <- ggplot(df, aes(y = `End date`,
                         x = .data[[xlabel]],
                         group = Fund, color = Fund, text = tooltip)) +
@@ -299,7 +299,7 @@ plot_metrics_overtime <- function(metrics = NULL,
       xlim(range(c(0, df[[xlabel]])) * 1.01) +
       theme_gray(base_size = base_size) +
       theme(legend.title = element_blank()) +
-      labs(title = ifelse(! is.null(title), title, paste(stocks:::metric_title(y.metric), "over Time")),
+      labs(title = ifelse(! is.null(title), title, paste(metric_title(y.metric), "over Time")),
            x = xlabel)
 
   } else {
@@ -307,8 +307,8 @@ plot_metrics_overtime <- function(metrics = NULL,
     df$tooltip <- paste(df$Fund,
                         "<br>Start date: ", df$`Start date`,
                         "<br>End date: ", df$`End date`,
-                        "<br>", stocks:::metric_title(y.metric), ": ", formatC(df[[ylabel]], stocks:::metric_decimals(y.metric), format = "f"), stocks:::metric_units(y.metric),
-                        "<br>", stocks:::metric_title(x.metric), ": ", formatC(df[[xlabel]], stocks:::metric_decimals(x.metric), format = "f"), stocks:::metric_units(x.metric), sep = "")
+                        "<br>", metric_title(y.metric), ": ", formatC(df[[ylabel]], metric_decimals(y.metric), format = "f"), metric_units(y.metric),
+                        "<br>", metric_title(x.metric), ": ", formatC(df[[xlabel]], metric_decimals(x.metric), format = "f"), metric_units(x.metric), sep = "")
     p <- ggplot(df, aes(y = .data[[ylabel]],
                         x = .data[[xlabel]],
                         group = Fund, color = Fund, text = tooltip)) +
@@ -321,7 +321,7 @@ plot_metrics_overtime <- function(metrics = NULL,
       xlim(range(c(0, df[[xlabel]])) * 1.01) +
       theme_gray(base_size = base_size) +
       theme(legend.title = element_blank()) +
-      labs(title = ifelse(! is.null(title), title, paste(stocks:::metric_title(y.metric), "vs.", stocks:::metric_title(x.metric))),
+      labs(title = ifelse(! is.null(title), title, paste(metric_title(y.metric), "vs.", metric_title(x.metric))),
            y = ylabel, x = xlabel)
 
   }
