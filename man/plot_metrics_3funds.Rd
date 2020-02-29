@@ -5,7 +5,7 @@
 \title{Plot One Performance Metric vs. Another for 3-Fund Portfolios}
 \usage{
 plot_metrics_3funds(metrics = NULL, formula = mean ~ sd,
-  tickers = NULL, ..., step = 1, gains = NULL, prices = NULL,
+  tickers = NULL, ..., step = 2.5, gains = NULL, prices = NULL,
   benchmark = "SPY", y.benchmark = benchmark,
   x.benchmark = benchmark, ref.tickers = NULL, plotly = FALSE,
   title = NULL, base_size = 16, label_size = 6, return = "plot")

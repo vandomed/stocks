@@ -15,8 +15,9 @@ gains for each fund.}
 \item{metrics}{Character vector specifying metrics to calculate. See
 \code{?calc_metrics} for choices.}
 
-\item{tickers}{Character vector of ticker symbols, where the first three are
-are a 3-fund set, the next three are another, and so on.}
+\item{tickers}{List where each element is a character vector of ticker
+symbols for a particular fund combination, e.g.
+\code{list("BRK-B", c("SPY", "TLT")}. Each set can contain 1-3 funds.}
 
 \item{...}{Arguments to pass along with \code{tickers} to
 \code{\link{load_gains}}.}

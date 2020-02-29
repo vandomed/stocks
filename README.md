@@ -1,7 +1,7 @@
 Get Rich with ‘stocks’
 ================
 Dane Van Domelen <br> <vandomed@gmail.com>
-2020-02-18
+2020-02-29
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
@@ -108,7 +108,8 @@ Negative correlation works wonders for a two-fund portfolio, so let’s
 look at how consistently TLT achieves negative correlation with SPY,
 using `calc_metrics_overtime` and `plot_metrics_overtime`. For
 illustrative purposes, I’ll include the full 3-step process: load
-historical gains, calculate beta over time, and plot beta over time.
+historical gains, calculate the correlation over time, and generate the
+plot.
 
 ``` r
 c("SPY", "TLT") %>%
@@ -173,7 +174,8 @@ CAGR is roughly the same from 60-100% SPY.
 ``` r
 plot_metrics_2funds(gains = gains, 
                     formula = cagr ~ allocation, 
-                    tickers = c("SPY", "TLT"))
+                    tickers = c("SPY", "TLT"), 
+                    from = "2010-01-01")
 ```
 
 <img src="README-figures/unnamed-chunk-8-1.png" width="80%" />
@@ -185,7 +187,8 @@ the Sharpe ratio gets much worse as you approach 60% SPY and higher.
 ``` r
 plot_metrics_2funds(gains = gains, 
                     formula = sharpe ~ allocation, 
-                    tickers = c("SPY", "TLT"))
+                    tickers = c("SPY", "TLT"), 
+                    from = "2010-01-01")
 ```
 
 <img src="README-figures/unnamed-chunk-9-1.png" width="80%" />
@@ -197,7 +200,8 @@ mean vs. standard deviation as a function of the allocation:
 ``` r
 plot_metrics_2funds(gains = gains, 
                     formula = mean ~ sd, 
-                    tickers = c("SPY", "TLT"))
+                    tickers = c("SPY", "TLT"), 
+                    from = "2010-01-01")
 ```
 
 <img src="README-figures/unnamed-chunk-10-1.png" width="80%" />
@@ -211,46 +215,68 @@ A big caveat is that this is all based on historical data. There’s no
 guarantee that 30% SPY, 70% TLT will have lower volatility *or* greater
 returns than TLT going forward.
 
-## Three-fund portfolios, plus a stock tip
+## Three-fund portfolios
 
-I won’t go into detail about it here, but one of my favorite strategies
-is UPRO-VBLTX-VWEHX. [UPRO](https://www.proshares.com/funds/upro.html)
-is a 3x daily S\&P 500 ETF and VBLTX and VWEHX are two bonds mutual
-funds offered by Vanguard.
+I think three-fund portfolios are the sweetspot in terms of balancing
+complexity and performance. With two funds, you’re relying on a single
+source of alpha generation; with \> 3 funds, it’s hard to visualize, and
+thus hard to understand whether the constituent funds actually
+complement each other.
 
-To visualize the behavior of this 3-fund portfolio, let’s plot mean
-vs. SD as the allocations vary, and include SPY on the graph for
-reference.
+I won’t go into full detail about it here, but three asset classes that
+I think work really well together are large-cap stocks, long-term bonds,
+and junk bonds. To visualize such a strategy, implemented via Vanguard
+mutual funds:
 
 ``` r
 plot_metrics_3funds(formula = mean ~ sd, 
-                    tickers = c("VWEHX", "VBLTX", "UPRO"), 
-                    ref.tickers = "SPY")
+                    tickers = c("VFINX", "VBLTX", "VWEHX"), 
+                    from = "2010-01-01")
 ```
 
 <img src="README-figures/unnamed-chunk-11-1.png" width="80%" />
 
-Notice that many points on the UPRO-VBLTX-VWEHX surface are higher and
-to the left of SPY, meaning this strategy has the potential to trump the
-S\&P in terms of risk-reward.
+100% VFINX maximizes expected returns, but also volatility. If you
+wanted to take on no more than one-half of the S\&P’s volatility, while
+maximizing returns, you could add an allocation to VBLTX (move from 100%
+VFINX to the left along the upper black curve). If you’re very
+conservative and want to target something like 0.4% volatility, a VWEHX
+allocation eventually becomes helpful (get off of black curves before it
+veers downward and to the right).
 
-One idea would be to choose an allocation to match the volatility (i.e,
-SD) of SPY. At roughly 1% SD, it looks like the higher black curve,
-which is just UPRO-VBLTX (0% VWEHX), achieves the highest historical
-returns. Still, I like having VWEHX in there for a second source of
-alpha.
-
-To see the actual numbers, you can either specify `return = "data"` (or
-`return = "both"`), or input the plot returned by `plot_metrics_3funds`
-to `plotly::ggplotly`.
-
-I’ll close it out with a hot stock tip: buy FANG.
+Mean vs. SD is the standard way of visualizing portfolios, but Sharpe
+ratio vs. SD is more useful for understanding how risk-adjusted
+performance varies with allocation. If we plot Sharpe ratio vs. SD, the
+benefit of adding exposure to bonds becomes more clear:
 
 ``` r
-plot_growth(tickers = c("FB", "AAPL", "NFLX", "GOOG"), from = "2015-01-01")
+plot_metrics_3funds(formula = sharpe ~ sd, 
+                    tickers = c("VFINX", "VBLTX", "VWEHX"), 
+                    from = "2010-01-01")
 ```
 
 <img src="README-figures/unnamed-chunk-12-1.png" width="80%" />
+
+Groovy\! By the way, if you want to see individual data points on the
+plot (i.e. what allocation each data point corresponds to) you can just
+set `plotly = TRUE` when you call `plot_metrics_3funds` or any of the
+other plotting functions.
+
+<!-- To see the actual numbers, you can either specify `return = "data"` (or `return = "both"`), or input the plot returned by `plot_metrics_3funds` to `plotly::ggplotly`. -->
+
+<!-- I'll close it out with a hot stock tip: buy FANG. -->
+
+<!-- ```{r} -->
+
+<!-- plot_growth(tickers = c("FB", "AAPL", "NFLX", "GOOG"), from = "2015-01-01") -->
+
+<!-- ``` -->
+
+## Feedback and bugs
+
+You can find me on Twitter at
+[@DaneVanDomelen](https://twitter.com/DaneVanDomelen), and of course
+feel free to make feature requests and collaborate directly on GitHub.
 
 ## Version history
 

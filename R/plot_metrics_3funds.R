@@ -83,7 +83,7 @@
 plot_metrics_3funds <- function(metrics = NULL,
                                 formula = mean ~ sd,
                                 tickers = NULL, ...,
-                                step = 1,
+                                step = 2.5,
                                 gains = NULL,
                                 prices = NULL,
                                 benchmark = "SPY",
