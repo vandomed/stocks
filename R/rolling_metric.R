@@ -1,26 +1,26 @@
 #' Calculate Moving-Window Performance Metrics
-#' 
+#'
 #' Mainly a helper function for \code{\link{plot_metrics_overtime}}.
-#' 
-#' 
+#'
+#'
 #' @param gains Numeric vector.
 #' @param metric Character string.
 #' @param width Integer value.
 #' @param units.year Integer value.
 #' @param benchmark.gains Numeric vector.
-#' 
-#' 
+#'
+#'
 #' @return
 #' Numeric vector.
-#' 
-#' 
+#'
+#'
 #' @export
-rolling_metric <- function(gains, 
-                           metric = "mean", 
-                           width = 50, 
-                           units.year = 252, 
+rolling_metric <- function(gains,
+                           metric = "mean",
+                           width = 50,
+                           units.year = 252,
                            benchmark.gains = NULL) {
-  
+
   if (metric == "first") {
     return(gains[seq(1, length(gains), width)])
   }
@@ -31,63 +31,37 @@ rolling_metric <- function(gains,
     return(movingaves(gains, window = width) * 100)
   }
   if (metric == "sd") {
-    return(rollapply(gains, width, sd) * 100)
-  } 
+    return(roll_sd(gains, width, center = FALSE) * 100)
+  }
   if (metric == "growth") {
-    return(rollapply(gains, width, gains_rate) * 100)
+    return((roll_prod(gains + 1, width)[-c(1: (width - 1))] - 1) * 100)
   }
   if (metric == "cagr") {
-    return(rollapply(gains, width, function(x) gains_rate(x, units.year)) * 100)
+    return(convert_gain(roll_prod(x + 1, width)[-c(1: (width - 1))] - 1, units.in = width, units.out = units.year) * 100)
   }
   if (metric == "mdd") {
     return(rollapply(gains, width, function(x) mdd(gains = x)) * 100)
-  } 
+  }
   if (metric == "sharpe") {
-    return(rollapply(gains, width, sharpe))
-  } 
+    return(movingaves(x, width) / roll_sd(x, width)[-c(1: (width - 1))])
+  }
   if (metric == "sortino") {
     return(rollapply(gains, width, sortino))
-  } 
+  }
   if (metric == "alpha") {
-    y <- c()
-    for (ii in (width: length(gains))) {
-      locs <- (ii - width + 1): ii
-      y[(ii - width + 1)] <- lm(gains[locs] ~ benchmark.gains[locs])$coef[1] * 100
-    }
-    return(y)
+    return(roll_lm(x = benchmark.gains, y = x, width = width)$coefficients[-c(1: (width - 1)), 1] * 100)
   }
   if (metric == "alpha.annualized") {
-    y <- c()
-    for (ii in (width: length(gains))) {
-      locs <- (ii - width + 1): ii
-      y[(ii - width + 1)] <- 
-        convert_gain(lm(gains[locs] ~ benchmark.gains[locs])$coef[1], 1, units.year) * 100
-    }
-    return(y)
+    return(convert_gain(roll_lm(x = benchmark.gains, y = x, width = width)$coefficients[-c(1: (width - 1)), 1], 1, units.year) * 100)
   }
   if (metric == "beta") {
-    y <- c()
-    for (ii in (width: length(gains))) {
-      locs <- (ii - width + 1): ii
-      y[(ii - width + 1)] <- lm(gains[locs] ~ benchmark.gains[locs])$coef[2]
-    }
-    return(y)
+    return(roll_lm(x = benchmark.gains, y = x, width = width)$coefficients[-c(1: (width - 1)), 2] * 100)
   }
   if (metric == "r.squared") {
-    y <- c()
-    for (ii in (width: length(gains))) {
-      locs <- (ii - width + 1): ii
-      y[(ii - width + 1)] <- summary(lm(gains[locs] ~ benchmark.gains[locs]))$r.squared
-    }
-    return(y)
+    return((roll_lm(x = benchmark.gains, y = x, width = width)$r.squared[, 1])[-c(1: (width - 1))])
   }
   if (metric == "pearson") {
-    y <- c()
-    for (ii in (width: length(gains))) {
-      locs <- (ii - width + 1): ii
-      y[(ii - width + 1)] <- cor(gains[locs], benchmark.gains[locs])
-    }
-    return(y)
+    return(roll_cor(x = benchmark.gains, y = x, width = width))[-c(1: (width - 1))]
   }
   if (metric == "spearman") {
     y <- c()
@@ -96,11 +70,9 @@ rolling_metric <- function(gains,
       y[(ii - width + 1)] <- cor(gains[locs], benchmark.gains[locs], method = "spearman")
     }
     return(y)
-  } 
+  }
   if (metric == "auto.pearson") {
-    return(rollapply(gains, width + 1, function(x) {
-      cor(x[-length(x)], x[-1])
-    }))
+    return(roll_cor(x = gains[-length(gains)], y = gains[-1], width = width)[-c(1: (width - 1))])
   }
   if (metric == "auto.spearman") {
     return(rollapply(gains, width + 1, function(x) {

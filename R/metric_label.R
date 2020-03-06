@@ -13,6 +13,8 @@
 #' @export
 metric_label <- function(metric) {
   unlist(sapply(metric, function(x) {
+
+    # Metrics
     if (x == "mean") return("Mean (%)")
     if (x == "sd") return ("SD (%)")
     if (grepl("growth.", x, fixed = TRUE)) {
@@ -33,7 +35,13 @@ metric_label <- function(metric) {
     if (x == "spearman") return("Spearman corr.")
     if (x == "auto.pearson") return("Pearson autocorr.")
     if (x == "auto.spearman") return("Spearman autocorr.")
+
+    # Other types of variables
     if (x == "allocation") return("Allocation (%)")
+    if (x == "time") return("Period")
+    if (x == "metric") return("Metric")
+    if (x == "set") return("Set")
+    return(x)
   }))
 }
 # metric_label <- function(metric) {

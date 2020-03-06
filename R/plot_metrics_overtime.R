@@ -179,7 +179,8 @@ plot_metrics_overtime <- function(metrics = NULL,
     gains.long <- merge(
       gains[, c("Date", unique(c(y.benchmark, x.benchmark))), with = FALSE],
       gains %>%
-      melt(measure.vars = tickers, variable.name = "Fund", value.name = "Gain"))
+      melt(measure.vars = tickers, variable.name = "Fund", value.name = "Gain")
+    )
 
     # Calculate metrics depending on user choice for type
     if (substr(type[1], 1, 3) == "hop") {

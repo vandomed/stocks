@@ -30,6 +30,7 @@ metric_decimals <- function(metric) {
     if (x == "auto.pearson") return(2)
     if (x == "auto.spearman") return(2)
     if (x == "allocation") return(0)
+    return(3)
   }))
 
 }

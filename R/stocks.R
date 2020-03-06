@@ -9,7 +9,7 @@
 #' Package: \tab stocks \cr
 #' Type: \tab Package \cr
 #' Version: \tab 2.0.0 \cr
-#' Date: \tab 2020-02-28 \cr
+#' Date: \tab 2020-03-05 \cr
 #' License: \tab GPL-3 \cr
 #' }
 #'
@@ -32,6 +32,7 @@
 #' @importFrom accelerometry movingaves
 #' @importFrom data.table as.data.table data.table first last melt
 #' @importFrom dplyr %>% bind_rows group_by mutate mutate_at row_number slice tibble ungroup
+#' @importFrom fastmatch ctapply
 #' @import ggplot2
 #' @importFrom ggrepel geom_label_repel
 #' @importFrom grDevices hcl
@@ -42,6 +43,7 @@
 #' @import quantmod
 #' @importFrom Rcpp evalCpp
 #' @importFrom rbenchmark benchmark
+#' @importFrom roll roll_sd
 #' @importFrom rvest html_node html_nodes html_table
 #' @importFrom scales comma hue_pal
 #' @import stats

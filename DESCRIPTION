@@ -5,7 +5,7 @@ Version: 2.0.0
 License: GPL-3
 LazyData: true
 URL: https://github.com/vandomed/stocks
-Date: 2020-02-28
+Date: 2020-03-05
 Author: Dane R. Van Domelen
 Maintainer: Dane R. Van Domelen <vandomed@gmail.com>
 Description: Functions for analyzing and visualizing stock market data. Main 
@@ -14,7 +14,7 @@ Description: Functions for analyzing and visualizing stock market data. Main
     individual funds or portfolios (e.g. annualized growth, maximum drawdown,
     Sharpe/Sortino ratio), and creating graphs.
 Depends: dplyr, rbenchmark, quantmod
-Imports: accelerometry, data.table, ggplot2, ggrepel, graphics, grDevices, lubridate, methods, plotly, purrr, Rcpp (>= 0.12.15), rvest, scales, stats, tidyr, TTR, xml2, zoo
+Imports: accelerometry, data.table, fastmatch, ggplot2, ggrepel, graphics, grDevices, lubridate, methods, plotly, purrr, Rcpp (>= 0.12.15), roll, rvest, scales, stats, tidyr, TTR, xml2, zoo
 Suggests: knitr,
     rmarkdown,
     pander,

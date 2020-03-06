@@ -16,7 +16,7 @@ Sharpe/Sortino ratio), and creating graphs.
 Package: \tab stocks \cr
 Type: \tab Package \cr
 Version: \tab 2.0.0 \cr
-Date: \tab 2020-02-28 \cr
+Date: \tab 2020-03-05 \cr
 License: \tab GPL-3 \cr
 }
 
