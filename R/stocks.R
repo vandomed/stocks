@@ -9,7 +9,7 @@
 #' Package: \tab stocks \cr
 #' Type: \tab Package \cr
 #' Version: \tab 2.0.0 \cr
-#' Date: \tab 2020-03-05 \cr
+#' Date: \tab 2020-03-10 \cr
 #' License: \tab GPL-3 \cr
 #' }
 #'
@@ -43,7 +43,7 @@
 #' @import quantmod
 #' @importFrom Rcpp evalCpp
 #' @importFrom rbenchmark benchmark
-#' @importFrom roll roll_sd
+#' @importFrom roll roll_cor roll_lm roll_prod roll_sd
 #' @importFrom rvest html_node html_nodes html_table
 #' @importFrom scales comma hue_pal
 #' @import stats

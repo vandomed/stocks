@@ -41,15 +41,13 @@
 #'
 #'
 #' @export
-calc_metrics <- function(
-  gains = NULL,
-  metrics = c("mean", "sd", "growth.10k", "growth", "cagr", "mdd", "sharpe",
-              "sortino", "alpha", "alpha.annualized", "beta", "r.squared",
-              "pearson", "spearman", "auto.pearson", "auto.spearman"),
-  prices = NULL,
-  tickers = NULL, ...,
-  benchmark = "SPY"
-) {
+calc_metrics <- function(gains = NULL,
+                         metrics = c("mean", "sd", "growth.10k", "growth", "cagr", "mdd", "sharpe",
+                                     "sortino", "alpha", "alpha.annualized", "beta", "r.squared",
+                                     "pearson", "spearman", "auto.pearson", "auto.spearman"),
+                         prices = NULL,
+                         tickers = NULL, ...,
+                         benchmark = "SPY") {
 
   # Set benchmarks to NULL if not needed
   if (! any(c("alpha", "alpha.annualized", "beta", "r.squared", "pearson", "spearman") %in% metrics)) {
