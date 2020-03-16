@@ -14,6 +14,8 @@
 metric_title <- function(metric) {
 
   unlist(sapply(metric, function(x) {
+
+    # Metrics
     if (x == "mean") return("Mean")
     if (x == "sd") return ("SD")
     if (grepl("growth.", x, fixed = TRUE)) {
@@ -34,8 +36,13 @@ metric_title <- function(metric) {
     if (x == "spearman") return("Spearman Corr.")
     if (x == "auto.pearson") return("Pearson Autocorr.")
     if (x == "auto.spearman") return("Spearman Autocorr.")
+
+    # Other types of variables
     if (x == "allocation") return("Allocation")
+    if (x == "time") return("Time Period")
+
     return(x)
+
   }))
 
 }

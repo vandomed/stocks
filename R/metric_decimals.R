@@ -14,6 +14,7 @@
 metric_decimals <- function(metric) {
 
   unlist(sapply(metric, function(x) {
+
     if (x == "mean") return(2)
     if (x == "sd") return (2)
     if (grepl("growth", x, fixed = TRUE)) return(1)
@@ -30,7 +31,8 @@ metric_decimals <- function(metric) {
     if (x == "auto.pearson") return(2)
     if (x == "auto.spearman") return(2)
     if (x == "allocation") return(0)
-    return(3)
+    return(2)
+
   }))
 
 }

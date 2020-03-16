@@ -30,6 +30,7 @@ title_metric <- function(title) {
     if (x == "Pearson Autocorr.") return("auto.pearson")
     if (x == "Spearman Autocorr.") return("auto.spearman")
     if (x == "Allocation") return("allocation")
+    if (x == "Time Period") return("time")
   })
 
 }

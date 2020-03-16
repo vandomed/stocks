@@ -13,5 +13,5 @@ label_metric(label)
 Character string.
 }
 \description{
-For internal use only.
+Mainly a helper function.
 }

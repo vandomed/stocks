@@ -43,25 +43,25 @@ rolling_metric <- function(gains,
     return(rollapply(gains, width, function(x) mdd(gains = x)) * 100)
   }
   if (metric == "sharpe") {
-    return(movingaves(x, width) / roll_sd(x, width)[-c(1: (width - 1))])
+    return(movingaves(gains, width) / roll_sd(gains, width)[-c(1: (width - 1))])
   }
   if (metric == "sortino") {
     return(rollapply(gains, width, sortino))
   }
   if (metric == "alpha") {
-    return(roll_lm(x = benchmark.gains, y = x, width = width)$coefficients[-c(1: (width - 1)), 1] * 100)
+    return(roll_lm(x = benchmark.gains, y = gains, width = width)$coefficients[-c(1: (width - 1)), 1] * 100)
   }
   if (metric == "alpha.annualized") {
-    return(convert_gain(roll_lm(x = benchmark.gains, y = x, width = width)$coefficients[-c(1: (width - 1)), 1], 1, units.year) * 100)
+    return(convert_gain(roll_lm(x = benchmark.gains, y = gains, width = width)$coefficients[-c(1: (width - 1)), 1], 1, units.year) * 100)
   }
   if (metric == "beta") {
-    return(roll_lm(x = benchmark.gains, y = x, width = width)$coefficients[-c(1: (width - 1)), 2] * 100)
+    return(roll_lm(x = benchmark.gains, y = gains, width = width)$coefficients[-c(1: (width - 1)), 2] * 100)
   }
   if (metric == "r.squared") {
-    return((roll_lm(x = benchmark.gains, y = x, width = width)$r.squared[, 1])[-c(1: (width - 1))])
+    return((roll_lm(x = benchmark.gains, y = gains, width = width)$r.squared[, 1])[-c(1: (width - 1))])
   }
   if (metric == "pearson") {
-    return(roll_cor(x = benchmark.gains, y = x, width = width))[-c(1: (width - 1))]
+    return(roll_cor(x = benchmark.gains, y = gains, width = width))[-c(1: (width - 1))]
   }
   if (metric == "spearman") {
     y <- c()
