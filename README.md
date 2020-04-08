@@ -1,14 +1,14 @@
 Get Rich with ‘stocks’
 ================
 Dane Van Domelen <br> <vandomed@gmail.com>
-2020-02-29
+2020-04-07
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
 [![Build
 Status](https://travis-ci.org/vandomed/stocks.svg?branch=master)](https://travis-ci.org/vandomed/stocks)
 
-## ‘stocks’ package
+## Package overview
 
 The **stocks** package has a variety of functions for analyzing
 investments and investment strategies. I use it for a lot of my articles
@@ -72,10 +72,191 @@ metrics <- calc_metrics(gains)
 knitr::kable(metrics)
 ```
 
-| Fund | Mean (%) | SD (%) | Growth of $10k | Growth (%) | CAGR (%) | Max drawdown (%) | Sharpe ratio | Sortino ratio | Alpha | Annualized alpha |    Beta | R-squared | Pearson corr. | Spearman corr. | Pearson autocorr. | Spearman autocorr. |
-| :--- | -------: | -----: | -------------: | ---------: | -------: | ---------------: | -----------: | ------------: | ----: | ---------------: | ------: | --------: | ------------: | -------------: | ----------------: | -----------------: |
-| SPY  |    0.039 |  1.168 |          38093 |        281 |     8.49 |             55.2 |        0.034 |         0.042 | 0.000 |              0.0 |   1.000 |     1.000 |         1.000 |          1.000 |           \-0.079 |            \-0.051 |
-| TLT  |    0.028 |  0.844 |          27295 |        173 |     6.31 |             26.6 |        0.033 |         0.050 | 0.039 |             10.4 | \-0.292 |     0.163 |       \-0.404 |        \-0.344 |           \-0.037 |            \-0.045 |
+<table>
+
+<thead>
+
+<tr>
+
+<th style="text-align:left;">
+
+Fund
+
+</th>
+
+<th style="text-align:right;">
+
+CAGR (%)
+
+</th>
+
+<th style="text-align:right;">
+
+Max drawdown (%)
+
+</th>
+
+<th style="text-align:right;">
+
+Mean (%)
+
+</th>
+
+<th style="text-align:right;">
+
+SD (%)
+
+</th>
+
+<th style="text-align:right;">
+
+Sharpe ratio
+
+</th>
+
+<th style="text-align:right;">
+
+Annualized alpha (%)
+
+</th>
+
+<th style="text-align:right;">
+
+Beta
+
+</th>
+
+<th style="text-align:right;">
+
+Correlation
+
+</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+<tr>
+
+<td style="text-align:left;">
+
+SPY
+
+</td>
+
+<td style="text-align:right;">
+
+8.49
+
+</td>
+
+<td style="text-align:right;">
+
+55.2
+
+</td>
+
+<td style="text-align:right;">
+
+0.039
+
+</td>
+
+<td style="text-align:right;">
+
+1.168
+
+</td>
+
+<td style="text-align:right;">
+
+0.034
+
+</td>
+
+<td style="text-align:right;">
+
+0.0
+
+</td>
+
+<td style="text-align:right;">
+
+1.000
+
+</td>
+
+<td style="text-align:right;">
+
+1.000
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+TLT
+
+</td>
+
+<td style="text-align:right;">
+
+6.31
+
+</td>
+
+<td style="text-align:right;">
+
+26.6
+
+</td>
+
+<td style="text-align:right;">
+
+0.028
+
+</td>
+
+<td style="text-align:right;">
+
+0.844
+
+</td>
+
+<td style="text-align:right;">
+
+0.033
+
+</td>
+
+<td style="text-align:right;">
+
+10.4
+
+</td>
+
+<td style="text-align:right;">
+
+\-0.292
+
+</td>
+
+<td style="text-align:right;">
+
+\-0.404
+
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
 
 We see here that SPY has achieved stronger growth (8.5% vs. 6.3%), but
 with a much worse max drawdown (55.2% vs. 26.6%). TLT’s Sharpe ratio (a
@@ -114,8 +295,8 @@ plot.
 ``` r
 c("SPY", "TLT") %>%
   load_gains(to = "2018-12-31") %>%
-  calc_metrics_overtime("pearson") %>%
-  plot_metrics_overtime(pearson ~ .)
+  calc_metrics_overtime("r") %>%
+  plot_metrics_overtime(r ~ .)
 ```
 
 <img src="README-figures/unnamed-chunk-5-1.png" width="80%" />
@@ -154,11 +335,153 @@ calc_metrics(gains, c("cagr", "mdd", "sharpe", "sortino")) %>%
   knitr::kable()
 ```
 
-| Fund  | CAGR (%) | Max drawdown (%) | Sharpe ratio | Sortino ratio |
-| :---- | -------: | ---------------: | -----------: | ------------: |
-| SPY   |     8.49 |             55.2 |        0.034 |         0.042 |
-| TLT   |     6.31 |             26.6 |        0.033 |         0.050 |
-| 50-50 |     8.37 |             23.0 |        0.059 |         0.082 |
+<table>
+
+<thead>
+
+<tr>
+
+<th style="text-align:left;">
+
+Fund
+
+</th>
+
+<th style="text-align:right;">
+
+CAGR (%)
+
+</th>
+
+<th style="text-align:right;">
+
+Max drawdown (%)
+
+</th>
+
+<th style="text-align:right;">
+
+Sharpe ratio
+
+</th>
+
+<th style="text-align:right;">
+
+Sortino ratio
+
+</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+<tr>
+
+<td style="text-align:left;">
+
+SPY
+
+</td>
+
+<td style="text-align:right;">
+
+8.49
+
+</td>
+
+<td style="text-align:right;">
+
+55.2
+
+</td>
+
+<td style="text-align:right;">
+
+0.034
+
+</td>
+
+<td style="text-align:right;">
+
+0.042
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+TLT
+
+</td>
+
+<td style="text-align:right;">
+
+6.31
+
+</td>
+
+<td style="text-align:right;">
+
+26.6
+
+</td>
+
+<td style="text-align:right;">
+
+0.033
+
+</td>
+
+<td style="text-align:right;">
+
+0.050
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+50-50
+
+</td>
+
+<td style="text-align:right;">
+
+8.37
+
+</td>
+
+<td style="text-align:right;">
+
+23.0
+
+</td>
+
+<td style="text-align:right;">
+
+0.059
+
+</td>
+
+<td style="text-align:right;">
+
+0.082
+
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
 
 Indeed, while the 50-50 portfolio achieved slightly lower raw returns
 than SPY alone, its max drawdown was far better, and its Sharpe and

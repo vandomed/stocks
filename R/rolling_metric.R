@@ -27,26 +27,26 @@ rolling_metric <- function(gains,
   if (metric == "last") {
     return(gains[seq(width, length(gains), width)])
   }
-  if (metric == "mean") {
-    return(movingaves(gains, window = width) * 100)
-  }
-  if (metric == "sd") {
-    return(roll_sd(gains, width, center = FALSE) * 100)
-  }
-  if (metric == "growth") {
-    return((roll_prod(gains + 1, width)[-c(1: (width - 1))] - 1) * 100)
-  }
   if (metric == "cagr") {
     return(convert_gain(roll_prod(x + 1, width)[-c(1: (width - 1))] - 1, units.in = width, units.out = units.year) * 100)
   }
   if (metric == "mdd") {
     return(rollapply(gains, width, function(x) mdd(gains = x)) * 100)
   }
+  if (metric == "mean") {
+    return(movingaves(gains, window = width) * 100)
+  }
+  if (metric == "sd") {
+    return(roll_sd(gains, width, center = FALSE) * 100)
+  }
   if (metric == "sharpe") {
     return(movingaves(gains, width) / roll_sd(gains, width)[-c(1: (width - 1))])
   }
   if (metric == "sortino") {
     return(rollapply(gains, width, sortino))
+  }
+  if (metric == "growth") {
+    return((roll_prod(gains + 1, width)[-c(1: (width - 1))] - 1) * 100)
   }
   if (metric == "alpha") {
     return(roll_lm(x = benchmark.gains, y = gains, width = width)$coefficients[-c(1: (width - 1)), 1] * 100)
@@ -60,10 +60,10 @@ rolling_metric <- function(gains,
   if (metric == "r.squared") {
     return((roll_lm(x = benchmark.gains, y = gains, width = width)$r.squared[, 1])[-c(1: (width - 1))])
   }
-  if (metric == "pearson") {
+  if (metric == "r") {
     return(roll_cor(x = benchmark.gains, y = gains, width = width))[-c(1: (width - 1))]
   }
-  if (metric == "spearman") {
+  if (metric == "rho") {
     y <- c()
     for (ii in (width: length(gains))) {
       locs <- (ii - width + 1): ii
@@ -71,10 +71,10 @@ rolling_metric <- function(gains,
     }
     return(y)
   }
-  if (metric == "auto.pearson") {
+  if (metric == "r.auto") {
     return(roll_cor(x = gains[-length(gains)], y = gains[-1], width = width)[-c(1: (width - 1))])
   }
-  if (metric == "auto.spearman") {
+  if (metric == "rho.auto") {
     return(rollapply(gains, width + 1, function(x) {
       cor(x[-length(x)], x[-1], method = "spearman")
     }))

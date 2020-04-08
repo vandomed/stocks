@@ -111,7 +111,7 @@ plot_metrics <- function(metrics = NULL,
   ylabel <- metric_label(y.metric)
 
   # Set benchmarks to NULL if not needed
-  if (! any(c("alpha", "alpha.annualized", "beta", "r.squared", "pearson", "spearman") %in% all.metrics)) {
+  if (! any(c("alpha", "alpha.annualized", "beta", "r.squared", "r", "rho") %in% all.metrics)) {
     benchmark <- y.benchmark <- x.benchmark <- NULL
   }
 
@@ -199,7 +199,7 @@ plot_metrics <- function(metrics = NULL,
                         x = reorder(Fund, .data[[ylabel]]),
                         text = tooltip)) +
       geom_col() +
-      scale_y_continuous(limits = range(c(0, df[[ylabel]])) * 1.02, expand = c(0, 0)) +
+      scale_y_continuous(limits = range(c(0, df[[ylabel]])) * 1.03, expand = c(0, 0)) +
       theme(axis.text = element_text(size = ticklabel_size)) +
       labs(title = ifelse(! is.null(title), title, paste(metric_title(y.metric), "for Various Funds")),
            y = ylabel, x = NULL)
@@ -213,7 +213,7 @@ plot_metrics <- function(metrics = NULL,
                         text = tooltip)) +
       geom_col() +
       theme(axis.text = element_text(size = ticklabel_size)) +
-      coord_flip(ylim = range(c(0, df[[xlabel]])) * 1.02, expand = 0) +
+      coord_flip(ylim = range(c(0, df[[xlabel]])) * 1.03, expand = 0) +
       labs(title = ifelse(! is.null(title), title, paste(metric_title(x.metric), "for Various Funds")),
            y = xlabel, x = NULL)
 
@@ -229,8 +229,8 @@ plot_metrics <- function(metrics = NULL,
                         group = Fund, label = Fund, text = tooltip)) +
       geom_point() +
       geom_label_repel(size = label_size) +
-      ylim(range(c(0, df[[ylabel]])) * 1.02) +
-      xlim(range(c(0, df[[xlabel]])) * 1.02) +
+      ylim(range(c(0, df[[ylabel]])) * 1.03) +
+      xlim(range(c(0, df[[xlabel]])) * 1.03) +
       theme_gray(base_size = base_size) +
       labs(title = ifelse(! is.null(title), title, paste(metric_title(y.metric), "vs.", metric_title(x.metric))),
            y = ylabel, x = xlabel)

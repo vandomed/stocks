@@ -12,5 +12,5 @@
 #'
 #' @export
 metric_units <- function(metric) {
-  ifelse(metric %in% c("mean", "sd", "cagr", "mdd", "allocation") | grepl("growth|alpha", metric), "%", "")
+  ifelse(metric %in% c("cagr", "mdd", "mean", "sd", "allocation") | grepl("growth|alpha", metric), "%", "")
 }

@@ -105,7 +105,7 @@ plot_metrics_2funds <- function(metrics = NULL,
   xlabel <- stocks:::metric_label(x.metric)
 
   # Set benchmarks to NULL if not needed
-  if (! any(c("alpha", "alpha.annualized", "beta", "r.squared", "pearson", "spearman") %in% all.metrics)) {
+  if (! any(c("alpha", "alpha.annualized", "beta", "r.squared", "r", "rho") %in% all.metrics)) {
     benchmark <- y.benchmark <- x.benchmark <- NULL
   }
 

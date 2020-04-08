@@ -44,11 +44,23 @@ calc_metric <- function(gains,
                         units.year = 252,
                         benchmark.gains = NULL) {
 
+  if (metric == "cagr") {
+    return(gains_rate(gains, units.year) * 100)
+  }
+  if (metric == "mdd") {
+    return(mdd(gains = as.numeric(gains)) * 100)
+  }
   if (metric == "mean") {
     return(mean(gains) * 100)
   }
   if (metric == "sd") {
     return(sd(gains) * 100)
+  }
+  if (metric == "sharpe") {
+    return(sharpe(gains))
+  }
+  if (metric == "sortino") {
+    return(sortino(gains))
   }
   if (grepl("growth.", metric)) {
     initial <- strsplit(metric, "[.]")[[1]][2]
@@ -62,18 +74,6 @@ calc_metric <- function(gains,
   if (metric == "growth") {
     return(gains_rate(gains) * 100)
   }
-  if (metric == "cagr") {
-    return(gains_rate(gains, units.year) * 100)
-  }
-  if (metric == "mdd") {
-    return(mdd(gains = as.numeric(gains)) * 100)
-  }
-  if (metric == "sharpe") {
-    return(sharpe(gains))
-  }
-  if (metric == "sortino") {
-    return(sortino(gains))
-  }
   if (metric == "alpha") {
     return(as.numeric(lm(gains ~ benchmark.gains)$coef[1] * 100))
   }
@@ -86,16 +86,16 @@ calc_metric <- function(gains,
   if (metric == "r.squared") {
     return(summary(lm(gains ~ benchmark.gains))$r.squared)
   }
-  if (metric == "pearson") {
+  if (metric == "r") {
     return(cor(gains, benchmark.gains))
   }
-  if (metric == "spearman") {
+  if (metric == "rho") {
     return(cor(gains, benchmark.gains, method = "spearman"))
   }
-  if (metric == "auto.pearson") {
+  if (metric == "r.auto") {
     return(cor(gains[-length(gains)], gains[-1]))
   }
-  if (metric == "auto.spearman") {
+  if (metric == "rho.auto") {
     return(cor(gains[-length(gains)], gains[-1], method = "spearman"))
   }
 }

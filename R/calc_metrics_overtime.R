@@ -67,11 +67,11 @@ calc_metrics_overtime <- function(gains = NULL,
   }
 
   # Align benchmarks with metrics
-  if (! any(c("alpha", "alpha.annualized", "beta", "r.squared", "pearson", "spearman") %in% metrics)) {
+  if (! any(c("alpha", "alpha.annualized", "beta", "r.squared", "r", "rho") %in% metrics)) {
     benchmark <- NULL
   }
   if (is.null(benchmark)) {
-    metrics <- setdiff(metrics, c("alpha", "alpha.annualized", "beta", "r.squared", "pearson", "spearman"))
+    metrics <- setdiff(metrics, c("alpha", "alpha.annualized", "beta", "r.squared", "r", "rho"))
   }
 
   # Determine gains based on user inputs

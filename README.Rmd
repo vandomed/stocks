@@ -29,7 +29,7 @@ knitr::opts_chunk$set(
 options(digits = 3)
 ```
 
-## 'stocks' package
+## Package overview
 
 The **stocks** package has a variety of functions for analyzing investments and investment strategies. I use it for a lot of my articles on [Seeking Alpha](https://seekingalpha.com/author/dane-van-domelen/articles#regular_articles). The package relies heavily on [Yahoo! Finance](https://finance.yahoo.com/) for historical prices and on the **quantmod** package for downloading that data into R.
 
@@ -95,8 +95,8 @@ Negative correlation works wonders for a two-fund portfolio, so let's look at ho
 ```{r}
 c("SPY", "TLT") %>%
   load_gains(to = "2018-12-31") %>%
-  calc_metrics_overtime("pearson") %>%
-  plot_metrics_overtime(pearson ~ .)
+  calc_metrics_overtime("r") %>%
+  plot_metrics_overtime(r ~ .)
 ```
 
 While the tendency is certainly for negative correlation, there's a lot of variability, and in some years the correlation was actually slightly positive.

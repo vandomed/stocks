@@ -4,22 +4,20 @@
 \alias{calc_metrics}
 \title{Calculate Performance Metrics}
 \usage{
-calc_metrics(gains = NULL, metrics = c("mean", "sd", "growth.10k",
-  "growth", "cagr", "mdd", "sharpe", "sortino", "alpha",
-  "alpha.annualized", "beta", "r.squared", "pearson", "spearman",
-  "auto.pearson", "auto.spearman"), prices = NULL, tickers = NULL, ...,
-  benchmark = "SPY")
+calc_metrics(gains = NULL, metrics = c("cagr", "mdd", "mean", "sd",
+  "sharpe", "alpha.annualized", "beta", "r"), prices = NULL,
+  tickers = NULL, ..., benchmark = "SPY")
 }
 \arguments{
 \item{gains}{Data frame with one column of gains for each investment and a
 date variable named Date.}
 
 \item{metrics}{Character vector specifying metrics to calculate. Choices are
-\code{"mean"}, \code{"sd"}, \code{"growth.x"} for growth of $x where x is the
-initial value, \code{"growth"} for percent growth, \code{"cagr"} for compound
-annualized growth rate, \code{"mdd"} for max drawdown, \code{"sharpe"},
-\code{"sortino"}, \code{"alpha"}, \code{"alpha.annualized"}, \code{"beta"},
-\code{"r.squared"}, \code{"pearson"} or \code{"spearman"} for
+\code{"cagr"} for compound annualized growth rate, \code{"mdd"} for max
+drawdown, \code{"mean"}, \code{"sd"}, \code{"sharpe"}, \code{"growth.x"} for
+growth of $x where x is the initial value, \code{"growth"} for percent
+growth, \code{"sortino"}, \code{"alpha"}, \code{"alpha.annualized"},
+\code{"beta"}, \code{"r.squared"}, \code{"pearson"} or \code{"spearman"} for
 Pearson/Spearman correlation with benchmark, and \code{"auto.pearson"} or
 \code{"auto.spearman"} for Pearson/Spearman autocorrelation.}
 
