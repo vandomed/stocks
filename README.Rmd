@@ -62,7 +62,7 @@ We can use `load_gains` to download historical daily gains for SPY and TLT over 
 
 ```{r}
 library("stocks")
-gains <- load_gains(c("SPY", "TLT"), mutual.start = TRUE, to = "2018-12-31")
+gains <- load_gains(c("SPY", "TLT"), to = "2018-12-31")
 head(gains)
 ```
 

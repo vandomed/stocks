@@ -84,7 +84,7 @@ plot_metrics <- function(metrics = NULL,
                          plotly = FALSE,
                          title = NULL,
                          base_size = 16,
-                         label_size = 6,
+                         label_size = 5,
                          ticklabel_size = 8,
                          return = "plot") {
 

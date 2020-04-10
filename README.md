@@ -1,7 +1,7 @@
 Get Rich with ‘stocks’
 ================
 Dane Van Domelen <br> <vandomed@gmail.com>
-2020-04-07
+2020-04-09
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
@@ -52,7 +52,7 @@ TLT over their mutual lifetimes:
 
 ``` r
 library("stocks")
-gains <- load_gains(c("SPY", "TLT"), mutual.start = TRUE, to = "2018-12-31")
+gains <- load_gains(c("SPY", "TLT"), to = "2018-12-31")
 head(gains)
 #>            Date      SPY      TLT
 #> 2395 2002-07-31  0.00242  0.01239

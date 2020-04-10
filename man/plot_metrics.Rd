@@ -8,7 +8,7 @@
 plot_metrics(metrics = NULL, formula = cagr ~ mdd, tickers = NULL,
   ..., gains = NULL, prices = NULL, benchmark = "SPY",
   y.benchmark = benchmark, x.benchmark = benchmark, plotly = FALSE,
-  title = NULL, base_size = 16, label_size = 6, ticklabel_size = 8,
+  title = NULL, base_size = 16, label_size = 5, ticklabel_size = 8,
   return = "plot")
 }
 \arguments{
