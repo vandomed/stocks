@@ -78,7 +78,7 @@ plot_metrics_2funds <- function(metrics = NULL,
                                 plotly = FALSE,
                                 title = NULL,
                                 base_size = 16,
-                                label_size = 6,
+                                label_size = 5,
                                 return = "plot") {
 
   # Extract info from formula

@@ -8,7 +8,7 @@ plot_metrics_2funds(metrics = NULL, formula = mean ~ sd,
   tickers = NULL, ..., points = seq(0, 100, 10), gains = NULL,
   prices = NULL, benchmark = "SPY", y.benchmark = benchmark,
   x.benchmark = benchmark, ref.tickers = NULL, plotly = FALSE,
-  title = NULL, base_size = 16, label_size = 6, return = "plot")
+  title = NULL, base_size = 16, label_size = 5, return = "plot")
 }
 \arguments{
 \item{metrics}{Data frame with Fund column and column for each metric you
