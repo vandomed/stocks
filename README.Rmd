@@ -29,6 +29,17 @@ knitr::opts_chunk$set(
 options(digits = 3)
 ```
 
+
+## Installation
+
+You can install and load **stocks** from GitHub via the following code:
+
+```{r, eval = FALSE}
+devtools::install_github("vandomed/stocks")
+library("stocks")
+```
+
+
 ## Package overview
 
 The **stocks** package has a variety of functions for analyzing investments and investment strategies. I use it for a lot of my articles on [Seeking Alpha](https://seekingalpha.com/author/dane-van-domelen/articles#regular_articles). The package relies heavily on [Yahoo! Finance](https://finance.yahoo.com/) for historical prices and on the **quantmod** package for downloading that data into R.

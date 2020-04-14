@@ -55,7 +55,7 @@ rolling_metric <- function(gains,
     return(convert_gain(roll_lm(x = benchmark.gains, y = gains, width = width)$coefficients[-c(1: (width - 1)), 1], 1, units.year) * 100)
   }
   if (metric == "beta") {
-    return(roll_lm(x = benchmark.gains, y = gains, width = width)$coefficients[-c(1: (width - 1)), 2] * 100)
+    return(roll_lm(x = benchmark.gains, y = gains, width = width)$coefficients[-c(1: (width - 1)), 2])
   }
   if (metric == "r.squared") {
     return((roll_lm(x = benchmark.gains, y = gains, width = width)$r.squared[, 1])[-c(1: (width - 1))])

@@ -8,6 +8,7 @@ src/*.so
 src/*.dll
 Thumbs.db
 misc
+marketing
 R/archived
 data/archived
 archived

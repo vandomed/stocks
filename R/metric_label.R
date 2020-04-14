@@ -28,7 +28,7 @@ metric_label <- function(metric) {
       return(paste("Growth of $", comma(as.numeric(initial)), sep = ""))
     }
     if (x == "growth") return("Growth (%)")
-    if (x == "alpha") return("Alpha")
+    if (x == "alpha") return("Alpha (%)")
     if (x == "alpha.annualized") return("Annualized alpha (%)")
     if (x == "beta") return("Beta")
     if (x == "r.squared") return("R-squared")
