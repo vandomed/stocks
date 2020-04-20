@@ -75,13 +75,16 @@ calc_metric <- function(gains,
     return(gains_rate(gains) * 100)
   }
   if (metric == "alpha") {
-    return(lmfit(x = cbind(1, benchmark.gains), y = gains)$be[1] * 100)
+    return(fastLmPure(X = cbind(1, benchmark.gains), y = gains)$coef[1] * 100)
+    #return(lmfit(x = cbind(1, benchmark.gains), y = gains)$be[1] * 100)
   }
   if (metric == "alpha.annualized") {
-    return(convert_gain(lmfit(x = cbind(1, benchmark.gains), y = gains)$be[1], 1, units.year) * 100)
+    return(convert_gain(fastLmPure(X = cbind(1, benchmark.gains), y = gains)$coef[1], 1, units.year) * 100)
+    #return(convert_gain(lmfit(x = cbind(1, benchmark.gains), y = gains)$be[1], 1, units.year) * 100)
   }
   if (metric == "beta") {
-    return(lmfit(x = cbind(1, benchmark.gains), y = gains)$be[1])
+    return(fastLmPure(X = cbind(1, benchmark.gains), y = gains)$coef[2])
+    #return(lmfit(x = cbind(1, benchmark.gains), y = gains)$be[2])
   }
   if (metric == "r.squared") {
     return(summary(lm(gains ~ benchmark.gains))$r.squared)
