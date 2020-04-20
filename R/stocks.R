@@ -29,9 +29,9 @@
 #' @docType package
 #'
 #'
-#' @importFrom accelerometry movingaves
 #' @importFrom data.table as.data.table data.table first last melt
 #' @importFrom dplyr %>% bind_rows group_by mutate mutate_at row_number slice tibble ungroup
+#' @importFrom dvmisc moving_mean
 #' @importFrom fastmatch ctapply
 #' @import ggplot2
 #' @importFrom ggrepel geom_label_repel

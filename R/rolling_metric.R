@@ -34,7 +34,8 @@ rolling_metric <- function(gains,
     return(rollapply(gains, width, function(x) mdd(gains = x)) * 100)
   }
   if (metric == "mean") {
-    return(movingaves(gains, window = width) * 100)
+    return(moving_mean(gains, window = width) * 100)
+    #return(movingaves(gains, window = width) * 100)
   }
   if (metric == "sd") {
     return(roll_sd(gains, width, center = FALSE) * 100)
