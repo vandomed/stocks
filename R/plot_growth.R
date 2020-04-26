@@ -17,7 +17,11 @@
 #' \code{\link[ggplot2]{ggplot}} to a \code{\link[plotly]{plotly}} object
 #' internally.
 #' @param title Character string.
-#' @param base_size Numeric value.
+#' @param base_size Numeric value to pass to \code{\link[ggplot2]{theme_gray}}.
+#' @param tooltip_size Numeric value to pass to \code{\link[plotly]{style}}.
+#' @param point_size Numeric value to pass to \code{\link[ggplot2]{geom_point}}.
+#' @param line_size Numeric value to pass to \code{\link[ggplot2]{geom_line}}.
+#' @param ticklabel_size Numeric value to pass to \code{\link[ggplot2]{theme}}.
 #' @param return Character string specifying what to return. Choices are
 #' \code{"plot"}, \code{"data"}, and \code{"both"}.
 #'
@@ -45,6 +49,10 @@ plot_growth <- function(prices = NULL,
                         plotly = FALSE,
                         title = "Growth Over Time",
                         base_size = 16,
+                        tooltip_size = 20,
+                        point_size = 1,
+                        line_size = 1,
+                        ticklabel_size = 8,
                         return = "plot") {
 
   # Determine prices if not pre-specified
@@ -80,16 +88,17 @@ plot_growth <- function(prices = NULL,
                       "<br>", "Date: ", df$Date,
                       "<br>", "Balance: $", comma(df$`Balance ($)`, accuracy = 0.01), sep = "")
   p <- ggplot(df, aes(y = `Balance ($)`, x = Date, group = Fund, color = Fund, text = tooltip)) +
-    geom_point(size = 1) +
-    geom_line(na.rm = TRUE) +
+    geom_point(size = point_size) +
+    geom_line(na.rm = TRUE, size = line_size) +
     scale_y_continuous(limits = range(c(0, df$Balance)) * 1.02, expand = c(0, 0), labels = comma) +
     theme_gray(base_size = base_size) +
+    theme(axis.text = element_text(size = ticklabel_size)) +
     theme(legend.title = element_blank()) +
     labs(title = title)
 
   if (plotly) {
     p <- ggplotly(p, tooltip = "tooltip") %>%
-      style(hoverlabel = list(font = list(size = 15)))
+      style(hoverlabel = list(font = list(size = tooltip_size)))
   }
 
   if (return == "plot") return(p)

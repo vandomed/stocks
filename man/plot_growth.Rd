@@ -6,7 +6,8 @@
 \usage{
 plot_growth(prices = NULL, tickers = NULL, ..., gains = NULL,
   initial = 10000, plotly = FALSE, title = "Growth Over Time",
-  base_size = 16, return = "plot")
+  base_size = 16, tooltip_size = 20, point_size = 1, line_size = 1,
+  ticklabel_size = 8, return = "plot")
 }
 \arguments{
 \item{prices}{Data frame with one column of prices for each investment and a
@@ -29,7 +30,15 @@ internally.}
 
 \item{title}{Character string.}
 
-\item{base_size}{Numeric value.}
+\item{base_size}{Numeric value to pass to \code{\link[ggplot2]{theme_gray}}.}
+
+\item{tooltip_size}{Numeric value to pass to \code{\link[plotly]{style}}.}
+
+\item{point_size}{Numeric value to pass to \code{\link[ggplot2]{geom_point}}.}
+
+\item{line_size}{Numeric value to pass to \code{\link[ggplot2]{geom_line}}.}
+
+\item{ticklabel_size}{Numeric value to pass to \code{\link[ggplot2]{theme}}.}
 
 \item{return}{Character string specifying what to return. Choices are
 \code{"plot"}, \code{"data"}, and \code{"both"}.}

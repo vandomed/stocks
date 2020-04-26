@@ -38,7 +38,7 @@ rolling_metric <- function(gains,
     #return(movingaves(gains, window = width) * 100)
   }
   if (metric == "sd") {
-    return(roll_sd(gains, width, center = FALSE) * 100)
+    return(roll_sd(gains, width, center = FALSE)[-c(1: (width - 1))] * 100)
   }
   if (metric == "sharpe") {
     return(movingaves(gains, width) / roll_sd(gains, width)[-c(1: (width - 1))])

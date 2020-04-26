@@ -35,7 +35,7 @@ label_metric <- function(label) {
 
     # Other types of variables
     if (x == "Allocation (%)") return("allocation")
-    if (x == "Time period") return("time")
+    if (x == "End date") return("time")
     if (x == "Metric") return("metric")
     if (x == "Set") return("set")
 

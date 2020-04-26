@@ -1,12 +1,21 @@
 Get Rich with ‘stocks’
 ================
 Dane Van Domelen <br> <vandomed@gmail.com>
-2020-04-09
+2020-04-26
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
 [![Build
 Status](https://travis-ci.org/vandomed/stocks.svg?branch=master)](https://travis-ci.org/vandomed/stocks)
+
+## Installation
+
+You can install and load **stocks** from GitHub via the following code:
+
+``` r
+devtools::install_github("vandomed/stocks")
+library("stocks")
+```
 
 ## Package overview
 
@@ -275,7 +284,7 @@ ETF’s, we can plot mean vs. SD using `plot_metrics`.
 plot_metrics(metrics, mean ~ sd)
 ```
 
-<img src="README-figures/unnamed-chunk-4-1.png" width="80%" />
+<img src="README-figures/unnamed-chunk-5-1.png" width="80%" />
 
 No surprise, the S\&P 500 ETF had more growth, but also higher
 volatility.
@@ -299,7 +308,7 @@ c("SPY", "TLT") %>%
   plot_metrics_overtime(r ~ .)
 ```
 
-<img src="README-figures/unnamed-chunk-5-1.png" width="80%" />
+<img src="README-figures/unnamed-chunk-6-1.png" width="80%" />
 
 While the tendency is certainly for negative correlation, there’s a lot
 of variability, and in some years the correlation was actually slightly
@@ -501,7 +510,7 @@ plot_metrics_2funds(gains = gains,
                     from = "2010-01-01")
 ```
 
-<img src="README-figures/unnamed-chunk-8-1.png" width="80%" />
+<img src="README-figures/unnamed-chunk-9-1.png" width="80%" />
 
 In terms of risk-adjusted growth, the Sharpe ratio curve is somewhat
 more interesting. The maximum Sharpe ratio occurs around 40% SPY, and
@@ -514,7 +523,7 @@ plot_metrics_2funds(gains = gains,
                     from = "2010-01-01")
 ```
 
-<img src="README-figures/unnamed-chunk-9-1.png" width="80%" />
+<img src="README-figures/unnamed-chunk-10-1.png" width="80%" />
 
 We can gain additional insight by plotting two metrics against each
 other, across all possible allocations. A common strategy is to plot the
@@ -527,7 +536,7 @@ plot_metrics_2funds(gains = gains,
                     from = "2010-01-01")
 ```
 
-<img src="README-figures/unnamed-chunk-10-1.png" width="80%" />
+<img src="README-figures/unnamed-chunk-11-1.png" width="80%" />
 
 This plot yields an interesting finding: starting at 100% TLT,
 increasing the allocation to SPY simultaneously *reduces volatility* and
@@ -557,7 +566,7 @@ plot_metrics_3funds(formula = mean ~ sd,
                     from = "2010-01-01")
 ```
 
-<img src="README-figures/unnamed-chunk-11-1.png" width="80%" />
+<img src="README-figures/unnamed-chunk-12-1.png" width="80%" />
 
 100% VFINX maximizes expected returns, but also volatility. If you
 wanted to take on no more than one-half of the S\&P’s volatility, while
@@ -578,7 +587,7 @@ plot_metrics_3funds(formula = sharpe ~ sd,
                     from = "2010-01-01")
 ```
 
-<img src="README-figures/unnamed-chunk-12-1.png" width="80%" />
+<img src="README-figures/unnamed-chunk-13-1.png" width="80%" />
 
 Groovy\! By the way, if you want to see individual data points on the
 plot (i.e. what allocation each data point corresponds to) you can just

@@ -106,8 +106,7 @@ plot_metrics_overtime <- function(metrics = NULL,
   all.metrics <- all.vars(formula, functions = FALSE)
 
   # If metrics is specified but doesn't include the expected variables, set defaults
-  all.metrics <- all.vars(formula, functions = FALSE)
-  if (! is.null(metrics) & ! all(unlist(metric_label(all.metrics)) %in% names(metrics))) {
+  if (! is.null(metrics) & ! all(unlist(metric_label(all.metrics)) %in% c(".", names(metrics)))) {
     all.metrics <- unlist(label_metric(names(metrics)))
     if (length(all.metrics) == 1) {
       all.metrics <- c(all.metrics, ".")
@@ -127,15 +126,15 @@ plot_metrics_overtime <- function(metrics = NULL,
   ylabel <- metric_label(y.metric)
 
   # Align benchmarks with metrics
-  if (! any(c("alpha", "alpha.annualized", "beta", "r.squared", "pearson", "spearman") %in% y.metric)) {
+  if (! any(c("alpha", "alpha.annualized", "beta", "r.squared", "r", "rho") %in% y.metric)) {
     y.benchmark <- NULL
   }
-  if (! any(c("alpha", "alpha.annualized", "beta", "r.squared", "pearson", "spearman") %in% x.metric)) {
+  if (! any(c("alpha", "alpha.annualized", "beta", "r.squared", "r", "rho") %in% x.metric)) {
     x.benchmark <- NULL
   }
 
   # Check that requested metrics are valid
-  invalid.requests <- all.metrics[! (all.metrics %in% metric.choices | grepl("growth.", all.metrics, fixed = TRUE))]
+  invalid.requests <- all.metrics[! (all.metrics %in% c("time", metric.choices) | grepl("growth.", all.metrics, fixed = TRUE))]
   if (length(invalid.requests) > 0) {
     stop(paste("The following metrics are not allowed (see ?calc_metrics for choices):",
                paste(invalid.requests, collapse = ", ")))
@@ -319,7 +318,7 @@ plot_metrics_overtime <- function(metrics = NULL,
       geom_path(data = df %>% group_by(Fund) %>% slice(-1) %>% ungroup(), show.legend = FALSE,
                 arrow = arrow(angle = 15, type = "closed", length = unit(0.1, "inches"))) +
       ylim(range(c(0, df[[ylabel]])) * 1.01) +
-      xlim(range(c(0, df[[xlabel]])) * 1.01) +
+      ylim(range(c(0, df[[xlabel]])) * 1.01) +
       theme_gray(base_size = base_size) +
       theme(legend.title = element_blank()) +
       labs(title = ifelse(! is.null(title), title, paste(metric_title(y.metric), "vs.", metric_title(x.metric))),
@@ -328,7 +327,6 @@ plot_metrics_overtime <- function(metrics = NULL,
   }
 
   if (plotly) p <- ggplotly(p, tooltip = "tooltip")
-  #df <- df[names(df) != "tooltip"]
 
   if (return == "plot") return(p)
   if (return == "data") return(df)
