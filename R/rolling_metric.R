@@ -28,20 +28,19 @@ rolling_metric <- function(gains,
     return(gains[seq(width, length(gains), width)])
   }
   if (metric == "cagr") {
-    return(convert_gain(roll_prod(x + 1, width)[-c(1: (width - 1))] - 1, units.in = width, units.out = units.year) * 100)
+    return(convert_gain(roll_prod(gains + 1, width)[-c(1: (width - 1))] - 1, units.in = width, units.out = units.year) * 100)
   }
   if (metric == "mdd") {
     return(rollapply(gains, width, function(x) mdd(gains = x)) * 100)
   }
   if (metric == "mean") {
-    return(moving_mean(gains, window = width) * 100)
-    #return(movingaves(gains, window = width) * 100)
+    return(moving_mean(gains, width) * 100)
   }
   if (metric == "sd") {
     return(roll_sd(gains, width, center = FALSE)[-c(1: (width - 1))] * 100)
   }
   if (metric == "sharpe") {
-    return(movingaves(gains, width) / roll_sd(gains, width)[-c(1: (width - 1))])
+    return(moving_mean(gains, width) / roll_sd(gains, width)[-c(1: (width - 1))])
   }
   if (metric == "sortino") {
     return(rollapply(gains, width, sortino))

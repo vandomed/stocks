@@ -209,8 +209,7 @@ plot_metrics <- function(metrics = NULL,
     # For x.metric only
     df$tooltip <- paste(df$Fund, "<br>", metric_title(x.metric), ": ",
                         formatC(df[[xlabel]], metric_decimals(x.metric), format = "f"), metric_units(x.metric), sep = "")
-    p <- ggplot(df, aes(y = .data[[xlabel]], x = reorder(Fund, .data[[xlabel]]),
-                        text = tooltip)) +
+    p <- ggplot(df, aes(y = .data[[xlabel]], x = reorder(Fund, .data[[xlabel]]), text = tooltip)) +
       geom_col() +
       theme(axis.text = element_text(size = ticklabel_size)) +
       coord_flip(ylim = range(c(0, df[[xlabel]])) * 1.03, expand = 0) +
