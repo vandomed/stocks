@@ -12,7 +12,7 @@ load_prices(tickers, intercepts = NULL, slopes = NULL,
 }
 \arguments{
 \item{tickers}{Character vector of ticker symbols that Yahoo! Finance
-recognizes.}
+recognizes, or "^CASH" for cash.}
 
 \item{intercepts}{Numeric vector of values to add to daily gains for each
 fund.}

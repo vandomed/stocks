@@ -5,7 +5,7 @@
 #'
 #'
 #' @param tickers Character vector of ticker symbols that Yahoo! Finance
-#' recognizes.
+#' recognizes, or "^CASH" for cash.
 #' @param intercepts Numeric vector of values to add to daily gains for each
 #' fund.
 #' @param slopes Numeric vector of values to multiply daily gains for each fund

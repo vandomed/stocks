@@ -5,7 +5,7 @@
 #'
 #'
 #' @param tickers Character vector of ticker symbols that Yahoo! Finance
-#' recognizes.
+#' recognizes, or "^CASH" for cash.
 #' @param intercepts Numeric vector of values to add to daily gains for each
 #' fund.
 #' @param slopes Numeric vector of values to multiply daily gains for each fund
@@ -87,7 +87,7 @@ load_prices <- function(tickers,
   }
 
   # Download prices from Yahoo! Finance
-  prices.list <- lapply(tickers, function(x) {
+  prices.list <- lapply(setdiff(tickers, "^CASH"), function(x) {
 
     y <- try(getSymbols(Symbols = x, from = from, to = to, auto.assign = FALSE), silent = TRUE)
     if (class(y)[1] == "try-error") {
@@ -103,7 +103,7 @@ load_prices <- function(tickers,
   prices.list[null.tickers] <- NULL
   tickers <- tickers[! null.tickers]
   prices <- as.data.frame(reduce(prices.list, .f = function(x, y) merge(x, y, by = "Date", all = TRUE)))
-  names(prices) <- c("Date", tickers)
+  names(prices) <- c("Date", setdiff(tickers, "^CASH"))
 
   # If mutual.start = TRUE, drop rows prior to youngest fund's start date
   if (mutual.start | mutual.end) {
@@ -127,6 +127,12 @@ load_prices <- function(tickers,
   }
   if (! is.null(preto.days)) {
     prices <- tail(prices, preto.days + 1)
+  }
+
+  # Insert cash if necessary
+  if ("^CASH" %in% tickers) {
+    prices$`^CASH` <- 1
+    prices <- prices[, c("Date", tickers)]
   }
 
   # If intercepts and slopes specified, convert to gains, scale gains, and

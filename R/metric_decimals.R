@@ -17,7 +17,7 @@ metric_decimals <- function(metric) {
 
     if (x == "cagr") return(1)
     if (x == "mdd") return(1)
-    if (x == "mean") return(2)
+    if (x == "mean") return(3)
     if (x == "sd") return (2)
     if (x == "sharpe") return (3)
     if (x == "sortino") return(3)
