@@ -17,10 +17,12 @@
 #' \code{\link[ggplot2]{ggplot}} to a \code{\link[plotly]{plotly}} object
 #' internally.
 #' @param title Character string.
-#' @param base_size Numeric value to pass to \code{\link[ggplot2]{theme_gray}}.
+#' @param base_size Numeric value to pass to
+#' \code{\link[ggplot2::ggtheme]{theme_gray}}.
 #' @param tooltip_size Numeric value to pass to \code{\link[plotly]{style}}.
 #' @param point_size Numeric value to pass to \code{\link[ggplot2]{geom_point}}.
-#' @param line_size Numeric value to pass to \code{\link[ggplot2]{geom_line}}.
+#' @param line_size Numeric value to pass to
+#' \code{\link[ggplot2::geom_path]{geom_line}}.
 #' @param ticklabel_size Numeric value to pass to \code{\link[ggplot2]{theme}}.
 #' @param return Character string specifying what to return. Choices are
 #' \code{"plot"}, \code{"data"}, and \code{"both"}.

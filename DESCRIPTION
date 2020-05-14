@@ -12,8 +12,27 @@ Description: Functions for analyzing and visualizing stock market data. Main
     features are loading and aligning historical data, calculating performance 
     metrics for individual funds or portfolios (e.g. annualized growth, maximum 
     drawdown, Sharpe/Sortino ratio), and creating graphs.
-Depends: dplyr, rbenchmark, quantmod
-Imports: data.table, dvmisc, fastmatch, ggplot2, ggrepel, graphics, grDevices, lubridate, methods, plotly, purrr, Rcpp (>= 0.12.15), RcppEigen, roll, rvest, scales, stats, tidyr, TTR, xml2, zoo
+Depends: dplyr, R (>= 3.5.0), rbenchmark, quantmod
+Imports: data.table, 
+    fastmatch, 
+    ggplot2, 
+    ggrepel, 
+    graphics, 
+    grDevices, 
+    lubridate, 
+    methods, 
+    plotly, 
+    purrr, 
+    Rcpp (>= 0.12.15), 
+    RcppEigen, 
+    roll, 
+    rvest, 
+    scales, 
+    stats, 
+    tidyr, 
+    TTR, 
+    xml2, 
+    zoo
 Suggests: knitr,
     rmarkdown,
     pander,

@@ -50,6 +50,22 @@ mdd_hl_indices <- function(highs, lows) {
     .Call(`_stocks_mdd_hl_indices`, highs, lows)
 }
 
+moving_mean_i <- function(x, window) {
+    .Call(`_stocks_moving_mean_i`, x, window)
+}
+
+moving_mean_i_max <- function(x, window) {
+    .Call(`_stocks_moving_mean_i_max`, x, window)
+}
+
+moving_mean_n <- function(x, window) {
+    .Call(`_stocks_moving_mean_n`, x, window)
+}
+
+moving_mean_n_max <- function(x, window) {
+    .Call(`_stocks_moving_mean_n_max`, x, window)
+}
+
 #' Lagged Proportion Changes
 #'
 #' Calculates proportion changes between subsequent (or lagged) elements of a 

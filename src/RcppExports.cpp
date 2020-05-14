@@ -63,6 +63,54 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// moving_mean_i
+NumericVector moving_mean_i(IntegerVector x, double window);
+RcppExport SEXP _stocks_moving_mean_i(SEXP xSEXP, SEXP windowSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< IntegerVector >::type x(xSEXP);
+    Rcpp::traits::input_parameter< double >::type window(windowSEXP);
+    rcpp_result_gen = Rcpp::wrap(moving_mean_i(x, window));
+    return rcpp_result_gen;
+END_RCPP
+}
+// moving_mean_i_max
+double moving_mean_i_max(IntegerVector x, double window);
+RcppExport SEXP _stocks_moving_mean_i_max(SEXP xSEXP, SEXP windowSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< IntegerVector >::type x(xSEXP);
+    Rcpp::traits::input_parameter< double >::type window(windowSEXP);
+    rcpp_result_gen = Rcpp::wrap(moving_mean_i_max(x, window));
+    return rcpp_result_gen;
+END_RCPP
+}
+// moving_mean_n
+NumericVector moving_mean_n(NumericVector x, double window);
+RcppExport SEXP _stocks_moving_mean_n(SEXP xSEXP, SEXP windowSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector >::type x(xSEXP);
+    Rcpp::traits::input_parameter< double >::type window(windowSEXP);
+    rcpp_result_gen = Rcpp::wrap(moving_mean_n(x, window));
+    return rcpp_result_gen;
+END_RCPP
+}
+// moving_mean_n_max
+double moving_mean_n_max(NumericVector x, double window);
+RcppExport SEXP _stocks_moving_mean_n_max(SEXP xSEXP, SEXP windowSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector >::type x(xSEXP);
+    Rcpp::traits::input_parameter< double >::type window(windowSEXP);
+    rcpp_result_gen = Rcpp::wrap(moving_mean_n_max(x, window));
+    return rcpp_result_gen;
+END_RCPP
+}
 // pchanges
 NumericVector pchanges(NumericVector x, int lag);
 RcppExport SEXP _stocks_pchanges(SEXP xSEXP, SEXP lagSEXP) {
@@ -105,6 +153,10 @@ static const R_CallMethodDef CallEntries[] = {
     {"_stocks_mdd_p_indices", (DL_FUNC) &_stocks_mdd_p_indices, 1},
     {"_stocks_mdd_hl", (DL_FUNC) &_stocks_mdd_hl, 2},
     {"_stocks_mdd_hl_indices", (DL_FUNC) &_stocks_mdd_hl_indices, 2},
+    {"_stocks_moving_mean_i", (DL_FUNC) &_stocks_moving_mean_i, 2},
+    {"_stocks_moving_mean_i_max", (DL_FUNC) &_stocks_moving_mean_i_max, 2},
+    {"_stocks_moving_mean_n", (DL_FUNC) &_stocks_moving_mean_n, 2},
+    {"_stocks_moving_mean_n_max", (DL_FUNC) &_stocks_moving_mean_n_max, 2},
     {"_stocks_pchanges", (DL_FUNC) &_stocks_pchanges, 2},
     {"_stocks_pdiffs", (DL_FUNC) &_stocks_pdiffs, 2},
     {"_stocks_ratios", (DL_FUNC) &_stocks_ratios, 1},
