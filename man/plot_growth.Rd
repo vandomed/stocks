@@ -31,14 +31,14 @@ internally.}
 \item{title}{Character string.}
 
 \item{base_size}{Numeric value to pass to
-\code{\link[ggplot2::ggtheme]{theme_gray}}.}
+\code{\link[ggplot2:ggtheme]{theme_gray}}.}
 
 \item{tooltip_size}{Numeric value to pass to \code{\link[plotly]{style}}.}
 
 \item{point_size}{Numeric value to pass to \code{\link[ggplot2]{geom_point}}.}
 
 \item{line_size}{Numeric value to pass to
-\code{\link[ggplot2::geom_path]{geom_line}}.}
+\code{\link[ggplot2:geom_path]{geom_line}}.}
 
 \item{ticklabel_size}{Numeric value to pass to \code{\link[ggplot2]{theme}}.}
 
