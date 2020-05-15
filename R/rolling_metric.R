@@ -61,7 +61,7 @@ rolling_metric <- function(gains,
     return((roll_lm(x = benchmark.gains, y = gains, width = width)$r.squared[, 1])[-c(1: (width - 1))])
   }
   if (metric == "r") {
-    return(roll_cor(x = benchmark.gains, y = gains, width = width))[-c(1: (width - 1))]
+    return(roll_cor(x = benchmark.gains, y = gains, width = width)[-c(1: (width - 1))])
   }
   if (metric == "rho") {
     y <- c()
