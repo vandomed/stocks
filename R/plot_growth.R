@@ -77,7 +77,7 @@ plot_growth <- function(prices = NULL,
   }
 
   # Transform for ggplot
-  tickers <- setdiff(names(prices), "Date")
+  if (is.null(tickers)) tickers <- setdiff(names(prices), "Date")
   df <- prices %>%
     data.table::as.data.table() %>%
     data.table::melt(measure.vars = tickers,

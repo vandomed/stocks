@@ -17,8 +17,8 @@ sharpe(gains = NULL, prices = NULL, rf = 0)
 Numeric value.
 }
 \description{
-Calculates Sharpe ratio from vector of gains or prices. The formula is: 
-\code{(mean(gains) - rf) / sd(gains)}, where \code{rf} is some risk-free rate 
+Calculates Sharpe ratio from vector of gains or prices. The formula is:
+\code{(mean(gains) - rf) / sd(gains)}, where \code{rf} is some risk-free rate
 of return.
 }
 \examples{
