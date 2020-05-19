@@ -5,7 +5,7 @@ Version: 2.0.0
 License: GPL-3
 LazyData: true
 URL: https://github.com/vandomed/stocks
-Date: 2020-05-17
+Date: 2020-05-18
 Author: Dane R. Van Domelen
 Maintainer: Dane R. Van Domelen <vandomed@gmail.com>
 Description: Functions for analyzing and visualizing stock market data. Main 

@@ -24,6 +24,7 @@
 #' @param line_size Numeric value to pass to
 #' \code{\link[ggplot2:geom_path]{geom_line}}.
 #' @param ticklabel_size Numeric value to pass to \code{\link[ggplot2]{theme}}.
+#' @param legend_position Character string to pass to \code{\link[ggplot2]{theme}}.
 #' @param return Character string specifying what to return. Choices are
 #' \code{"plot"}, \code{"data"}, and \code{"both"}.
 #'
@@ -55,6 +56,7 @@ plot_growth <- function(prices = NULL,
                         point_size = 1,
                         line_size = 1,
                         ticklabel_size = 8,
+                        legend_position = "right",
                         return = "plot") {
 
   # Determine prices if not pre-specified
@@ -95,7 +97,7 @@ plot_growth <- function(prices = NULL,
     scale_y_continuous(limits = range(c(0, df$Balance)) * 1.02, expand = c(0, 0), labels = comma) +
     theme_gray(base_size = base_size) +
     theme(axis.text = element_text(size = ticklabel_size)) +
-    theme(legend.title = element_blank()) +
+    theme(legend.title = element_blank(), legend.position = legend_position) +
     labs(title = title)
 
   if (plotly) {
