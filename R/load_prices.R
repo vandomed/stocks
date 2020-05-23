@@ -87,7 +87,7 @@ load_prices <- function(tickers,
   }
 
   # Download prices from Yahoo! Finance
-  prices.list <- lapply(setdiff(tickers, "^CASH"), function(x) {
+  prices.list <- lapply(tickers[tickers != "^CASH"], function(x) {
 
     y <- try(getSymbols(Symbols = x, from = from, to = to, auto.assign = FALSE), silent = TRUE)
     if (class(y)[1] == "try-error") {
@@ -103,7 +103,7 @@ load_prices <- function(tickers,
   prices.list[null.tickers] <- NULL
   tickers <- tickers[! null.tickers]
   prices <- as.data.frame(reduce(prices.list, .f = function(x, y) merge(x, y, by = "Date", all = TRUE)))
-  names(prices) <- c("Date", setdiff(tickers, "^CASH"))
+  names(prices) <- c("Date", tickers[tickers != "^CASH"])
 
   # If mutual.start = TRUE, drop rows prior to youngest fund's start date
   if (mutual.start | mutual.end) {
