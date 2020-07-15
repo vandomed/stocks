@@ -4,11 +4,23 @@
 \alias{plot_metrics_overtime}
 \title{Plot One Performance Metric over Time or One vs. Another over Time}
 \usage{
-plot_metrics_overtime(metrics = NULL, formula = cagr ~ .,
-  type = "hop.year", minimum.n = 3, tickers = NULL, ...,
-  gains = NULL, prices = NULL, benchmark = "SPY",
-  y.benchmark = benchmark, x.benchmark = benchmark, plotly = FALSE,
-  title = NULL, base_size = 16, return = "plot")
+plot_metrics_overtime(
+  metrics = NULL,
+  formula = cagr ~ .,
+  type = "hop.year",
+  minimum.n = 3,
+  tickers = NULL,
+  ...,
+  gains = NULL,
+  prices = NULL,
+  benchmark = "SPY",
+  y.benchmark = benchmark,
+  x.benchmark = benchmark,
+  plotly = FALSE,
+  title = NULL,
+  base_size = 16,
+  return = "plot"
+)
 }
 \arguments{
 \item{metrics}{"Long" data frame with Fund column, Date column, and column

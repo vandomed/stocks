@@ -9,7 +9,7 @@
 #' Package: \tab stocks \cr
 #' Type: \tab Package \cr
 #' Version: \tab 2.0.0 \cr
-#' Date: \tab 2020-05-23 \cr
+#' Date: \tab 2020-07-14 \cr
 #' License: \tab GPL-3 \cr
 #' }
 #'

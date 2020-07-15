@@ -4,8 +4,7 @@
 \alias{calc_metric}
 \title{Calculate Performance Metric}
 \usage{
-calc_metric(gains, metric = "mean", units.year = 252,
-  benchmark.gains = NULL)
+calc_metric(gains, metric = "mean", units.year = 252, benchmark.gains = NULL)
 }
 \arguments{
 \item{gains}{Numeric vector.}

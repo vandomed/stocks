@@ -4,9 +4,17 @@
 \alias{targetall}
 \title{Backtest a Fixed-Allocation Trading Strategy}
 \usage{
-targetall(tickers = NULL, intercepts = NULL, slopes = NULL, ...,
-  tickers.gains = NULL, target.alls = NULL, tol = 0.05,
-  rebalance.cost = 0, initial = 10000)
+targetall(
+  tickers = NULL,
+  intercepts = NULL,
+  slopes = NULL,
+  ...,
+  tickers.gains = NULL,
+  target.alls = NULL,
+  tol = 0.05,
+  rebalance.cost = 0,
+  initial = 10000
+)
 }
 \arguments{
 \item{tickers}{Character vector specifying 2 ticker symbols that Yahoo! 

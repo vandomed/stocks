@@ -4,9 +4,16 @@
 \alias{calc_metrics_overtime}
 \title{Calculate Performance Metrics over Time}
 \usage{
-calc_metrics_overtime(gains = NULL, metrics = c("mean", "sd"),
-  tickers = NULL, ..., type = "hop.year", minimum.n = 3,
-  prices = NULL, benchmark = "SPY")
+calc_metrics_overtime(
+  gains = NULL,
+  metrics = c("mean", "sd"),
+  tickers = NULL,
+  ...,
+  type = "hop.year",
+  minimum.n = 3,
+  prices = NULL,
+  benchmark = "SPY"
+)
 }
 \arguments{
 \item{gains}{Data frame with one column of gains for each investment and a

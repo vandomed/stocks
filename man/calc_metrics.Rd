@@ -4,9 +4,14 @@
 \alias{calc_metrics}
 \title{Calculate Performance Metrics}
 \usage{
-calc_metrics(gains = NULL, metrics = c("cagr", "mdd", "mean", "sd",
-  "sharpe", "alpha.annualized", "beta", "r"), prices = NULL,
-  tickers = NULL, ..., benchmark = "SPY")
+calc_metrics(
+  gains = NULL,
+  metrics = c("cagr", "mdd", "mean", "sd", "sharpe", "alpha.annualized", "beta", "r"),
+  prices = NULL,
+  tickers = NULL,
+  ...,
+  benchmark = "SPY"
+)
 }
 \arguments{
 \item{gains}{Data frame with one column of gains for each investment and a

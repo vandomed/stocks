@@ -4,10 +4,22 @@
 \alias{plot_growth}
 \title{Plot Investment Growth}
 \usage{
-plot_growth(prices = NULL, tickers = NULL, ..., gains = NULL,
-  initial = 10000, plotly = FALSE, title = "Growth Over Time",
-  base_size = 16, tooltip_size = 20, point_size = 1, line_size = 1,
-  ticklabel_size = 8, legend_position = "right", return = "plot")
+plot_growth(
+  prices = NULL,
+  tickers = NULL,
+  ...,
+  gains = NULL,
+  initial = 10000,
+  plotly = FALSE,
+  title = "Growth Over Time",
+  base_size = 16,
+  tooltip_size = 20,
+  point_size = 1,
+  line_size = 1,
+  ticklabel_size = 8,
+  legend_position = "right",
+  return = "plot"
+)
 }
 \arguments{
 \item{prices}{Data frame with one column of prices for each investment and a

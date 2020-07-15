@@ -4,11 +4,22 @@
 \alias{load_prices}
 \title{Download Historical Prices}
 \usage{
-load_prices(tickers, intercepts = NULL, slopes = NULL,
-  from = "1950-01-01", to = Sys.Date(), time.scale = "daily",
-  preto.days = NULL, prefrom.days = NULL, initial = NULL,
-  mutual.lifetimes = TRUE, mutual.start = mutual.lifetimes,
-  mutual.end = mutual.lifetimes, anchor = FALSE, drop.anyNA = FALSE)
+load_prices(
+  tickers,
+  intercepts = NULL,
+  slopes = NULL,
+  from = "1950-01-01",
+  to = Sys.Date(),
+  time.scale = "daily",
+  preto.days = NULL,
+  prefrom.days = NULL,
+  initial = NULL,
+  mutual.lifetimes = TRUE,
+  mutual.start = mutual.lifetimes,
+  mutual.end = mutual.lifetimes,
+  anchor = FALSE,
+  drop.anyNA = FALSE
+)
 }
 \arguments{
 \item{tickers}{Character vector of ticker symbols that Yahoo! Finance

@@ -5,10 +5,23 @@
 \title{Plot One Performance Metric vs. Another for Any Number of Single Funds,
 2-Fund Portfolios, and 3-Fund Portfolios}
 \usage{
-plot_metrics_123(metrics = NULL, formula = mean ~ sd, tickers = NULL,
-  ..., step = 1, gains = NULL, prices = NULL, benchmark = "SPY",
-  y.benchmark = benchmark, x.benchmark = benchmark, plotly = FALSE,
-  title = NULL, base_size = 16, label_size = 5, return = "plot")
+plot_metrics_123(
+  metrics = NULL,
+  formula = mean ~ sd,
+  tickers = NULL,
+  ...,
+  step = 1,
+  gains = NULL,
+  prices = NULL,
+  benchmark = "SPY",
+  y.benchmark = benchmark,
+  x.benchmark = benchmark,
+  plotly = FALSE,
+  title = NULL,
+  base_size = 16,
+  label_size = 5,
+  return = "plot"
+)
 }
 \arguments{
 \item{metrics}{Data frame with Fund column and column for each metric you

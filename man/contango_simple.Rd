@@ -4,8 +4,14 @@
 \alias{contango_simple}
 \title{Backtest a Simple Contango-Based Volatility Trading Strategy}
 \usage{
-contango_simple(contango, xiv.gains = NULL, vxx.gains = NULL,
-  xiv.cutpoint = 0, vxx.cutpoint = -Inf, initial = 10000)
+contango_simple(
+  contango,
+  xiv.gains = NULL,
+  vxx.gains = NULL,
+  xiv.cutpoint = 0,
+  vxx.cutpoint = -Inf,
+  initial = 10000
+)
 }
 \arguments{
 \item{contango}{Numeric vector of contango values at the end of each trading 

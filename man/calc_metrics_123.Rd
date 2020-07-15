@@ -5,8 +5,15 @@
 \title{Calculate Performance Metrics for Any Combination of Individual Funds,
 2-Fund Portfolios, and 3-Fund Portfolios}
 \usage{
-calc_metrics_123(gains = NULL, metrics = c("mean", "sd"),
-  tickers = NULL, ..., step = 1, prices = NULL, benchmark = "SPY")
+calc_metrics_123(
+  gains = NULL,
+  metrics = c("mean", "sd"),
+  tickers = NULL,
+  ...,
+  step = 1,
+  prices = NULL,
+  benchmark = "SPY"
+)
 }
 \arguments{
 \item{gains}{Data frame with a date variable named Date and one column of

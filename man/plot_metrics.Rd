@@ -5,11 +5,23 @@
 \title{Plot One Performance Metric (Sorted Bar Plot) or One vs. Another
 (Scatterplot) for a Group of Individual Funds}
 \usage{
-plot_metrics(metrics = NULL, formula = cagr ~ mdd, tickers = NULL,
-  ..., gains = NULL, prices = NULL, benchmark = "SPY",
-  y.benchmark = benchmark, x.benchmark = benchmark, plotly = FALSE,
-  title = NULL, base_size = 16, label_size = 5, ticklabel_size = 8,
-  return = "plot")
+plot_metrics(
+  metrics = NULL,
+  formula = cagr ~ mdd,
+  tickers = NULL,
+  ...,
+  gains = NULL,
+  prices = NULL,
+  benchmark = "SPY",
+  y.benchmark = benchmark,
+  x.benchmark = benchmark,
+  plotly = FALSE,
+  title = NULL,
+  base_size = 16,
+  label_size = 5,
+  ticklabel_size = 8,
+  return = "plot"
+)
 }
 \arguments{
 \item{metrics}{"Long" data frame with Fund column and column for each metric

@@ -3,7 +3,6 @@
 \docType{package}
 \name{stocks}
 \alias{stocks}
-\alias{stocks-package}
 \title{Stock Market Analysis}
 \description{
 Functions for analyzing and visualizing stock market data. Main features are
@@ -16,7 +15,7 @@ Sharpe/Sortino ratio), and creating graphs.
 Package: \tab stocks \cr
 Type: \tab Package \cr
 Version: \tab 2.0.0 \cr
-Date: \tab 2020-05-23 \cr
+Date: \tab 2020-07-14 \cr
 License: \tab GPL-3 \cr
 }
 

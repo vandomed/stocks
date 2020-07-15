@@ -4,8 +4,7 @@
 \alias{mdd}
 \title{Maximum Drawdown}
 \usage{
-mdd(prices = NULL, highs = NULL, lows = NULL, gains = NULL,
-  indices = FALSE)
+mdd(prices = NULL, highs = NULL, lows = NULL, gains = NULL, indices = FALSE)
 }
 \arguments{
 \item{prices}{Numeric vector of daily closing prices.}

@@ -161,10 +161,12 @@ load_prices <- function(tickers,
 
   # Convert to prices on last day of month/year if requested
   if (time.scale == "monthly") {
-    locs <- which(diff(data.table::month(prices$Date)) %in% c(1, -11))
+    #locs <- which(diff(data.table::month(prices$Date)) %in% c(1, -11))
+    locs <- unique(c(1, which(diff(data.table::month(prices$Date)) %in% c(1, -11)), nrow(prices)))
     prices <- prices[locs, , drop = FALSE]
   } else if (time.scale == "yearly") {
-    locs <- which(diff(data.table::year(prices$Date)) == 1)
+    #locs <- which(diff(data.table::year(prices$Date)) == 1)
+    locs <- unique(c(1, which(diff(data.table::year(prices$Date)) == 1), nrow(prices)))
     prices <- prices[locs, , drop = FALSE]
   }
 

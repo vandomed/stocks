@@ -4,12 +4,23 @@
 \alias{targetbeta_twofunds}
 \title{Backtest a Two-Fund Strategy that Targets a Certain Beta}
 \usage{
-targetbeta_twofunds(tickers = NULL, intercepts = NULL, slopes = NULL,
-  ..., benchmark.ticker = NULL, reference.tickers = NULL,
-  tickers.gains = NULL, benchmark.gains = NULL,
-  reference.gains = NULL, target.beta = 0, tol = 0.15,
-  window.units = 50, failure.method = "closer", maxall.tol = tol -
-  0.05, initial = 10000)
+targetbeta_twofunds(
+  tickers = NULL,
+  intercepts = NULL,
+  slopes = NULL,
+  ...,
+  benchmark.ticker = NULL,
+  reference.tickers = NULL,
+  tickers.gains = NULL,
+  benchmark.gains = NULL,
+  reference.gains = NULL,
+  target.beta = 0,
+  tol = 0.15,
+  window.units = 50,
+  failure.method = "closer",
+  maxall.tol = tol - 0.05,
+  initial = 10000
+)
 }
 \arguments{
 \item{tickers}{Character vector specifying 2 ticker symbols that Yahoo! 
@@ -107,7 +118,7 @@ function attempts to rebalance each time it shifts over to a new day,
 regardless of the effective portfolio beta.
 
 When \code{failure.method = "cash"}, the entire portfolio balance is 
-allocated to cash when the target beta cannot be achieved.
+allocated to cash when the target beta cannot be achieved. 
 
 When \code{failure.method = "fund1"} (or \code{"fund2"}), the entire 
 portfolio balance is allocated to the first (or second) fund when the target 

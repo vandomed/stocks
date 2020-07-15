@@ -4,8 +4,7 @@
 \alias{cum_metric}
 \title{Calculate Cumulative Performance Metrics}
 \usage{
-cum_metric(gains, metric = "mean", units.year = 252,
-  benchmark.gains = NULL)
+cum_metric(gains, metric = "mean", units.year = 252, benchmark.gains = NULL)
 }
 \arguments{
 \item{gains}{Numeric vector.}

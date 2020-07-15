@@ -4,8 +4,13 @@
 \alias{rolling_metric}
 \title{Calculate Moving-Window Performance Metrics}
 \usage{
-rolling_metric(gains, metric = "mean", width = 50, units.year = 252,
-  benchmark.gains = NULL)
+rolling_metric(
+  gains,
+  metric = "mean",
+  width = 50,
+  units.year = 252,
+  benchmark.gains = NULL
+)
 }
 \arguments{
 \item{gains}{Numeric vector.}

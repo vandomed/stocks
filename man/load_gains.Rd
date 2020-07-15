@@ -4,11 +4,20 @@
 \alias{load_gains}
 \title{Download Historical Gains}
 \usage{
-load_gains(tickers, intercepts = NULL, slopes = NULL,
-  from = "1950-01-01", to = Sys.Date(), time.scale = "daily",
-  preto.days = NULL, prefrom.days = NULL, mutual.lifetimes = TRUE,
-  mutual.start = mutual.lifetimes, mutual.end = mutual.lifetimes,
-  drop.anyNA = FALSE)
+load_gains(
+  tickers,
+  intercepts = NULL,
+  slopes = NULL,
+  from = "1950-01-01",
+  to = Sys.Date(),
+  time.scale = "daily",
+  preto.days = NULL,
+  prefrom.days = NULL,
+  mutual.lifetimes = TRUE,
+  mutual.start = mutual.lifetimes,
+  mutual.end = mutual.lifetimes,
+  drop.anyNA = FALSE
+)
 }
 \arguments{
 \item{tickers}{Character vector of ticker symbols that Yahoo! Finance

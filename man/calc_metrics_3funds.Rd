@@ -4,9 +4,16 @@
 \alias{calc_metrics_3funds}
 \title{Calculate Performance Metrics for 3-Fund Portfolios with Varying Allocations}
 \usage{
-calc_metrics_3funds(gains = NULL, metrics = c("mean", "sd"),
-  tickers = NULL, ..., step = 1, prices = NULL, benchmark = "SPY",
-  ref.tickers = NULL)
+calc_metrics_3funds(
+  gains = NULL,
+  metrics = c("mean", "sd"),
+  tickers = NULL,
+  ...,
+  step = 1,
+  prices = NULL,
+  benchmark = "SPY",
+  ref.tickers = NULL
+)
 }
 \arguments{
 \item{gains}{Data frame with a date variable named Date and one column of

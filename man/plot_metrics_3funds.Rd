@@ -4,11 +4,24 @@
 \alias{plot_metrics_3funds}
 \title{Plot One Performance Metric vs. Another for 3-Fund Portfolios}
 \usage{
-plot_metrics_3funds(metrics = NULL, formula = mean ~ sd,
-  tickers = NULL, ..., step = 2.5, gains = NULL, prices = NULL,
-  benchmark = "SPY", y.benchmark = benchmark,
-  x.benchmark = benchmark, ref.tickers = NULL, plotly = FALSE,
-  title = NULL, base_size = 16, label_size = 5, return = "plot")
+plot_metrics_3funds(
+  metrics = NULL,
+  formula = mean ~ sd,
+  tickers = NULL,
+  ...,
+  step = 2.5,
+  gains = NULL,
+  prices = NULL,
+  benchmark = "SPY",
+  y.benchmark = benchmark,
+  x.benchmark = benchmark,
+  ref.tickers = NULL,
+  plotly = FALSE,
+  title = NULL,
+  base_size = 16,
+  label_size = 5,
+  return = "plot"
+)
 }
 \arguments{
 \item{metrics}{Data frame with Fund column and column for each metric you

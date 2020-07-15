@@ -5,9 +5,15 @@
 \title{Calculate Performance Metrics for 2-Fund Portfolios with Varying
 Allocations}
 \usage{
-calc_metrics_2funds(gains = NULL, metrics = c("mean", "sd"),
-  tickers = NULL, ..., prices = NULL, benchmark = "SPY",
-  ref.tickers = NULL)
+calc_metrics_2funds(
+  gains = NULL,
+  metrics = c("mean", "sd"),
+  tickers = NULL,
+  ...,
+  prices = NULL,
+  benchmark = "SPY",
+  ref.tickers = NULL
+)
 }
 \arguments{
 \item{gains}{Data frame with a date variable named Date and one column of

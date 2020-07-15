@@ -4,10 +4,18 @@
 \alias{contango_hedged}
 \title{Backtest a Hedged Contango-Based Volatility Trading Strategy}
 \usage{
-contango_hedged(contango, xiv.spxu.gains = NULL, vxx.upro.gains = NULL,
-  xiv.spxu.cutpoint = 6.36, vxx.upro.cutpoint = 5.45,
-  xiv.allocation = 0.46, vxx.allocation = 0.46, xiv.beta = NULL,
-  vxx.beta = NULL, initial = 10000)
+contango_hedged(
+  contango,
+  xiv.spxu.gains = NULL,
+  vxx.upro.gains = NULL,
+  xiv.spxu.cutpoint = 6.36,
+  vxx.upro.cutpoint = 5.45,
+  xiv.allocation = 0.46,
+  vxx.allocation = 0.46,
+  xiv.beta = NULL,
+  vxx.beta = NULL,
+  initial = 10000
+)
 }
 \arguments{
 \item{contango}{Numeric vector of contango values at the end of each trading 

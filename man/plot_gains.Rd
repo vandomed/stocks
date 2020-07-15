@@ -4,9 +4,17 @@
 \alias{plot_gains}
 \title{Plot Gains for One Investment vs. Another}
 \usage{
-plot_gains(formula = NULL, ..., gains = NULL, prices = NULL,
-  poly_order = 1, plotly = FALSE, title = NULL, base_size = 16,
-  return = "plot")
+plot_gains(
+  formula = NULL,
+  ...,
+  gains = NULL,
+  prices = NULL,
+  poly_order = 1,
+  plotly = FALSE,
+  title = NULL,
+  base_size = 16,
+  return = "plot"
+)
 }
 \arguments{
 \item{formula}{Formula, e.g. \code{SSO + UPRO ~ SPY} to plot gains for SSO
